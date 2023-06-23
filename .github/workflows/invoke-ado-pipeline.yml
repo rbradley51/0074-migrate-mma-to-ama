@@ -16,8 +16,8 @@ jobs:
         runs-on: ubuntu-latest
         env:
           AZURE_DEVOPS_TOKEN: ${{ secrets.AZURE_DEVOPS_TOKEN }}
-          adoProject: https://dev.azure.com/autocloudarc/tfPrjReveiw01
-          adoPipeline: tfPrjReveiw02
+          adoProject: 'https://dev.azure.com/autocloudarc/tfPrjReveiw01'
+          adoPipeline: 'tfPrjReveiw02'
 
         steps:
         - name: Azure Pipelines Action
