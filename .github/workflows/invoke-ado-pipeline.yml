@@ -44,8 +44,8 @@ jobs:
       with: 
         azcliversion: 2.49.0
         inlineScript: |
-          chmod +x $GITHUB_WORKSPACE/az-scripts/createAndAssingUami.sh
-          $GITHUB_WORKSPACE/az-scripts/createAndAssingUami.sh 
+          chmod +x $GITHUB_WORKSPACE/az-scripts/createAndAssignUami.sh
+          $GITHUB_WORKSPACE/az-scripts/createAndAssignUami.sh 
       
 
 
