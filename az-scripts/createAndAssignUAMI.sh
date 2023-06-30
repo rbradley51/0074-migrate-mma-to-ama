@@ -4,7 +4,8 @@ roles=("Virtual Machine Contributor" "Log Analytics Contributor" "Azure Arc Conn
 az group create -n $uamiResourceGroup -l $uamiLocation;
 rgId=$(az group show --name $uamiResourceGroup --query "id" -o tsv)
 az identity create -g $uamiResourceGroup -n $uamiName --query id -o tsv;
+uamiId=(az identity list -g $uamiResourceGroup --query [].principalId -o tsv)
 for role in "${roles[@]}";
    do echo $role;
-   az role assignment create --role "$role" --assignee $uamiName --scope $rgId;
+   az role assignment create --role "$role" --assignee-object-id $uamiId --assignee-principal-type ServicePrincipal --scope $rgId;
 done

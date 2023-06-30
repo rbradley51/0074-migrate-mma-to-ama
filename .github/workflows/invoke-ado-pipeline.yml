@@ -9,10 +9,10 @@ jobs:
   pre-requisites:
     name: 'Setup'
     env:
-      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-      ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       uamiName: ama-uami-01
       uamiResourceGroup: ama-rg-01
       uamiLocation: eastus2
@@ -44,8 +44,9 @@ jobs:
       with: 
         azcliversion: 2.49.0
         inlineScript: |
+          az account set --subscription $AZURE_SUBSCRIPTION_ID
           chmod +x $GITHUB_WORKSPACE/az-scripts/createAndAssignUAMI.sh
-          $GITHUB_WORKSPACE/az-scripts/createAndAssignUAMI.sh 
+          $GITHUB_WORKSPACE/az-scripts/createAndAssignUAMI.sh
       
 
 
