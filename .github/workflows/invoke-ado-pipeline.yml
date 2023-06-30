@@ -1,29 +1,52 @@
-# https://learn.microsoft.com/en-us/azure/devops/pipelines/ecosystems/github-actions?view=azure-devops
-name: CI
-
-# Run this workflow every time a commit gets pushed to main or a pull request gets opened against main
-# New branch commit demo AB#2584
+name: Provision Azure Monitoring Agent
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches: 
-      - main
+    # branches:
+    # - main
+  workflow_dispatch:
 
 jobs:
-    build:
-        name: Call Azure Pipeline
-        runs-on: ubuntu-latest
-        steps:
-        - name: Azure Pipelines Action
-          uses: Azure/pipelines@v1.2
-          with:
-            # Fullyqualified URL to the Azure DevOps organization along with project name(eg, https://dev.azure.com/organization/project-name or https://server.example.com:8080/tfs/DefaultCollection/project-name)
-            azure-devops-project-url: https://dev.azure.com/autocloudarc/tfPrjReveiw01
-            # Name of the Azure Pipline to be triggered
-            azure-pipeline-name: tfPrjReveiw02
-            # Set/Overwrite pipeline variables
-            # azure-pipeline-variables: # optional
-            # Paste personal access token of the user as value of secret variable:AZURE_DEVOPS_TOKEN
-            azure-devops-token: ${{ secrets.AZURE_DEVOPS_TOKEN }}
+  pre-requisites:
+    name: 'Setup'
+    env:
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      uamiName: ama-uami-01
+      uamiResourceGroup: ama-rg-01
+      uamiLocation: eastus2
+      uamiRoleAssignmentVmContrib: "Virtual Machine Contributor"
+      uamiRoleAssignmentLogAnalyticsContrib: "Log Analytics Contributor"
+      uamiRoleAssignmentArcContrib: "Azure Arc Connected Resource Administrator"
+
+    runs-on: ubuntu-latest
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v3
+    
+    # Authenticate to Azure tenant using the Azure login action
+    - name: Create Managed Identity
+      uses: Azure/login@v1
+      with:
+       creds: '{"clientId":"${{ secrets.AZURE_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_CLIENT_SECRET }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.AZURE_TENANT_ID }}"}'
+    
+      # Create a user assigned managed identity
+    - name: Create Managed Identity
+      uses: Azure/CLI@v1
+      with: 
+        azcliversion: 2.49.0
+        inlineScript: |
+          chmod +x $GITHUB_WORKSPACE/az-scripts/createAndAssingUami.sh
+          $GITHUB_WORKSPACE/az-scripts/createAndAssingUami.sh 
+      
+
+
+
