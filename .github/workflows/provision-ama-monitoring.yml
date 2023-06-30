@@ -44,10 +44,6 @@ jobs:
       with: 
         azcliversion: 2.49.0
         inlineScript: |
-          az account set --subscription $AZURE_SUBSCRIPTION_ID
           chmod +x $GITHUB_WORKSPACE/az-scripts/createAndAssignUAMI.sh
           $GITHUB_WORKSPACE/az-scripts/createAndAssignUAMI.sh
       
-
-
-
