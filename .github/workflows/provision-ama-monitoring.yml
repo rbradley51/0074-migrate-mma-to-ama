@@ -1,9 +1,16 @@
+# Use OpenID Connect to authenticate to Azure
+# https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-portal%2Cwindows#use-the-azure-login-action-with-openid-connect
 name: Provision Azure Monitoring Agent
 on:
   push:
     # branches:
     # - main
   workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
 
 jobs:
   pre-requisites:
@@ -19,6 +26,7 @@ jobs:
       uamiRoleAssignmentVmContrib: "Virtual Machine Contributor"
       uamiRoleAssignmentLogAnalyticsContrib: "Log Analytics Contributor"
       uamiRoleAssignmentArcContrib: "Azure Arc Connected Resource Administrator"
+      azCliVer: 2.49.0
 
     runs-on: ubuntu-latest
 
@@ -36,15 +44,19 @@ jobs:
     - name: Authenticate to Azure
       uses: Azure/login@v1
       with:
-       creds: '{"clientId":"${{ secrets.AZURE_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_CLIENT_SECRET }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.AZURE_TENANT_ID }}"}'
-    
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      # with:
+      #  creds: '{"clientId":"${{ secrets.AZURE_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_CLIENT_SECRET }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.AZURE_TENANT_ID }}"}'   
+
       # Create a user assigned managed identity
     - name: Create and assign UAMI
       uses: Azure/CLI@v1
       with: 
-        azcliversion: 2.49.0
+        azcliversion: ${{ env.azCliVer }}
         inlineScript: |
-          az account set -s $AZURE_SUBSCRIPTION_ID
           chmod +x $GITHUB_WORKSPACE/az-scripts/createAndAssignUAMI.sh
           $GITHUB_WORKSPACE/az-scripts/createAndAssignUAMI.sh
       
