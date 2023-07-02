@@ -1,0 +1,61 @@
+# Use OpenID Connect to authenticate to Azure
+# https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-portal%2Cwindows#use-the-azure-login-action-with-openid-connect
+name: Provision Azure Monitoring Agent
+on:
+  push:
+    branches:
+    - main
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  pre-requisites:
+    name: 'Setup'
+    env:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      # AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      uamiName: ama-uami-01
+      uamiResourceGroup: ama-rg-01
+      uamiLocation: eastus2
+      uamiRoleAssignmentVmContrib: "Virtual Machine Contributor"
+      uamiRoleAssignmentLogAnalyticsContrib: "Log Analytics Contributor"
+      uamiRoleAssignmentArcContrib: "Azure Arc Connected Resource Administrator"
+      azCliVer: 2.49.0
+
+    runs-on: ubuntu-latest
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v3
+    
+    # Authenticate to Azure tenant using the Azure login action
+    - name: Authenticate to Azure
+      uses: Azure/login@v1
+      with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      # with:
+      #  creds: '{"clientId":"${{ secrets.AZURE_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_CLIENT_SECRET }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.AZURE_TENANT_ID }}"}'   
+
+      # Create a user assigned managed identity
+    - name: Create and assign UAMI
+      uses: Azure/CLI@v1
+      with: 
+        azcliversion: ${{ env.azCliVer }}
+        inlineScript: |
+          chmod +x $GITHUB_WORKSPACE/az-scripts/createAndAssignUAMI.sh
+          $GITHUB_WORKSPACE/az-scripts/createAndAssignUAMI.sh
+      
