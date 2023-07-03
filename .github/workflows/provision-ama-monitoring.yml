@@ -92,16 +92,16 @@ jobs:
 
     # Validate
     - name: 'Terraform Validate'
-      run: terraform validate
+      run: terraform validate -var pw=${{ secrets.VM_PASSWORD }}
     
     # Plan
     - name: 'Terraform Plan'
-      run: terraform plan
+      run: terraform plan -var pw=${{ secrets.VM_PASSWORD }} -out=tfplan -input=false
 
     # Deploy
     - name: 'Terraform Deploy'
       if: ${{ env.planOnly == 'false' }}
-      run: terraform apply -auto-approve
+      run: terraform apply -auto-approve -var pw=${{ secrets.VM_PASSWORD }}
 
     # Rollback
     - name: 'Terraform Rollback'

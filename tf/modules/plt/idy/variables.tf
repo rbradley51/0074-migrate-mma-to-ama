@@ -103,11 +103,6 @@ variable "userName" {
     default = "adsadmin"
 }
 
-variable "userPassword" {
-    type = string
-    default = "P@ssw0rd1234"
-}
-
 variable "provisionVmAgent" {
     type = bool
     default = true

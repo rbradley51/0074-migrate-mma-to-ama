@@ -56,7 +56,7 @@ resource "azurerm_network_interface" "ads01" {
 }
 
 resource "azurerm_virtual_machine" "ads01" {
-  name                  = var.adsO1VmName 
+  name                  = var.vmName 
   location            = var.primary_location
   resource_group_name = var.rgpName
   network_interface_ids = [azurerm_network_interface.ads01.id]
@@ -79,7 +79,7 @@ resource "azurerm_virtual_machine" "ads01" {
   os_profile {
     computer_name  = var.vmName # "azr-prd-ads-01"
     admin_username = var.userName # "adminuser"
-    admin_password = var.pw # "Password1234!"
+    admin_password = var.pw # Use GitHub secret for this
   }
 
   os_profile_windows_config {
