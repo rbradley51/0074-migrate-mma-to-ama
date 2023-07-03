@@ -26,6 +26,10 @@ jobs:
       uamiRoleAssignmentLogAnalyticsContrib: "Log Analytics Contributor"
       uamiRoleAssignmentArcContrib: "Azure Arc Connected Resource Administrator"
       azCliVer: 2.49.0
+      tfVersion: 1.5.2
+      workingdir: tf
+      planOnly: true # Set to true to plan only, false to deploy
+      rollback: false # Set to true to rollback, false to deploy
 
     runs-on: ubuntu-latest
 
@@ -50,7 +54,7 @@ jobs:
       # with:
       #  creds: '{"clientId":"${{ secrets.AZURE_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_CLIENT_SECRET }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.AZURE_TENANT_ID }}"}'   
 
-      # Create a user assigned managed identity
+    # Create a user assigned managed identity
     - name: Create and assign UAMI
       uses: Azure/CLI@v1
       with: 
@@ -58,4 +62,40 @@ jobs:
         inlineScript: |
           chmod +x $GITHUB_WORKSPACE/az-scripts/createAndAssignUAMI.sh
           $GITHUB_WORKSPACE/az-scripts/createAndAssignUAMI.sh
-      
+    
+    # Setup Terraform
+    - name: 'Setup Terraform'
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: ${{ env.tfVersion }}
+        terraform_wrapper: true
+
+    # Check version
+    - name: 'Terraform Version'
+      run: terraform version
+
+    # Format
+    - name: 'Terraform Format'
+      run: terraform -chdir=${{ env.workingdir }} fmt -recursive
+
+    # Init
+    - name: 'Terraform Init'
+      run: terraform -chdir=${{ env.workingdir }} init
+
+    # Validate
+    - name: 'Terraform Validate'
+      run: terraform -chdir=${{ env.workingdir }} validate
+    
+    # Plan
+    - name: 'Terraform Plan'
+      run: terraform -chdir=${{ env.workingdir }} plan
+
+    # Deploy
+    - name: 'Terraform Deploy'
+      if: ${{ env.planOnly == 'false' }}
+      run: terraform -chdir=${{ env.workingdir }} apply -auto-approve
+
+    # Rollback
+    - name: 'Terraform Rollback'
+      if: ${{ env.rollback == 'true' }}
+      run: terraform -chdir=${{ env.workingdir }} destroy -auto-approve
