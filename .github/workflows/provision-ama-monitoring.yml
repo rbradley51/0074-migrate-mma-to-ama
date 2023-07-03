@@ -92,11 +92,11 @@ jobs:
 
     # Validate
     - name: 'Terraform Validate'
-      run: terraform validate -var pw=${{ secrets.VM_PASSWORD }}
+      run: terraform validate
     
     # Plan
     - name: 'Terraform Plan'
-      run: terraform plan -var pw=${{ secrets.VM_PASSWORD }}
+      run: terraform plan
 
     # Deploy
     - name: 'Terraform Deploy'
