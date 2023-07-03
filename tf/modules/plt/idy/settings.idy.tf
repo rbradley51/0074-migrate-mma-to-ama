@@ -34,7 +34,7 @@ locals {
 
           vm = {
             userName         = "adsadmin"
-            pw               = "P@ssw0rd1234"
+            pw               = ""
             provisionVmAgent = true
             vmName           = "azr-prd-ads-01"
             vmSize           = "Standard_DS2_v2"

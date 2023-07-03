@@ -110,4 +110,5 @@ variable "provisionVmAgent" {
 
 variable "pw" {
     type = string
+    default = ""
 }

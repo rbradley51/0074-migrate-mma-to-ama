@@ -70,7 +70,7 @@ jobs:
       uses: hashicorp/setup-terraform@v2
       with:
         terraform_version: ${{ env.tfVersion }}
-        terraform_wrapper: false
+        terraform_wrapper: true
         
 
     # Check version
@@ -92,7 +92,7 @@ jobs:
 
     # Validate
     - name: 'Terraform Validate'
-      run: terraform validate
+      run: terraform validate -var pw="${{ secrets.VM_PASSWORD }}"
     
     # Plan
     - name: 'Terraform Plan'
