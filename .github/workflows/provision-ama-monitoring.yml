@@ -81,10 +81,6 @@ jobs:
     - name: 'Terraform Format'
       run: terraform fmt -recursive
 
-    # Init
-    # - name: 'Terraform Init'
-    #   run: terraform -chdir=${{ env.workingdir }} init
-
     - name: Terraform Init
       id: init
       run: terraform init
@@ -96,18 +92,18 @@ jobs:
 
     # Validate
     - name: 'Terraform Validate'
-      run: terraform -chdir=${{ env.workingdir }} validate
+      run: terraform validate
     
     # Plan
     - name: 'Terraform Plan'
-      run: terraform -chdir=${{ env.workingdir }} plan
+      run: terraform plan
 
     # Deploy
     - name: 'Terraform Deploy'
       if: ${{ env.planOnly == 'false' }}
-      run: terraform -chdir=${{ env.workingdir }} apply -auto-approve
+      run: terraform apply -auto-approve
 
     # Rollback
     - name: 'Terraform Rollback'
       if: ${{ env.rollback == 'true' }}
-      run: terraform -chdir=${{ env.workingdir }} destroy -auto-approve
+      run: terraform destroy -auto-approve
