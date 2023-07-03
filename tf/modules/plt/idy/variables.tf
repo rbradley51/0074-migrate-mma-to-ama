@@ -112,3 +112,18 @@ variable "provisionVmAgent" {
     type = bool
     default = true
 }
+
+variable "subscription_id_identity" {
+  type = string
+  default = "1d790e78-7852-498d-8087-f5d48686a50e"
+}
+
+variable "client_id" {
+    type = string
+    default = "6d0a70fd-62f0-49d6-b520-bd27525fa1f3"
+}
+
+variable "tenant_id" {
+  type = string
+  default = "440e42a9-54c7-4d77-91a4-306f8fe4183d"
+}
