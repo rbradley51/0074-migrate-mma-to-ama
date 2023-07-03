@@ -1,5 +1,6 @@
 # Use OpenID Connect to authenticate to Azure
 # https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-portal%2Cwindows#use-the-azure-login-action-with-openid-connect
+# *** https://colinsalmcorner.com/using-oidc-with-terraform-in-github-actions/
 name: Provision Azure Monitoring Agent
 on:
   push:
@@ -37,14 +38,15 @@ jobs:
     defaults:
       run:
         shell: bash
+        working-directory: ${{ env.workingdir }}
 
     steps:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v3
     
-    # Authenticate to Azure tenant using the Azure login action
-    - name: Authenticate to Azure
+    # Authenticate to Azure tenant using the Azure login action (OIDC)
+    - name: Authenticate to Azure with OIDC
       uses: Azure/login@v1
       with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
@@ -69,6 +71,7 @@ jobs:
       with:
         terraform_version: ${{ env.tfVersion }}
         terraform_wrapper: true
+        
 
     # Check version
     - name: 'Terraform Version'
@@ -79,8 +82,17 @@ jobs:
       run: terraform -chdir=${{ env.workingdir }} fmt -recursive
 
     # Init
-    - name: 'Terraform Init'
-      run: terraform -chdir=${{ env.workingdir }} init
+    # - name: 'Terraform Init'
+    #   run: terraform -chdir=${{ env.workingdir }} init
+
+    - name: Terraform Init
+      id: init
+      run: terraform init
+      env:
+        ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        ARM_USE_OIDC: true
 
     # Validate
     - name: 'Terraform Validate'
