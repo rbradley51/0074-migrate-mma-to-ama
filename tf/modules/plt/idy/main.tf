@@ -49,7 +49,7 @@ resource "azurerm_network_interface" "ads01" {
 
   ip_configuration {
     name                          = var.ads01NicConfigName
-    subnet_id                     = azurerm_virtual_network.idy.subnet.id
+    subnet_id                     = azurerm_virtual_network.idy.subnet[0].id
     private_ip_address_allocation = var.prvIpAlloc
   }
 }
