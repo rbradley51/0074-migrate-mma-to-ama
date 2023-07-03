@@ -18,10 +18,4 @@ variable "secondary_location" {
   default = "eastus2"
 }
 
-variable "subscription_id_identity" {
-  type = string
-  default = "1d790e78-7852-498d-8087-f5d48686a50e"
-}
-
-
   

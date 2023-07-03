@@ -34,8 +34,8 @@ resource "azurerm_virtual_network" "idy" {
   subnet {
     name           = var.sntName
     address_prefix = var.subAddrPrefixes # ["10.0.1.0/24"]
-    network_security_group_id = azurerm_network_security_group.idy.id
-  }
+    security_group = azurerm_network_security_group.idy.id  
+}
 
   tags = {
     environment = "Production"
