@@ -23,10 +23,4 @@ data "azurerm_client_config" "current" {}
 
 module "idy" {
   source = "./modules/plt/idy"
-
-  primary_location                 = var.primary_location
-  root_id                          = var.root_id
-  root_name                        = var.root_name
-  secondary_location               = var.secondary_location
-  subscription_id_identity         = var.subscription_id_identity
 }

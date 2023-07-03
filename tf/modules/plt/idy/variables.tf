@@ -1,3 +1,8 @@
+variable "primary_location" {
+  type = string
+  default = "centralus"
+}
+
 variable "rgpName" {
   type = string
   default = "idy-rgp"
