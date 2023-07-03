@@ -92,7 +92,7 @@ jobs:
 
     # Validate
     - name: 'Terraform Validate'
-      run: terraform validate -var pw="${{ secrets.VM_PASSWORD }}"
+      run: terraform validate -var "pw=${{ secrets.VM_PASSWORD }}"
     
     # Plan
     - name: 'Terraform Plan'
@@ -101,7 +101,7 @@ jobs:
     # Deploy
     - name: 'Terraform Deploy'
       if: ${{ env.planOnly == 'false' }}
-      run: terraform apply -auto-approve -var pw=${{ secrets.VM_PASSWORD }}
+      run: terraform apply -auto-approve -var "pw=${{ secrets.VM_PASSWORD }}""
 
     # Rollback
     - name: 'Terraform Rollback'
