@@ -96,7 +96,7 @@ jobs:
     
     # Plan
     - name: 'Terraform Plan'
-      run: terraform plan -var pw=${{ secrets.VM_PASSWORD }} -out=tfplan -input=false
+      run: terraform plan -var pw=${{ secrets.VM_PASSWORD }}
 
     # Deploy
     - name: 'Terraform Deploy'
