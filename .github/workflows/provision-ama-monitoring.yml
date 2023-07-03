@@ -92,7 +92,7 @@ jobs:
 
     # Validate
     - name: 'Terraform Validate'
-      run: terraform validate -var "pw=${{ secrets.VM_PASSWORD }}"
+      run: terraform validate -check-variables=false
     
     # Plan
     - name: 'Terraform Plan'
