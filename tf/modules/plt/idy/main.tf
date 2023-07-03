@@ -8,11 +8,15 @@ resource "azurerm_resource_group" "idy" {
   location = var.primary_location
 }
 
-resource "azurerm_virtual_network" "idy" {
-  name                = var.vntName 
-  address_space       = var.vntAddrSpaces # ["10.0.0.0/16"]
-  location            = var.primary_location
-  resource_group_name = azurerm_resource_group.idy.name
+resource "azurerm_resource_group" "example" {
+  name     = "example-resources"
+  location = "West Europe"
+}
+
+resource "azurerm_network_security_group" "example" {
+  name                = "example-security-group"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
 }
 
 resource "azurerm_network_security_group" "idy" {
@@ -20,13 +24,22 @@ resource "azurerm_network_security_group" "idy" {
   location            = var.primary_location
   resource_group_name = var.rgpName
 }
+resource "azurerm_virtual_network" "idy" {
+  name                = var.vntName
+  location            = var.primary_location
+  resource_group_name = azurerm_resource_group.idy.name
+  address_space       = var.vntAddrSpaces # ["10.0.0.0/16"]
+  # dns_servers         = ["10.0.0.4", "10.0.0.5"]
 
-resource "azurerm_subnet" "ads" {
-  name                 = var.sntName
-  resource_group_name  = var.rgpName
-  virtual_network_name = azurerm_virtual_network.idy.name
-  address_prefixes     = var.subAddrPrefixes # ["10.0.1.0/24"]
-  network_security_group_id = azurerm_network_security_group.idy.id
+  subnet {
+    name           = var.sntName
+    address_prefix = var.subAddrPrefixes # ["10.0.1.0/24"]
+    network_security_group_id = azurerm_network_security_group.idy.id
+  }
+
+  tags = {
+    environment = "Production"
+  }
 }
 
 resource "azurerm_network_interface" "ads01" {
@@ -36,7 +49,7 @@ resource "azurerm_network_interface" "ads01" {
 
   ip_configuration {
     name                          = var.ads01NicConfigName
-    subnet_id                     = azurerm_subnet.ads.id
+    subnet_id                     = azurerm_virtual_network.idy.subnet.id
     private_ip_address_allocation = var.prvIpAlloc
   }
 }
