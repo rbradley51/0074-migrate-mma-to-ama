@@ -79,7 +79,7 @@ jobs:
 
     # Format
     - name: 'Terraform Format'
-      run: terraform -chdir=${{ env.workingdir }} fmt -recursive
+      run: terraform fmt -recursive
 
     # Init
     # - name: 'Terraform Init'
