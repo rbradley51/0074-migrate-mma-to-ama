@@ -70,7 +70,7 @@ jobs:
       uses: hashicorp/setup-terraform@v2
       with:
         terraform_version: ${{ env.tfVersion }}
-        terraform_wrapper: true
+        terraform_wrapper: false
         
 
     # Check version
