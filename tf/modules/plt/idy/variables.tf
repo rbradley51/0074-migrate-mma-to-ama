@@ -109,7 +109,9 @@
 # }
 
 variable "idy" {
-  type = object({})
+  type = object({
+    settings = object({})
+  })
   default = {
     settings = {
       identity = {
@@ -120,6 +122,9 @@ variable "idy" {
             kind             = "StorageV2"
             tier             = "Standard"
             replication_type = "LRS"
+          }
+          rsv = {
+            sku = "standard"
           }
           kvt = {
             sku = "standard"
