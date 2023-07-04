@@ -108,6 +108,9 @@
 #     default = true
 # }
 
+variable "configure_identity_resources" {
+  type = object({})
+}
 variable "pw" {
     type = string
     default = ""
