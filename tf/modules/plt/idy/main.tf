@@ -3,11 +3,10 @@ provider "azurerm" {
   features {}
 }
 
-idy = local.configure_identity_resources
-
 resource "random_uuid" "rnd" {
 }
 
+idy = local.configure_identity_resources
 resource "azurerm_recovery_services_vault" "rsv" {
   name                = "rsv-${random_uuid.rnd.result}"
   location            = idy.settings.identity.config.primary_location
@@ -77,7 +76,7 @@ resource "azurerm_network_interface" "ads01" {
   }
 }
 
-resoure "azurerm_availability_set" "avs01" {
+resource "azurerm_availability_set" "avs01" {
   name                = idy.settings.identity.config.avset.avsetName
   location            = idy.settings.identity.config.primary_location
   resource_group_name = idy.settings.identity.config.rgpName
