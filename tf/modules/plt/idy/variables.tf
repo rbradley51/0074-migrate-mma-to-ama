@@ -48,7 +48,7 @@ variable "vnet" {
             subnet = {
               nsgName         = "ads-nsg"
               sntName         = "ads-snt"
-              subAddrPrefix = "10.0.0.0/29"
+              subAddrPrefix = "10.0.0.0`/29"
               nsgName         = "ads-nsg"
               nic = {
                 ads01NicName       = "ads01-nic"
