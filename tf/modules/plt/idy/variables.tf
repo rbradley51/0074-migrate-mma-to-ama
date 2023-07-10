@@ -6,7 +6,7 @@ variable "rgp" {
   default = {
     rgp = {
       rgpName     = "rgp-ads"
-      rgpLocation = primary_location
+      rgpLocation = "centralus"
     }
   }
 }
@@ -38,7 +38,7 @@ variable "vnet" {
         ads01NicName       = string
         ads01NicConfigName = string
         prvIpAlloc         = string
-      }))
+      }))S
     }))
   }))
   default = {
@@ -58,9 +58,10 @@ variable "vnet" {
             }
           }
   }
+}
 
-variable "keyvault" {
-  type = map(object({
+variable "kvt" {
+type = map(object({
     sku = string
   }))
   default = {
