@@ -38,7 +38,7 @@ variable "vnet" {
         ads01NicName       = string
         ads01NicConfigName = string
         prvIpAlloc         = string
-      }))S
+      }))
     }))
   }))
   default = {
