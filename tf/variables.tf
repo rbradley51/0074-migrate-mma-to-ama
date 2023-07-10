@@ -17,5 +17,3 @@ variable "secondary_location" {
   type = string
   default = "eastus2"
 }
-
-  
