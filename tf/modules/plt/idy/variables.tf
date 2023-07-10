@@ -30,39 +30,43 @@ variable "vnet" {
   type = map(object({
     vntName       = string
     vntAddrSpaces = list(string)
-    subnet = map(object({
-      sntName         = string
-      subAddrPrefix = map(object({
-        subAddrPrefix = string}))
-      nsgName         = string
-      nic = map(object({
-        ads01NicName       = string
-        ads01NicConfigName = string
-        prvIpAlloc         = string
-      }))
-    }))
   }))
   default = {
-          vnet = {
-            vntName       = "idy-vnt"
-            vntAddrSpaces = ["10.0.0.0/28"]
-            subnet = {
-              nsgName         = "ads-nsg"
-              sntName         = "ads-snt"
-              subAddrPrefix = "10.0.0.0/29"
-              nsgName         = "ads-nsg"
-              nic = {
-                ads01NicName       = "ads01-nic"
-                ads01NicConfigName = "ads01-nic-config"
-                prvIpAlloc         = "Dynamic"
-              }
-            }
-          }
+    vnet = {
+      vntName       = "idy-vnt"
+      vntAddrSpaces = ["10.0.0.0/28"]
+    }
+  }
+}
+
+variable "subnets" {
+  type = map(object({
+    name = string
+    cidr = string
+  }))
+  default = {
+    subnet1 = {
+      name = "adds-snet"
+      cidr = "10.0.0.0/29"
+    }
+  }
+}
+
+variables "nic" {
+  type = map(object({
+    name       = string
+    prvIpAlloc = string
+  }))
+  default = {
+    nic = {
+      name       = "ads01-nic"
+      prvIpAlloc = "Dynamic"
+    }
   }
 }
 
 variable "kvt" {
-type = map(object({
+  type = map(object({
     sku = string
   }))
   default = {
@@ -75,7 +79,7 @@ type = map(object({
 variable "tags" {
   type = map(string)
   default = {
-    key = "environment"
+    key   = "environment"
     value = "Production"
   }
 }
