@@ -52,7 +52,7 @@ variable "subnets" {
   }
 }
 
-variables "nic" {
+variable "nic" {
   type = map(object({
     name       = string
     prvIpAlloc = string
