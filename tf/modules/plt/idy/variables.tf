@@ -32,7 +32,8 @@ variable "vnet" {
     vntAddrSpaces = list(string)
     subnet = map(object({
       sntName         = string
-      subAddrPrefix = list(string)
+      subAddrPrefix = map(object({
+        subAddrPrefix = string}))
       nsgName         = string
       nic = map(object({
         ads01NicName       = string
@@ -48,7 +49,7 @@ variable "vnet" {
             subnet = {
               nsgName         = "ads-nsg"
               sntName         = "ads-snt"
-              subAddrPrefix = ["10.0.0.0/29"]
+              subAddrPrefix = "10.0.0.0/29"
               nsgName         = "ads-nsg"
               nic = {
                 ads01NicName       = "ads01-nic"
