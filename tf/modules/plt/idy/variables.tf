@@ -1,14 +1,6 @@
-variable "rgp" {
-  type = map(object({
-    rgpName     = string
-    rgpLocation = string
-  }))
-  default = {
-    rgp = {
-      rgpName     = "rgp-ads"
-      rgpLocation = "centralus"
-    }
-  }
+variable "rgpName" {
+  type    = string
+  default = "rgp-ads"
 }
 
 variable "storage" {
