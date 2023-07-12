@@ -8,8 +8,8 @@ resource "random_uuid" "rnd" {
 }
 
 resource "azurerm_resource_group" "idy" {
-  name     = var.rgp.rgpName
-  location = var.rgp.rgpLocation
+  name     = var.rgpName
+  location = var.rgpLocation
 }
 # resource "azurerm_recovery_services_vault" "rsv" {
 #   name                = "rsv-${random_uuid.rnd.result}"
