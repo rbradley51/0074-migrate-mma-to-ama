@@ -136,3 +136,22 @@ variable "vm" {
     }
   }
 }
+variable "root_id" {
+  type = string
+}
+
+variable "root_name" {
+  type = string
+}
+
+variable "primary_location" {
+  type = string
+}
+
+variable "secondary_location" {
+  type = string
+}
+
+variable "identitySubscriptionId" {
+  type = string
+}
