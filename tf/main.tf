@@ -27,4 +27,5 @@ module "idy" {
   secondary_location = var.secondary_location
   root_id = var.root_id
   root_name = var.root_name
+  identitySubscriptionId = var.identitySubscriptionId
 }
