@@ -11,11 +11,11 @@ resource "azurerm_resource_group" "idy" {
   name     = var.rgpName
   location = var.primary_location
 }
-# resource "azurerm_recovery_services_vault" "rsv" {
-#   name                = "rsv-${random_uuid.rnd.result}"
-#   location            = primary_location
-#   resource_group_name = var.idy.settings.identity.config.rgpName
-# }
+resource "azurerm_recovery_services_vault" "rsv" {
+  name                = "rsv-${random_uuid.rnd.result}"
+  location            = primary_location
+  resource_group_name = var.idy.settings.identity.config.rgpName
+}
 
 # resource "azurerm_key_vault" "kvt" {
 #   name = "kvt-${random_uuid.rnd.result}"
