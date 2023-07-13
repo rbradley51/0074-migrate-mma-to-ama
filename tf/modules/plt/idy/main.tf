@@ -106,7 +106,7 @@ resource "azurerm_recovery_services_vault" "rsv" {
 #   os_profile {
 #     computer_name  = var.idy.settings.identity.config.vm.vmName
 #     admin_username = var.idy.settings.identity.config.vm.userName
-#     admin_password = var.pw
+#     admin_password = var.vm.pw
 #   }
 
 #   os_profile_windows_config {

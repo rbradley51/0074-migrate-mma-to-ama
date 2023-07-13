@@ -113,7 +113,6 @@ variable "disk" {
 variable "vm" {
   type = map(object({
     userName         = string
-    pw               = string
     provisionVmAgent = bool
     vmName           = string
     vmSize           = string
@@ -145,11 +144,15 @@ variable "secondary_location" {
 }
 
 variable "identitySubscriptionId" {
-  type = string
+  type    = string
   default = "1d790e78-7852-498d-8087-f5d48686a50e"
 }
 
 variable "rsv_sku" {
-  type = string
+  type    = string
   default = "Standard"
+}
+
+variable "pw" {
+  type    = string
 }
