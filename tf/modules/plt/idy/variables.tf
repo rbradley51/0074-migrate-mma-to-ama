@@ -152,7 +152,7 @@ variable "identitySubscriptionId" {
 variable "rsv" {
   type = map(object({
     sku     = string
-    soft_delete_enabled = string
+    soft_delete_enabled = bool
   }))
   default = {
       sku = "Standard"
