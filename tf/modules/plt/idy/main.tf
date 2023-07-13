@@ -15,7 +15,7 @@ resource "azurerm_recovery_services_vault" "rsv" {
   name                = "rsv-${random_uuid.rnd.result}"
   location            = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
-  sku = var.rsv.sku
+  sku = var.rsv_sku
 }
 
 # resource "azurerm_key_vault" "kvt" {
