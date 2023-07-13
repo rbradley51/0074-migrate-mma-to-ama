@@ -155,9 +155,7 @@ variable "rsv" {
     soft_delete_enabled = bool
   }))
   default = {
-    "rsv" = {
       sku = "Standard"
       soft_delete_enabled = true
-    }
   }
 }

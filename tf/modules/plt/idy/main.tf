@@ -15,8 +15,8 @@ resource "azurerm_recovery_services_vault" "rsv" {
   name                = "rsv-${random_uuid.rnd.result}"
   location            = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
-  sku = tostring(var.rsv.sku)
-  soft_delete_enabled = tostring(var.rsv.soft_delete_enabled)
+  sku = var.rsv.sku
+  soft_delete_enabled = var.rsv.soft_delete_enabled
 }
 
 # resource "azurerm_key_vault" "kvt" {
