@@ -10,7 +10,7 @@ variable "vnetName" {
 
 variable vntAddrSpaces {
   type = list(string)
-  default = [cidrsubnet("10.0.0.0/28",8,0)]
+  default = ["10.0.0.0/28"]
 }
 
 variable "subnets" {
@@ -39,24 +39,10 @@ variable "nic" {
   }
 }
 
-variable "kvt" {
-  type = map(object({
-    sku = string
-    soft_delete_enabled = bool
-    purge_protection_enabled = bool
-    enabled_for_disk_encryption = bool
-    enabled_for_deployment = bool
-    enabled_for_template_deployment = bool
-    enabled_for_volume_encryption = bool
-  }))
-  default = {
-    sku                             = "standard"
-    soft_delete_enabled             = true
-    purge_protection_enabled        = false
-    enabled_for_disk_encryption     = false
-    enabled_for_deployment          = true
-    enabled_for_template_deployment = true
-    enabled_for_volume_encryption   = false
+variable "kvt_sku" {
+  type = string
+  description = "values for key vault sku"
+  default = "standard"
   }
 }
 variable "tags" {
