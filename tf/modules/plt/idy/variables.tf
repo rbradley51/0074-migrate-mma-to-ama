@@ -3,21 +3,6 @@ variable "rgpName" {
   default = "rgp-ads"
 }
 
-variable "storage" {
-  type = map(object({
-    kind             = string
-    tier             = string
-    replication_type = string
-  }))
-  default = {
-    sta = {
-      kind             = "StorageV2"
-      tier             = "Standard"
-      replication_type = "LRS"
-    }
-  }
-}
-
 variable "vnet" {
   type = map(object({
     vntName       = string
