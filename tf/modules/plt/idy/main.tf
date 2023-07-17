@@ -13,17 +13,17 @@ resource "azurerm_recovery_services_vault" "rsv" {
 }
 
 resource "azurerm_key_vault" "kvt" {
-  name = "${resource_codes.key_vault}-${local.rndPrefix}"
+  name = "${var.resource_codes.key_vault}-${local.rndPrefix}"
   location = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
   sku_name = var.kvt.sku 
   tenant_id = data.azurerm_client_config.current.tenant_id
-  soft_delete_enabled = var.soft_delete_enabled
-  purge_protection_enabled = var.purge_protection_enabled
-  enabled_for_disk_encryption = var.enabled_for_disk_encryption
-  enabled_for_deployment = var.enabled_for_deployment
-  enabled_for_template_deployment = var.enabled_for_template_deployment
-  enabled_for_volume_encryption = var.enabled_for_volume_encryption
+  soft_delete_enabled = true
+  purge_protection_enabled = false
+  enabled_for_disk_encryption = false
+  enabled_for_deployment = true
+  enabled_for_template_deployment = true
+  enabled_for_volume_encryption = false
 }
 
 # resource "azurerm_storage_account" "idy" {
