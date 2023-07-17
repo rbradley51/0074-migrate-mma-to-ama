@@ -1,15 +1,18 @@
 variable "rgpName" {
   type    = string
+  description = "values for resource group name"
   default = "rgp-ads"
 }
 
 variable "vnetName" {
   type = string
+  description = "values for virtual network name"
   default = "vnt-ads"
 }
 
 variable vntAddrSpaces {
   type = list(string)
+  description = "values for virtual network address spaces"
   default = ["10.0.0.0/28"]
 }
 
@@ -18,6 +21,7 @@ variable "subnets" {
     name = string
     cidr = string
   }))
+  description = "values for subnets"
   default = {
     subnet1 = {
       name = "adds-snet"
@@ -31,6 +35,7 @@ variable "nic" {
     name       = string
     prvIpAlloc = string
   }))
+  description = "values for network interface"
   default = {
     nic = {
       name       = "ads01-nic"
@@ -46,6 +51,7 @@ variable "kvt_sku" {
   }
 variable "tags" {
   type = map(string)
+  description = "values for tags"
   default = {
     key   = "env"
     value = "dev"
@@ -54,6 +60,7 @@ variable "tags" {
 
 variable "image" {
   type = map(string)
+  description = "values for image"
   default = {
     publisher = "MicrosoftWindowsServer"
     offer     = "WindowsServer"
@@ -64,6 +71,7 @@ variable "image" {
 
 variable "disk" {
   type = map(string)
+  description = "values for disk"
   default = {
       osDiskName   = "syst"
       caching      = "ReadWrite"
@@ -74,6 +82,7 @@ variable "disk" {
 
 variable "vm" {
   type = map(string)
+  description = "values for virtual machine"
   default = {
     userName         = "adsadmin"
     pw               = ""
@@ -85,32 +94,39 @@ variable "vm" {
 
 variable "root_id" {
   type = string
+  description = "root id value for organization"
 }
 
 variable "root_name" {
   type = string
+  description = "root name value for organization"
 }
 
 variable "primary_location" {
   type = string
+  description = "primary azure region value for organization"
 }
 
 variable "secondary_location" {
   type = string
+  description = "secondary azure region value for organization"
 }
 
 variable "identitySubscriptionId" {
   type    = string
+  description = "identity subscription id"
   default = "1d790e78-7852-498d-8087-f5d48686a50e"
 }
 
 variable "rsv_sku" {
   type    = string
+  description = "values for recovery services vault sku"
   default = "Standard"
 }
 
 variable "pw" {
   type = string
+  description = "Values for password. Will be provided interactively for confidentiality"
 }
 
 variable "resource_codes" {
