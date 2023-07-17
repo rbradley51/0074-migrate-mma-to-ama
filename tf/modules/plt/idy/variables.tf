@@ -114,7 +114,7 @@ variable "pw" {
 }
 
 variable "resource_codes" {
-  type        = map((string))
+  type        = map(string)
   description = "values for resource codes abbreviations"
   default = {
     prefix           = "azr"
