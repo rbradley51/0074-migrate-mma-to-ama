@@ -65,20 +65,16 @@ variable "image" {
 variable "disk" {
   type = map(string)
   default = {
-    disk = {
       osDiskName   = "syst"
       caching      = "ReadWrite"
       createOption = "FromImage"
       diskType     = "Standard_LRS"
-    }
   }
 }
 
 variable "vm" {
   type = map(string)
-
   default = {
-
     userName         = "adsadmin"
     pw               = ""
     provisionVmAgent = true
