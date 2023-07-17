@@ -43,6 +43,12 @@ variable "nic" {
 variable "kvt" {
   type = map(object({
     sku = string
+    soft_delete_enabled = bool
+    purge_protection_enabled = bool
+    enabled_for_disk_encryption = bool
+    enabled_for_deployment = bool
+    enabled_for_template_deployment = bool
+    enabled_for_volume_encryption = bool
   }))
   default = {
     sku                             = "standard"
@@ -155,5 +161,4 @@ variable "sta" {
     tier             = "Standard"
     replication_type = "LRS"
   }
-
 }
