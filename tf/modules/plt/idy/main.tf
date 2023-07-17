@@ -16,7 +16,7 @@ resource "azurerm_key_vault" "kvt" {
   name = "${var.resource_codes.key_vault}-${local.rndPrefix}"
   location = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
-  sku_name = var.kvt.sku 
+  sku_name = var.kvt_sku
   tenant_id = data.azurerm_client_config.current.tenant_id
   soft_delete_enabled = true
   purge_protection_enabled = false
