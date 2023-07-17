@@ -17,7 +17,6 @@ jobs:
     name: 'Setup'
     env:
       AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-      # AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
       AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       uamiName: ama-uami-01
@@ -26,10 +25,10 @@ jobs:
       uamiRoleAssignmentVmContrib: "Virtual Machine Contributor"
       uamiRoleAssignmentLogAnalyticsContrib: "Log Analytics Contributor"
       uamiRoleAssignmentArcContrib: "Azure Arc Connected Resource Administrator"
-      azCliVer: 2.49.0
-      tfVersion: 1.5.2
+      azCliVer: 2.50.0
+      tfVersion: 1.5.3
       workingdir: tf
-      planOnly: true # Set to true to plan only, false to deploy
+      planOnly: false # Set to true to plan only, false to deploy
       rollback: false # Set to true to rollback, false to deploy
 
     runs-on: ubuntu-latest
@@ -53,10 +52,6 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      # with:
-      #  creds: '{"clientId":"${{ secrets.AZURE_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_CLIENT_SECRET }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.AZURE_TENANT_ID }}"}'   
-
-    # Create a user assigned managed identity
     - name: Create and assign UAMI
       uses: Azure/CLI@v1
       with: 
