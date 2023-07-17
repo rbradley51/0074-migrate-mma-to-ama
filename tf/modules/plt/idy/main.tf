@@ -18,12 +18,11 @@ resource "azurerm_key_vault" "kvt" {
   resource_group_name = azurerm_resource_group.idy.name
   sku_name = var.kvt_sku
   tenant_id = data.azurerm_client_config.current.tenant_id
-  soft_delete_enabled = true
   purge_protection_enabled = false
   enabled_for_disk_encryption = false
   enabled_for_deployment = true
   enabled_for_template_deployment = true
-  enabled_for_volume_encryption = false
+  soft_delete_retention_days = var.retention_days
 }
 
 # resource "azurerm_storage_account" "idy" {

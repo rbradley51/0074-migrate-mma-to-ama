@@ -158,3 +158,8 @@ variable "sta" {
     replication_type = "LRS"
   }
 }
+variable "retention_days" {
+  type       = number
+  description = "values for soft delete retention in days"
+  default = 7
+}
