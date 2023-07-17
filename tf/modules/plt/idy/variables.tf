@@ -53,7 +53,7 @@ variable "tags" {
 }
 
 variable "image" {
-  type = map(string())
+  type = map(string)
   default = {
     publisher = "MicrosoftWindowsServer"
     offer     = "WindowsServer"
@@ -63,7 +63,7 @@ variable "image" {
 }
 
 variable "disk" {
-  type = map(string())
+  type = map(string)
   default = {
     disk = {
       osDiskName   = "syst"
@@ -75,7 +75,7 @@ variable "disk" {
 }
 
 variable "vm" {
-  type = map(string())
+  type = map(string)
 
   default = {
 
