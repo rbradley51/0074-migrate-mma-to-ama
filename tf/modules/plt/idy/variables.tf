@@ -9,10 +9,8 @@ variable "vnet" {
     vntAddrSpaces = list(string)
   }))
   default = {
-    vnet = {
-      vntName       = "idy-vnt"
-      vntAddrSpaces = ["10.0.0.0/28"]
-    }
+    vntName       = "idy-vnt"
+    vntAddrSpaces = ["10.0.0.0/28"]
   }
 }
 
@@ -47,13 +45,13 @@ variable "kvt" {
     sku = string
   }))
   default = {
-      sku  = "standard"
-      soft_delete_enabled = true
-      purge_protection_enabled = false
-      enabled_for_disk_encryption = false
-      enabled_for_deployment = true
-      enabled_for_template_deployment = true
-      enabled_for_volume_encryption = false
+    sku                             = "standard"
+    soft_delete_enabled             = true
+    purge_protection_enabled        = false
+    enabled_for_disk_encryption     = false
+    enabled_for_deployment          = true
+    enabled_for_template_deployment = true
+    enabled_for_volume_encryption   = false
   }
 }
 variable "tags" {
@@ -67,20 +65,15 @@ variable "tags" {
 variable "image" {
   type = map(string())
   default = {
-      publisher = "MicrosoftWindowsServer"
-      offer     = "WindowsServer"
-      sku       = "2022-Datacenter"
-      version   = "latest"
-    }
+    publisher = "MicrosoftWindowsServer"
+    offer     = "WindowsServer"
+    sku       = "2022-Datacenter"
+    version   = "latest"
   }
+}
 
 variable "disk" {
-  type = map(object({
-    osDiskName   = string
-    caching      = string
-    createOption = string
-    diskType     = string
-  }))
+  type = map(string())
   default = {
     disk = {
       osDiskName   = "syst"
@@ -92,22 +85,18 @@ variable "disk" {
 }
 
 variable "vm" {
-  type = map(object({
-    userName         = string
-    provisionVmAgent = bool
-    vmName           = string
-    vmSize           = string
-  }))
+  type = map(string())
+
   default = {
-    vm = {
-      userName         = "adsadmin"
-      pw               = ""
-      provisionVmAgent = true
-      vmName           = "azrads01"
-      vmSize           = "Standard_DS2_v2"
-    }
+
+    userName         = "adsadmin"
+    pw               = ""
+    provisionVmAgent = true
+    vmName           = "azrads01"
+    vmSize           = "Standard_DS2_v2"
   }
 }
+
 variable "root_id" {
   type = string
 }
@@ -139,7 +128,7 @@ variable "pw" {
 }
 
 variable "resource_codes" {
-  type = map((string))
+  type        = map((string))
   description = "values for resource codes abbreviations"
   default = {
     prefix           = "azr"
@@ -159,12 +148,12 @@ variable "resource_codes" {
 }
 
 variable "sta" {
-  type = map(string)
+  type        = map(string)
   description = "values for storage account"
   default = {
-    kind = "StorageV2"
-    tier = "Standard"
+    kind             = "StorageV2"
+    tier             = "Standard"
     replication_type = "LRS"
   }
-  
+
 }
