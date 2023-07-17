@@ -47,37 +47,32 @@ variable "kvt" {
     sku = string
   }))
   default = {
-    kvt = {
-      sku = "standard"
+      sku  = "standard"
       soft_delete_enabled = true
-    }
+      purge_protection_enabled = false
+      enabled_for_disk_encryption = false
+      enabled_for_deployment = true
+      enabled_for_template_deployment = true
+      enabled_for_volume_encryption = false
   }
 }
-
 variable "tags" {
   type = map(string)
   default = {
-    key   = "environment"
-    value = "Production"
+    key   = "env"
+    value = "dev"
   }
 }
 
 variable "image" {
-  type = map(object({
-    publisher = string
-    offer     = string
-    sku       = string
-    version   = string
-  }))
+  type = map(string())
   default = {
-    image = {
       publisher = "MicrosoftWindowsServer"
       offer     = "WindowsServer"
       sku       = "2022-Datacenter"
       version   = "latest"
     }
   }
-}
 
 variable "disk" {
   type = map(object({
@@ -140,5 +135,36 @@ variable "rsv_sku" {
 }
 
 variable "pw" {
-  type    = string
+  type = string
+}
+
+variable "resource_codes" {
+  type = map((string))
+  description = "values for resource codes abbreviations"
+  default = {
+    prefix           = "azr"
+    resource_group   = "rgp"
+    key_vault        = "kvt"
+    recovery_vault   = "rsv"
+    storage          = "sta"
+    development      = "dev"
+    subnet           = "snt"
+    sql              = "sql"
+    vnet             = "vnt"
+    net_sec_grp      = "nsg"
+    public_ip        = "pip"
+    bastion          = "bas"
+    availaiblity_set = "avs"
+  }
+}
+
+variable "sta" {
+  type = map(string)
+  description = "values for storage account"
+  default = {
+    kind = "StorageV2"
+    tier = "Standard"
+    replication_type = "LRS"
+  }
+  
 }

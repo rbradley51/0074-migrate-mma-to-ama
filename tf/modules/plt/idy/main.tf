@@ -1,38 +1,29 @@
-provider "azurerm" {
-  use_oidc = true
-  subscription_id = var.identitySubscriptionId
-  features {}
-}
-
 resource "random_uuid" "rnd" {
 }
 
-locals {
-  rndPrefix = substr(random_uuid.rnd.result, 0, 8)
-}
 resource "azurerm_resource_group" "idy" {
   name     = var.rgpName
   location = var.primary_location
 }
 resource "azurerm_recovery_services_vault" "rsv" {
-  name                = "rsv-${local.rndPrefix}"
+  name                = "${resource_codes.recovery_vault}-${local.rndPrefix}"
   location            = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
   sku = var.rsv_sku
 }
 
 resource "azurerm_key_vault" "kvt" {
-  name = "kvt-${local.rndPrefix}"
+  name = "${resource_codes.key_vault}-${local.rndPrefix}"
   location = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
   sku_name = var.kvt.sku 
-  tenant_id = var.idy.settings.identity.config.tenant_id
-  soft_delete_enabled = true
-  purge_protection_enabled = false
-  enabled_for_disk_encryption = false
-  enabled_for_deployment = true
-  enabled_for_template_deployment = true
-  enabled_for_volume_encryption = false
+  tenant_id = data.azurerm_client_config.current.tenant_id
+  soft_delete_enabled = var.soft_delete_enabled
+  purge_protection_enabled = var.purge_protection_enabled
+  enabled_for_disk_encryption = var.enabled_for_disk_encryption
+  enabled_for_deployment = var.enabled_for_deployment
+  enabled_for_template_deployment = var.enabled_for_template_deployment
+  enabled_for_volume_encryption = var.enabled_for_volume_encryption
 }
 
 # resource "azurerm_storage_account" "idy" {
