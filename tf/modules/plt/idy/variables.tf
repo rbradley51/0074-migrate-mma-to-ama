@@ -44,7 +44,6 @@ variable "kvt_sku" {
   description = "values for key vault sku"
   default = "standard"
   }
-}
 variable "tags" {
   type = map(string)
   default = {
