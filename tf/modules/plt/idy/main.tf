@@ -6,10 +6,14 @@ provider "azurerm" {
 resource "random_uuid" "rnd" {
 }
 
+locals {
+  rndPrefix = substr(random_uuid.rnd.result, 0, 8)
+}
 resource "azurerm_recovery_services_vault" "rsv" {
-  name                = "rsv-${random_uuid.rnd.result}"
+  name                = "rsv-${rndPrefix}"
   location            = var.idy.settings.identity.config.primary_location
   resource_group_name = var.idy.settings.identity.config.rgpName
+  sku = var.idy.settings.identity.config.rsv.sku
 }
 
 resource "azurerm_key_vault" "kvt" {
