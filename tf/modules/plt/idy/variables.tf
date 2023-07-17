@@ -3,15 +3,14 @@ variable "rgpName" {
   default = "rgp-ads"
 }
 
-variable "vnet" {
-  type = map(object({
-    vntName       = string
-    vntAddrSpaces = list(string)
-  }))
-  default = {
-    vntName       = "idy-vnt"
-    vntAddrSpaces = [cidrsubnet("10.0.0.0/28",8,0)]
-  }
+variable "vnetName" {
+  type = string
+  default = "vnt-ads"
+}
+
+variable vntAddrSpaces {
+  type = list(string)
+  default = [cidrsubnet("10.0.0.0/28",8,0)]
 }
 
 variable "subnets" {
