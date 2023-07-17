@@ -7,30 +7,33 @@ provider "azurerm" {
 resource "random_uuid" "rnd" {
 }
 
+locals {
+  rndPrefix = substr(random_uuid.rnd.result, 0, 8)
+}
 resource "azurerm_resource_group" "idy" {
   name     = var.rgpName
   location = var.primary_location
 }
 resource "azurerm_recovery_services_vault" "rsv" {
-  name                = "rsv-${random_uuid.rnd.result}"
+  name                = "rsv-${local.rndPrefix}"
   location            = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
   sku = var.rsv_sku
 }
 
-# resource "azurerm_key_vault" "kvt" {
-#   name = "kvt-${random_uuid.rnd.result}"
-#   location = var.idy.settings.identity.config.primary_location
-#   resource_group_name = var.idy.settings.identity.config.rgpName
-#   sku_name = var.idy.settings.identity.config.kvt.sku
-#   tenant_id = var.idy.settings.identity.config.tenant_id
-#   soft_delete_enabled = true
-#   purge_protection_enabled = false
-#   enabled_for_disk_encryption = false
-#   enabled_for_deployment = true
-#   enabled_for_template_deployment = true
-#   enabled_for_volume_encryption = false
-# }
+resource "azurerm_key_vault" "kvt" {
+  name = "kvt-${local.rndPrefix}"
+  location = var.primary_location
+  resource_group_name = azurerm_resource_group.idy.name
+  sku_name = var.kvt.sku 
+  tenant_id = var.idy.settings.identity.config.tenant_id
+  soft_delete_enabled = true
+  purge_protection_enabled = false
+  enabled_for_disk_encryption = false
+  enabled_for_deployment = true
+  enabled_for_template_deployment = true
+  enabled_for_volume_encryption = false
+}
 
 # resource "azurerm_storage_account" "idy" {
 #   account_kind = "StorageV2"

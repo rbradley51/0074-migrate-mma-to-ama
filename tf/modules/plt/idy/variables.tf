@@ -64,6 +64,7 @@ variable "kvt" {
   default = {
     kvt = {
       sku = "standard"
+      soft_delete_enabled = true
     }
   }
 }
