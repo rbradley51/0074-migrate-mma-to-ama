@@ -10,7 +10,7 @@ variable "vnet" {
   }))
   default = {
     vntName       = "idy-vnt"
-    vntAddrSpaces = ["10.0.0.0/28"]
+    vntAddrSpaces = [cidrsubnet("10.0.0.0/28",8,0)]
   }
 }
 
