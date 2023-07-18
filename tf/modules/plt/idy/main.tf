@@ -26,7 +26,7 @@ resource "azurerm_key_vault" "kvt" {
 }
 
 resource "azurerm_storage_account" "idy" {
-  name = "${var.resource_codes.storage_account}-${local.rndPrefix}"
+  name = "${var.resource_codes.storage}-${local.rndPrefix}"
   location = var.primary_location
   account_kind = var.sta.kind
   account_tier = var.sta.tier
@@ -34,11 +34,12 @@ resource "azurerm_storage_account" "idy" {
   resource_group_name = azurerm_resource_group.idy.name
 }
 
-# resource "azurerm_network_security_group" "idy" {
-#   name                = var.idy.settings.identity.config.vnet.subnet.nsgName
-#   location            = var.idy.settings.identity.config.primary_location
-#   resource_group_name = var.idy.settings.identity.config.rgpName
-# }
+resource "azurerm_network_security_group" "idy" {
+  name = var.nsg.name
+  location = var.primary_location
+  resource_group_name = azurerm_resource_group.idy.name
+}
+
 # resource "azurerm_virtual_network" "idy" {
 #   name                = var.idy.settings.identity.config.vnet.vntName
 #   location            = var.idy.settings.identity.config.primary_location
