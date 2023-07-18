@@ -8,10 +8,8 @@ variable "nic" {
   type        = map(string)
   description = "values for network interface"
   default = {
-    nic = {
-      name       = "ads01-nic"
-      prvIpAlloc = "Dynamic"
-    }
+    name       = "ads01-nic"
+    prvIpAlloc = "Dynamic"
   }
 }
 
