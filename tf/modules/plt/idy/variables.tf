@@ -210,7 +210,7 @@ variable "subnets" {
     },
     {
       name           = "srvs"
-      address_prefix = "10.0.0.8/29"
+      address_prefix = "10.0.0.8/28"
     }
   ]
 }
