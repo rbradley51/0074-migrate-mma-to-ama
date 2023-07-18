@@ -94,7 +94,6 @@ resource "azurerm_network_interface" "ads01" {
   ip_configuration {
     name                          = var.ads_nics[0].ipconfig
     # https://stackoverflow.com/questions/56861532/how-to-reference-objects-in-terraform
-    # subnet_id                     = azurerm_virtual_network.idy.subnet.*.id[0]
     private_ip_address_allocation = var.ads_nics[0].private_ip_address_allocation
     private_ip_address            = var.ads_nics[0].private_ip_address
   }
@@ -102,7 +101,6 @@ resource "azurerm_network_interface" "ads01" {
 
 resource "azurerm_network_interface" "ads02" {
   name                = var.ads_nics[1].name
-  subnet_id = azurerm_virtual_network.idy.subnet.*.id[0]
   location            = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
 
