@@ -159,7 +159,15 @@ variable "sta" {
   }
 }
 variable "retention_days" {
-  type       = number
+  type = number
   description = "values for soft delete retention in days"
   default = 7
+}
+
+variable "nsg" {
+  type = map(string)
+  description = "values for network security group"
+  default = {
+    name = "nsg-ads"
+  }
 }
