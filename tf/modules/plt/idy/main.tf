@@ -26,7 +26,7 @@ resource "azurerm_key_vault" "kvt" {
 }
 
 resource "azurerm_storage_account" "idy" {
-  name                     = "${var.resource_codes.storage}${local.rndPrefix}"
+  name                     = "1${var.resource_codes.storage}${local.rndPrefix}"
   location                 = var.primary_location
   account_kind             = var.sta.kind
   account_tier             = var.sta.tier
@@ -86,18 +86,18 @@ resource "azurerm_virtual_network" "idy" {
   }
 }
 
-# resource "azurerm_network_interface" "ads01" {
-#   name                = var.idy.settings.identity.config.vnet.subnet.nic.ads01NicName
-#   location            = var.idy.settings.identity.config.primary_location
-#   resource_group_name = var.idy.settings.identity.config.rgpName
+resource "azurerm_network_interface" "ads01" {
+  name                = var.idy.settings.identity.config.vnet.subnet.nic.ads01NicName
+  location            = var.idy.settings.identity.config.primary_location
+  resource_group_name = var.idy.settings.identity.config.rgpName
 
-#   ip_configuration {
-#     name                          = var.idy.settings.identity.config.vnet.subnet.nic.ads01NicConfigName
-#     # https://stackoverflow.com/questions/56861532/how-to-reference-objects-in-terraform
-#     subnet_id                     = azurerm_virtual_network.idy.subnet.*.id[0]
-#     private_ip_address_allocation = var.idy.settings.identity.config.vnet.subnet.nic.prvIpAlloc
-#   }
-# }
+  ip_configuration {
+    name                          = var.idy.settings.identity.config.vnet.subnet.nic.ads01NicConfigName
+    # https://stackoverflow.com/questions/56861532/how-to-reference-objects-in-terraform
+    subnet_id                     = azurerm_virtual_network.idy.subnet.*.id[0]
+    private_ip_address_allocation = var.idy.settings.identity.config.vnet.subnet.nic.prvIpAlloc
+  }
+}
 
 # resource "azurerm_availability_set" "avs01" {
 #   name                = var.idy.settings.identity.config.avset.avsetName
