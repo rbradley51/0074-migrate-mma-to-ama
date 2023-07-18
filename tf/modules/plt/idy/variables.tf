@@ -187,28 +187,32 @@ variable "nsg_rules_srvs" {
 
 variable "vnt" {
   type = list(object({
-    name             = string
+    name           = string
     address_prefix = string
-    dns_servers      = list(string)
-    subnets          = list(object({
-      name           = string
-      address_prefix = string
-    }))
+    dns_servers    = list(string)
   }))
   description = "values for virtual network"
   default = {
-    name             = "vnt-ads"
+    name           = "vnt-ads"
     address_prefix = "10.0.0.0/27"
-    dns_servers      = ["10.0.0.4", "10.0.0.5"]
-    subnets = [
-      {
-        name           = "adds"
-        address_prefix = "10.0.0.0/29"
-      },
-      {
-        name           = "srvs"
-        address_prefix = "10.0.0.8/29"
-      }
-    ]
+    dns_servers    = ["10.0.0.4", "10.0.0.5"]
   }
+}
+
+variable "subnets" {
+  type = list(object({
+    name           = string
+    address_prefix = string
+  }))
+  description = "values for subnets"
+  default = [
+    {
+      name           = "adds"
+      address_prefix = "10.0.0.0/29"
+    },
+    {
+      name           = "srvs"
+      address_prefix = "10.0.0.8/29"
+    }
+  ]
 }
