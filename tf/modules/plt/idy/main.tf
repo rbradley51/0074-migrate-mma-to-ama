@@ -69,10 +69,10 @@ resource "azurerm_network_security_group" "srvs" {
 }
 
 resource "azurerm_virtual_network" "idy" {
-  name                = var.vnt.name
+  name                = var.vntName
   location            = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
-  address_space       = var.vnt.address_prefixes
+  address_space       = var.vntAddressPrefix
   dns_servers         = var.dns_servers
   subnet {
     name = var.subnets[0].name

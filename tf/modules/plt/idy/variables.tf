@@ -184,18 +184,17 @@ variable "nsg_rules_srvs" {
     destination_address_prefix = "*"
   }]
 }
-
-variable "vnt" {
-  type = map(string)
-    name = string
-    address_prefix = string
-  description = "values for virtual network"
-  default = {
-    name = "vnt-ads"
-    address_prefix = "10.0.0.0/27"
-  }
+variable "vntName" {
+  type        = string
+  description = "values for virtual network name"
+  default     = "azr-vnt"
 }
 
+variable "vntAddressPrefix" {
+  type        = string
+  description = "values for virtual network address prefix"
+  default     = "10.0.0.0/27"
+}
 variable "dns_servers" {
   type       = list(string)
   description = "values for dns servers"
