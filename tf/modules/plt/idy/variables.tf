@@ -143,7 +143,7 @@ variable "nsg_name" {
 }
 variable "nsg_rules_adds" {
   description = "A list of security rules to apply to the network security group."
-  type = map(string)
+  type        = map(string)
   default = {
     name                       = "placeholder-adds"
     direction                  = "Inbound"
@@ -157,13 +157,15 @@ variable "nsg_rules_adds" {
 }
 
 variable "nsg_rules_adds_pri" {
-    type = number
-    description = "value for nsg rules adds priority"
+  type        = number
+  description = "value for nsg rules adds priority"
+  default = {
     priority = 100
+  }
 }
 variable "nsg_rules_srvs" {
   description = "A list of security rules to apply to the network security group."
-  type = map(string)
+  type        = map(string)
   default = {
     name                       = "placeholder-srvs"
     direction                  = "Inbound"
@@ -176,9 +178,11 @@ variable "nsg_rules_srvs" {
   }
 }
 variable "nsg_rules_srvs_pri" {
-    type = number
-    description = "value for nsg rules srvs priority"
+  type        = number
+  description = "value for nsg rules srvs priority"
+  default = {
     priority = 100
+  }
 }
 variable "vntName" {
   type        = string
@@ -192,7 +196,7 @@ variable "vntAddressPrefix" {
   default     = "10.0.0.0/27"
 }
 variable "dns_servers" {
-  type       = list(string)
+  type        = list(string)
   description = "values for dns servers"
   default     = ["10.0.0.4", "10.0.0.5"]
 }
