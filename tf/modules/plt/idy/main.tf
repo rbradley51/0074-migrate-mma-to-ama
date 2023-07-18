@@ -38,6 +38,17 @@ resource "azurerm_network_security_group" "idy" {
   name = var.nsg.name
   location = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
+    security_rule {
+    name                       = var.nsg_rules.name
+    priority                   = var.nsg_rules.priority
+    direction                  = var.nsg_rules.direction
+    access                     = var.nsg_rules.access
+    protocol                   = var.nsgrules.protocol
+    source_port_range          = var.nsg_rules.source_port_range
+    destination_port_range     = var.nsg_rules.destination_port_range
+    source_address_prefix      = var.nsg_rules.source_address_prefix
+    destination_address_prefix = var.nsg_rules.destination_address_prefix
+  }
 }
 
 # resource "azurerm_virtual_network" "idy" {
