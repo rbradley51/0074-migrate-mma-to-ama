@@ -187,10 +187,10 @@ variable "vntName" {
   default     = "azr-vnt"
 }
 
-variable "vntAddressPrefix" {
-  type        = string
+variable "vntAddressPrefixes" {
+  type        = list(string)
   description = "values for virtual network address prefix"
-  default     = "10.0.0.0/27"
+  default     = ["10.0.0.0/27"]
 }
 variable "dns_servers" {
   type        = list(string)
