@@ -193,7 +193,7 @@ variable "vnt" {
     subnets          = list(object({
       name           = string
       address_prefix = string
-    })
+    }, {max_items = 2}))
   }))
   description = "values for virtual network"
   default = {
