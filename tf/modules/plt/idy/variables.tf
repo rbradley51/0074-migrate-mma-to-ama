@@ -186,19 +186,22 @@ variable "nsg_rules_srvs" {
 }
 
 variable "vnt" {
-  type = map(object({
-    name           = string
+  type = map(string)
+    name = string
     address_prefix = string
-    dns_servers    = list(string)
-  }))
+    dns_servers = list(string)
   description = "values for virtual network"
   default = {
-    name           = "vnt-ads"
+    name = "vnt-ads"
     address_prefix = "10.0.0.0/27"
-    dns_servers    = ["10.0.0.4", "10.0.0.5"]
   }
 }
 
+variable "dns_servers" {
+  type       = list(string)
+  description = "values for dns servers"
+  default     = ["10.0.0.4", "10.0.0.5"]
+}
 variable "subnets" {
   type = list(object({
     name           = string
