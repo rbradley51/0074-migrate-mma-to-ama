@@ -28,7 +28,7 @@ jobs:
       azCliVer: 2.50.0
       tfVersion: 1.5.3
       workingdir: tf
-      planOnly: true # Set to true to plan only, false to deploy
+      planOnly: false # Set to true to plan only, false to deploy
       rollback: false # Set to true to rollback, false to deploy
 
     runs-on: ubuntu-latest

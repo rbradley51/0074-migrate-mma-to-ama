@@ -25,13 +25,12 @@ resource "azurerm_key_vault" "kvt" {
   soft_delete_retention_days = var.retention_days
 }
 
-# resource "azurerm_storage_account" "idy" {
-#   account_kind = "StorageV2"
-#   account_tier = "Standard"
-#   account_replication_type = "LRS"
-#   resource_group_name = var.idy.settings.identity.config.rgpName
-
-# }
+resource "azurerm_storage_account" "idy" {
+  account_kind = var.sta.kind
+  account_tier = var.sta.tier
+  account_replication_type = var.sta.replication_type
+  resource_group_name = azurerm_resource_group.idy.name
+}
 
 # resource "azurerm_network_security_group" "idy" {
 #   name                = var.idy.settings.identity.config.vnet.subnet.nsgName
