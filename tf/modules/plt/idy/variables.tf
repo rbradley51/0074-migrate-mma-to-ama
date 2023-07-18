@@ -17,10 +17,9 @@ variable vntAddrSpaces {
 }
 
 variable "subnets" {
-  type = map(object({
+  type = map(string)
     name = string
     cidr = string
-  }))
   description = "values for subnets"
   default = {
     subnet1 = {
@@ -31,10 +30,7 @@ variable "subnets" {
 }
 
 variable "nic" {
-  type = map(object({
-    name       = string
-    prvIpAlloc = string
-  }))
+  type = map(string)
   description = "values for network interface"
   default = {
     nic = {
@@ -170,4 +166,30 @@ variable "nsg" {
   default = {
     name = "nsg-ads"
   }
+}
+
+variable "nsg_rules" {
+  description = "A list of security rules to apply to the network security group."
+  type        = list(object({
+    name                       = string
+    priority                   = number
+    direction                  = string
+    access                     = string
+    protocol                   = string
+    source_port_range          = string
+    destination_port_range     = string
+    source_address_prefix      = string
+    destination_address_prefix = string
+  }))
+  default = [ {
+    name                       = "placeholder"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  } ]
 }
