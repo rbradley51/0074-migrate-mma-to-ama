@@ -35,7 +35,7 @@ resource "azurerm_storage_account" "idy" {
 }
 
 resource "azurerm_network_security_group" "adds" {
-  name                = var.nsg.name
+  name                = var.nsg_name[0]
   location            = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
   security_rule {
@@ -43,7 +43,7 @@ resource "azurerm_network_security_group" "adds" {
     priority                   = var.nsg_rules_adds.priority
     direction                  = var.nsg_rules_adds.direction
     access                     = var.nsg_rules_adds.access
-    protocol                   = var.nsgrules_adds.protocol
+    protocol                   = var.nsg_rules_adds.protocol
     source_port_range          = var.nsg_rules_adds.source_port_range
     destination_port_range     = var.nsg_rules_adds.destination_port_range
     source_address_prefix      = var.nsg_rules_adds.source_address_prefix
@@ -52,7 +52,7 @@ resource "azurerm_network_security_group" "adds" {
 }
 
 resource "azurerm_network_security_group" "srvs" {
-  name                = var.nsg.name
+  name                = var.nsg_name[1]
   location            = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
   security_rule {
@@ -60,7 +60,7 @@ resource "azurerm_network_security_group" "srvs" {
     priority                   = var.nsg_rules_srvs.priority
     direction                  = var.nsg_rules_srvs.direction
     access                     = var.nsg_rules_srvs.access
-    protocol                   = var.nsgrules_srvs.protocol
+    protocol                   = var.nsg_rules_srvs.protocol
     source_port_range          = var.nsg_rules_srvs.source_port_range
     destination_port_range     = var.nsg_rules_srvs.destination_port_range
     source_address_prefix      = var.nsg_rules_srvs.source_address_prefix

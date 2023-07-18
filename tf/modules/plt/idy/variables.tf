@@ -133,6 +133,14 @@ variable "retention_days" {
   default     = 7
 }
 
+variable "nsg_name" {
+  type        = list(string)
+  description = "values for network security group"
+  default = [
+    "nsg-adds",
+    "nsg-srvs"
+  ]
+}
 variable "nsg_rules_adds" {
   description = "A list of security rules to apply to the network security group."
   type = list(object({
