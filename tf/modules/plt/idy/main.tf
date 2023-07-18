@@ -26,6 +26,8 @@ resource "azurerm_key_vault" "kvt" {
 }
 
 resource "azurerm_storage_account" "idy" {
+  name = "${var.resource_codes.storage_account}-${local.rndPrefix}"
+  location = var.primary_location
   account_kind = var.sta.kind
   account_tier = var.sta.tier
   account_replication_type = var.sta.replication_type
