@@ -40,7 +40,7 @@ resource "azurerm_network_security_group" "adds" {
   resource_group_name = azurerm_resource_group.idy.name
   security_rule {
     name                       = var.nsg_rules_adds.name
-    priority                   = var.nsg_rules_adds.priority
+    priority                   = var.nsg_rules_adds_pri.priority
     direction                  = var.nsg_rules_adds.direction
     access                     = var.nsg_rules_adds.access
     protocol                   = var.nsg_rules_adds.protocol
@@ -57,7 +57,7 @@ resource "azurerm_network_security_group" "srvs" {
   resource_group_name = azurerm_resource_group.idy.name
   security_rule {
     name                       = var.nsg_rules_srvs.name
-    priority                   = var.nsg_rules_srvs.priority
+    priority                   = var.nsg_rules_srvs_pri.priority
     direction                  = var.nsg_rules_srvs.direction
     access                     = var.nsg_rules_srvs.access
     protocol                   = var.nsg_rules_srvs.protocol
