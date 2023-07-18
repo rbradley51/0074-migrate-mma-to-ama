@@ -189,18 +189,16 @@ variable "vnt" {
   type = list(object({
     name             = string
     address_prefixes = list(string)
-    location         = string
     dns_servers      = list(string)
-    subnets          = list(map(string))
-    name             = string
-    address_prefix   = string
+    subnets          = list(object({
+      name           = string
+      address_prefix = string
+    })
   }))
-
   description = "values for virtual network"
   default = {
     name             = "vnt-ads"
     address_prefixes = ["10.0.0.0/27"]
-    location         = var.primary_location
     dns_servers      = ["10.0.0.4", "10.0.0.5"]
     subnets = [
       {
@@ -214,27 +212,3 @@ variable "vnt" {
     ]
   }
 }
-variable "vnetName" {
-  type        = string
-  description = "values for virtual network name"
-  default     = "vnt-ads"
-}
-
-# variable vntAddrSpaces {
-#   type = list(string)
-#   description = "values for virtual network address spaces"
-#   default = ["10.0.0.0/28"]
-# }
-
-# variable "subnets" {
-#   type = map(string)
-#     name = string
-#     cidr = string
-#   description = "values for subnets"
-#   default = {
-#     subnet1 = {
-#       name = "adds-snet"
-#       cidr = "10.0.0.0/29"
-#     }
-#   }
-# }
