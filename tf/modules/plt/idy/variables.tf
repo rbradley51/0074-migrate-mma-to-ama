@@ -189,7 +189,6 @@ variable "vnt" {
   type = map(string)
     name = string
     address_prefix = string
-    dns_servers = list(string)
   description = "values for virtual network"
   default = {
     name = "vnt-ads"
