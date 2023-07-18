@@ -87,18 +87,33 @@ resource "azurerm_virtual_network" "idy" {
 }
 
 resource "azurerm_network_interface" "ads01" {
-  name                = var.idy.settings.identity.config.vnet.subnet.nic.ads01NicName
-  location            = var.idy.settings.identity.config.primary_location
-  resource_group_name = var.idy.settings.identity.config.rgpName
+  name                = var.ads_nics[0].name
+  location            = var.primary_location
+  resource_group_name = azurerm_resource_group.idy.name
 
   ip_configuration {
-    name                          = var.idy.settings.identity.config.vnet.subnet.nic.ads01NicConfigName
+    name                          = var.ads_nics[0].ipconfig
     # https://stackoverflow.com/questions/56861532/how-to-reference-objects-in-terraform
     subnet_id                     = azurerm_virtual_network.idy.subnet.*.id[0]
-    private_ip_address_allocation = var.idy.settings.identity.config.vnet.subnet.nic.prvIpAlloc
+    private_ip_address_allocation = var.ads_nics[0].private_ip_address_allocation
+    private_ip_address            = var.ads_nics[0].private_ip_address
   }
 }
 
+resource "azurerm_network_interface" "ads02" {
+  name                = var.ads_nics[1].name
+  subnet_id = azurerm_virtual_network.idy.subnet.*.id[0]
+  location            = var.primary_location
+  resource_group_name = azurerm_resource_group.idy.name
+
+  ip_configuration {
+    name                          = var.ads_nics[1].ipconfig
+    # https://stackoverflow.com/questions/56861532/how-to-reference-objects-in-terraform
+    subnet_id                     = azurerm_virtual_network.idy.subnet.*.id[0]
+    private_ip_address_allocation = var.ads_nics[1].private_ip_address_allocation
+    private_ip_address            = var.ads_nics[1].private_ip_address
+  }
+}
 # resource "azurerm_availability_set" "avs01" {
 #   name                = var.idy.settings.identity.config.avset.avsetName
 #   location            = var.idy.settings.identity.config.primary_location

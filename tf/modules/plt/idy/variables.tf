@@ -4,13 +4,21 @@ variable "rgpName" {
   default     = "rgp-ads"
 }
 
-variable "nic" {
-  type        = map(string)
+variable "ads_nics" {
+  type        = list(map(string))
   description = "values for network interface"
-  default = {
+  default = [{
     name       = "ads01-nic"
-    prvIpAlloc = "Dynamic"
-  }
+    prvIpAlloc = "Static"
+    prvIpAddr = "10.0.0.4"
+    ipconfig = "ads01-ipconfig"
+  },
+  {
+    name       = "ads02-nic"
+    prvIpAlloc = "Static"
+    prvIpAddr = "10.0.0.5"
+    ipconfig = "ads02-ipconfig"
+  }]
 }
 
 variable "kvt_sku" {
