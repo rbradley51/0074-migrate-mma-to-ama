@@ -186,7 +186,7 @@ variable "nsg_rules_srvs" {
 }
 
 variable "vnt" {
-  type = (object({
+  type = list(object({
     name           = string
     address_prefix = string
     dns_servers    = list(string)
