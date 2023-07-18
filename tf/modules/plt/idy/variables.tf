@@ -159,9 +159,7 @@ variable "nsg_rules_adds" {
 variable "nsg_rules_adds_pri" {
   type        = number
   description = "value for nsg rules adds priority"
-  default = {
-    priority = 100
-  }
+  default     = 100
 }
 variable "nsg_rules_srvs" {
   description = "A list of security rules to apply to the network security group."
@@ -180,10 +178,9 @@ variable "nsg_rules_srvs" {
 variable "nsg_rules_srvs_pri" {
   type        = number
   description = "value for nsg rules srvs priority"
-  default = {
-    priority = 100
-  }
+  default     = 100
 }
+
 variable "vntName" {
   type        = string
   description = "values for virtual network name"
