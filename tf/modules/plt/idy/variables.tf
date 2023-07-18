@@ -1,36 +1,11 @@
 variable "rgpName" {
-  type    = string
+  type        = string
   description = "values for resource group name"
-  default = "rgp-ads"
-}
-
-variable "vnetName" {
-  type = string
-  description = "values for virtual network name"
-  default = "vnt-ads"
-}
-
-variable vntAddrSpaces {
-  type = list(string)
-  description = "values for virtual network address spaces"
-  default = ["10.0.0.0/28"]
-}
-
-variable "subnets" {
-  type = map(string)
-    name = string
-    cidr = string
-  description = "values for subnets"
-  default = {
-    subnet1 = {
-      name = "adds-snet"
-      cidr = "10.0.0.0/29"
-    }
-  }
+  default     = "rgp-ads"
 }
 
 variable "nic" {
-  type = map(string)
+  type        = map(string)
   description = "values for network interface"
   default = {
     nic = {
@@ -41,12 +16,12 @@ variable "nic" {
 }
 
 variable "kvt_sku" {
-  type = string
+  type        = string
   description = "values for key vault sku"
-  default = "standard"
-  }
+  default     = "standard"
+}
 variable "tags" {
-  type = map(string)
+  type        = map(string)
   description = "values for tags"
   default = {
     key   = "env"
@@ -55,7 +30,7 @@ variable "tags" {
 }
 
 variable "image" {
-  type = map(string)
+  type        = map(string)
   description = "values for image"
   default = {
     publisher = "MicrosoftWindowsServer"
@@ -66,18 +41,18 @@ variable "image" {
 }
 
 variable "disk" {
-  type = map(string)
+  type        = map(string)
   description = "values for disk"
   default = {
-      osDiskName   = "syst"
-      caching      = "ReadWrite"
-      createOption = "FromImage"
-      diskType     = "Standard_LRS"
+    osDiskName   = "syst"
+    caching      = "ReadWrite"
+    createOption = "FromImage"
+    diskType     = "Standard_LRS"
   }
 }
 
 variable "vm" {
-  type = map(string)
+  type        = map(string)
   description = "values for virtual machine"
   default = {
     userName         = "adsadmin"
@@ -89,39 +64,39 @@ variable "vm" {
 }
 
 variable "root_id" {
-  type = string
+  type        = string
   description = "root id value for organization"
 }
 
 variable "root_name" {
-  type = string
+  type        = string
   description = "root name value for organization"
 }
 
 variable "primary_location" {
-  type = string
+  type        = string
   description = "primary azure region value for organization"
 }
 
 variable "secondary_location" {
-  type = string
+  type        = string
   description = "secondary azure region value for organization"
 }
 
 variable "identitySubscriptionId" {
-  type    = string
+  type        = string
   description = "identity subscription id"
-  default = "1d790e78-7852-498d-8087-f5d48686a50e"
+  default     = "1d790e78-7852-498d-8087-f5d48686a50e"
 }
 
 variable "rsv_sku" {
-  type    = string
+  type        = string
   description = "values for recovery services vault sku"
-  default = "Standard"
+  default     = "Standard"
 }
 
 variable "pw" {
-  type = string
+  type        = string
   description = "Values for password. Will be provided interactively for confidentiality"
 }
 
@@ -155,22 +130,14 @@ variable "sta" {
   }
 }
 variable "retention_days" {
-  type = number
+  type        = number
   description = "values for soft delete retention in days"
-  default = 7
+  default     = 7
 }
 
-variable "nsg" {
-  type = map(string)
-  description = "values for network security group"
-  default = {
-    name = "nsg-ads"
-  }
-}
-
-variable "nsg_rules" {
+variable "nsg_rules_adds" {
   description = "A list of security rules to apply to the network security group."
-  type        = list(object({
+  type = list(object({
     name                       = string
     priority                   = number
     direction                  = string
@@ -181,8 +148,8 @@ variable "nsg_rules" {
     source_address_prefix      = string
     destination_address_prefix = string
   }))
-  default = [ {
-    name                       = "placeholder"
+  default = [{
+    name                       = "placeholder-adds"
     priority                   = 100
     direction                  = "Inbound"
     access                     = "Allow"
@@ -191,5 +158,85 @@ variable "nsg_rules" {
     destination_port_range     = "*"
     source_address_prefix      = "*"
     destination_address_prefix = "*"
-  } ]
+  }]
 }
+
+variable "nsg_rules_srvs" {
+  description = "A list of security rules to apply to the network security group."
+  type = list(object({
+    name                       = string
+    priority                   = number
+    direction                  = string
+    access                     = string
+    protocol                   = string
+    source_port_range          = string
+    destination_port_range     = string
+    source_address_prefix      = string
+    destination_address_prefix = string
+  }))
+  default = [{
+    name                       = "placeholder-srvs"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }]
+}
+
+variable "vnt" {
+  type = list(object({
+    name             = string
+    address_prefixes = list(string)
+    location         = string
+    dns_servers      = list(string)
+    subnets          = list(map(string))
+    name             = string
+    address_prefix   = string
+  }))
+
+  description = "values for virtual network"
+  default = {
+    name             = "vnt-ads"
+    address_prefixes = ["10.0.0.0/27"]
+    location         = var.primary_location
+    dns_servers      = ["10.0.0.4", "10.0.0.5"]
+    subnets = [
+      {
+        name           = "adds"
+        address_prefix = "10.0.0.0/29"
+      },
+      {
+        name           = "srvs"
+        address_prefix = "10.0.0.8/29"
+      }
+    ]
+  }
+}
+variable "vnetName" {
+  type        = string
+  description = "values for virtual network name"
+  default     = "vnt-ads"
+}
+
+# variable vntAddrSpaces {
+#   type = list(string)
+#   description = "values for virtual network address spaces"
+#   default = ["10.0.0.0/28"]
+# }
+
+# variable "subnets" {
+#   type = map(string)
+#     name = string
+#     cidr = string
+#   description = "values for subnets"
+#   default = {
+#     subnet1 = {
+#       name = "adds-snet"
+#       cidr = "10.0.0.0/29"
+#     }
+#   }
+# }

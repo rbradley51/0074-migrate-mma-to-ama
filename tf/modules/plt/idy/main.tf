@@ -9,65 +9,82 @@ resource "azurerm_recovery_services_vault" "rsv" {
   name                = "${var.resource_codes.recovery_vault}-${local.rndPrefix}"
   location            = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
-  sku = var.rsv_sku
+  sku                 = var.rsv_sku
 }
 
 resource "azurerm_key_vault" "kvt" {
-  name = "${var.resource_codes.key_vault}-${local.rndPrefix}"
-  location = var.primary_location
-  resource_group_name = azurerm_resource_group.idy.name
-  sku_name = var.kvt_sku
-  tenant_id = data.azurerm_client_config.current.tenant_id
-  purge_protection_enabled = false
-  enabled_for_disk_encryption = false
-  enabled_for_deployment = true
+  name                            = "${var.resource_codes.key_vault}-${local.rndPrefix}"
+  location                        = var.primary_location
+  resource_group_name             = azurerm_resource_group.idy.name
+  sku_name                        = var.kvt_sku
+  tenant_id                       = data.azurerm_client_config.current.tenant_id
+  purge_protection_enabled        = false
+  enabled_for_disk_encryption     = false
+  enabled_for_deployment          = true
   enabled_for_template_deployment = true
-  soft_delete_retention_days = var.retention_days
+  soft_delete_retention_days      = var.retention_days
 }
 
 resource "azurerm_storage_account" "idy" {
-  name = "${var.resource_codes.storage}-${local.rndPrefix}"
-  location = var.primary_location
-  account_kind = var.sta.kind
-  account_tier = var.sta.tier
+  name                     = "${var.resource_codes.storage}-${local.rndPrefix}"
+  location                 = var.primary_location
+  account_kind             = var.sta.kind
+  account_tier             = var.sta.tier
   account_replication_type = var.sta.replication_type
-  resource_group_name = azurerm_resource_group.idy.name
+  resource_group_name      = azurerm_resource_group.idy.name
 }
 
-resource "azurerm_network_security_group" "idy" {
-  name = var.nsg.name
-  location = var.primary_location
+resource "azurerm_network_security_group" "adds" {
+  name                = var.nsg.name
+  location            = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
-    security_rule {
-    name                       = var.nsg_rules.name
-    priority                   = var.nsg_rules.priority
-    direction                  = var.nsg_rules.direction
-    access                     = var.nsg_rules.access
-    protocol                   = var.nsgrules.protocol
-    source_port_range          = var.nsg_rules.source_port_range
-    destination_port_range     = var.nsg_rules.destination_port_range
-    source_address_prefix      = var.nsg_rules.source_address_prefix
-    destination_address_prefix = var.nsg_rules.destination_address_prefix
+  security_rule {
+    name                       = var.nsg_rules_adds.name
+    priority                   = var.nsg_rules_adds.priority
+    direction                  = var.nsg_rules_adds.direction
+    access                     = var.nsg_rules_adds.access
+    protocol                   = var.nsgrules_adds.protocol
+    source_port_range          = var.nsg_rules_adds.source_port_range
+    destination_port_range     = var.nsg_rules_adds.destination_port_range
+    source_address_prefix      = var.nsg_rules_adds.source_address_prefix
+    destination_address_prefix = var.nsg_rules_adds.destination_address_prefix
   }
 }
 
-# resource "azurerm_virtual_network" "idy" {
-#   name                = var.idy.settings.identity.config.vnet.vntName
-#   location            = var.idy.settings.identity.config.primary_location
-#   resource_group_name = var.idy.settings.identity.config.rgpName
-#   address_space       = var.idy.settings.identity.config.vnet.vntAddrSpaces # ["10.0.0.0/28"]
-#   # dns_servers         = ["10.0.0.4", "10.0.0.5"]
+resource "azurerm_network_security_group" "srvs" {
+  name                = var.nsg.name
+  location            = var.primary_location
+  resource_group_name = azurerm_resource_group.idy.name
+  security_rule {
+    name                       = var.nsg_rules_srvs.name
+    priority                   = var.nsg_rules_srvs.priority
+    direction                  = var.nsg_rules_srvs.direction
+    access                     = var.nsg_rules_srvs.access
+    protocol                   = var.nsgrules_srvs.protocol
+    source_port_range          = var.nsg_rules_srvs.source_port_range
+    destination_port_range     = var.nsg_rules_srvs.destination_port_range
+    source_address_prefix      = var.nsg_rules_srvs.source_address_prefix
+    destination_address_prefix = var.nsg_rules_srvs.destination_address_prefix
+  }
+}
 
-#   subnet {
-#     name           = var.idy.settings.identity.config.vnet.subnet.sntName
-#     address_prefix = var.idy.settings.identity.config.vnet.subnet.subAddrPrefix # ["10.0.0.0/29"]
-#     security_group = azurerm_network_security_group.idy.id  
-# }
-
-#   tags = {
-#     var.idy.settings.identity.config.tags.environment.key = var.idy.settings.identity.config.tags.environment.value
-#   }
-# }
+resource "azurerm_virtual_network" "idy" {
+  name                = var.vnt.name
+  location            = var.primary_location
+  resource_group_name = azurerm_resource_group.idy.name
+  address_space       = var.vnt.address_prefixes
+  dns_servers         = var.vnt.dns_servers
+  subnet {
+    name           = var.vnt.subnets[0].name
+    address_prefix = var.vnt.subnets[0].address_prefix
+    security_group = azurerm_network_security_group.adds.id
+  }
+  subnet {
+    name           = var.vnt.subnets[1].name
+    address_prefix = var.vnt.subnets[1].address_prefix
+    security_group = azurerm_network_security_group.srvs.id
+  }
+}
 
 # resource "azurerm_network_interface" "ads01" {
 #   name                = var.idy.settings.identity.config.vnet.subnet.nic.ads01NicName
