@@ -122,15 +122,14 @@ resource "azurerm_virtual_machine" "vms" {
   }
 
   storage_os_disk {
-    name              = var.vms[count.index].disk_os.osDiskName
+    name              = "${var.vms[count.index].vmName}-syst"
     caching           = var.vms[count.index].disk_os.caching
     create_option     = var.vms[count.index].disk_os.createOption
     managed_disk_type = var.vms[count.index].disk_os.diskType
-    disk_size_gb      = var.vms[count.index].disk_os.diskSizeGB
   }
 
   storage_data_disk {
-    name              = var.vms[count.index].disk_data.dataDiskName
+    name              = "${var.vms[count.index].vmName}-data"
     managed_disk_type = var.vms[count.index].disk_data.diskType
     create_option     = var.vms[count.index].disk_data.createOption
     caching           = var.vms[count.index].disk_data.caching

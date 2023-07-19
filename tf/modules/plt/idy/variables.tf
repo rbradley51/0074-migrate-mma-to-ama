@@ -66,17 +66,6 @@ variable "image" {
   }
 }
 
-variable "disk" {
-  type        = map(string)
-  description = "values for disk"
-  default = {
-    osDiskName   = "syst"
-    caching      = "ReadWrite"
-    createOption = "FromImage"
-    diskType     = "Standard_LRS"
-  }
-}
-
 variable "avs_adds" {
   type = object({
     update_domain = number
@@ -156,7 +145,6 @@ variable "vms" {
         caching      = "ReadWrite"
         createOption = "FromImage"
         diskType     = "Standard_LRS"
-        diskSizeGB   = 128
       }
       disk_data = {
         dataDiskName = "data"
@@ -191,7 +179,6 @@ variable "vms" {
         caching      = "ReadWrite"
         createOption = "FromImage"
         diskType     = "Standard_LRS"
-        diskSizeGB   = 128
       }
       disk_data = {
         dataDiskName = "data"
@@ -226,7 +213,6 @@ variable "vms" {
         caching      = "ReadWrite"
         createOption = "FromImage"
         diskType     = "Standard_LRS"
-        diskSizeGB   = 128
       }
       disk_data = {
         dataDiskName = "data"
