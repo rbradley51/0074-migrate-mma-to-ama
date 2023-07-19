@@ -131,8 +131,13 @@ variable "vms" {
       createOption = string
       diskType     = string
       diskSizeGB   = number
+      lun          = number
     })
     os_profile = map(string)
+    windows_config = object({
+      provision_vm_agent        = bool
+      enable_automatic_upgrades = bool
+    })
   }))
   description = "Values for virtual machines"
   default = [
@@ -159,6 +164,7 @@ variable "vms" {
         createOption = "Empty"
         diskType     = "Standard_LRS"
         diskSizeGB   = 32
+        lun = 2
       }
       os_profile = {
         admin_username = "adsadmin"
@@ -193,6 +199,7 @@ variable "vms" {
         createOption = "Empty"
         diskType     = "Standard_LRS"
         diskSizeGB   = 32
+        lun = 2
       }
       os_profile = {
         admin_username = "adsadmin"
@@ -227,6 +234,7 @@ variable "vms" {
         createOption = "Empty"
         diskType     = "Standard_LRS"
         diskSizeGB   = 32
+        lun = 2
       }
       os_profile = {
         admin_username = "adsadmin"
