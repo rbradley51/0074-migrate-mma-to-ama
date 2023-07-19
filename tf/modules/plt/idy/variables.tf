@@ -389,7 +389,7 @@ variable "subnets" {
 variable "bas" {
   type = object({
     name = string
-    address_prefixes = string
+    address_prefix = string
     pub_ip = object({
       name = string
       sku = string
