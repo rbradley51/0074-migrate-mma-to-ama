@@ -74,7 +74,7 @@ resource "azurerm_network_security_group" "idy" {
   location            = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
   security_rule {
-    name                       = var.nsg_name[count.index].name
+    name                       = var.nsg_name[count.index]
     priority                   = var.nsg_rule_sets[count.index].priority
     direction                  = var.nsg_rule_sets[count.index].direction
     access                     = var.nsg_rule_sets[count.index].access
