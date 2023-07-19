@@ -144,7 +144,7 @@ variable "vms" {
     {
       vmName           = "azrads01"
       provisionVmAgent = true
-      vmSize           = "Standard_D1_v2"
+      vmSize           = "Standard_D1"
       image = {
         publisher = "MicrosoftWindowsServer"
         offer     = "WindowsServer"
@@ -179,7 +179,7 @@ variable "vms" {
     {
       vmName           = "azrads02"
       provisionVmAgent = true
-      vmSize           = "Standard_D1_v2"
+      vmSize           = "Standard_D1"
       image = {
         publisher = "MicrosoftWindowsServer"
         offer     = "WindowsServer"
@@ -214,7 +214,7 @@ variable "vms" {
     {
       vmName           = "azrsvr01"
       provisionVmAgent = true
-      vmSize           = "Standard_D1_v2"
+      vmSize           = "Standard_D1"
       image = {
         publisher = "MicrosoftWindowsServer"
         offer     = "WindowsServer"
