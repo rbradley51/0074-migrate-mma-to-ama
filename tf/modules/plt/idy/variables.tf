@@ -324,26 +324,13 @@ variable "nsg_name" {
   description = "values for network security group"
   default = [
     "nsg-adds",
-    "nsg-srvs"
+    "nsg-svrs"
   ]
 }
-# variable "nsg_rules_adds" {
-#   description = "A list of security rules to apply to the network security group."
-#   type        = map(string)
-#   default = {
-#     name                       = "placeholder-adds"
-#     direction                  = "Inbound"
-#     access                     = "Allow"
-#     protocol                   = "Tcp"
-#     source_port_range          = "*"
-#     destination_port_range     = "*"
-#     source_address_prefix      = "*"
-#     destination_address_prefix = "*"
-#   }
-# }
 
 variable "nsg_rule_sets" {
   type = list(object({
+    name                       = string
     priority                   = number
     direction                  = string
     access                     = string
@@ -354,6 +341,7 @@ variable "nsg_rule_sets" {
     destination_address_prefix = string
   }))
   default = [{
+    name                       = "adds-place-holder"
     priority                   = 100
     direction                  = "Inbound"
     access                     = "Allow"
@@ -364,7 +352,7 @@ variable "nsg_rule_sets" {
     destination_address_prefix = "*"
     },
     {
-      name                       = "srvs"
+      name                       = "svrs-place-holder"
       priority                   = 100
       direction                  = "Inbound"
       access                     = "Allow"
