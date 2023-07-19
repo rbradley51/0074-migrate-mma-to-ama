@@ -90,7 +90,7 @@ jobs:
     # Plan
     - name: 'Terraform Plan'
       id: plan
-      run: terraform plan
+      run: terraform plan -lock=false -out=tfplan -var "pw=${{ secrets.VM_PASSWORD }}"
       timeout-minutes: 20
       env:
         ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
