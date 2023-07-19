@@ -148,7 +148,7 @@ variable "vms" {
       image = {
         publisher = "MicrosoftWindowsServer"
         offer     = "WindowsServer"
-        sku       = "2022-Datacenter"
+        sku       = "2022-datacenter-azure-edition-smalldisk"
         version   = "latest"
       }
       disk_os = {
@@ -183,7 +183,7 @@ variable "vms" {
       image = {
         publisher = "MicrosoftWindowsServer"
         offer     = "WindowsServer"
-        sku       = "2022-Datacenter"
+        sku       = "2022-datacenter-azure-edition-smalldisk"
         version   = "latest"
       }
       disk_os = {
@@ -218,7 +218,7 @@ variable "vms" {
       image = {
         publisher = "MicrosoftWindowsServer"
         offer     = "WindowsServer"
-        sku       = "2022-Datacenter"
+        sku       = "2022-datacenter-azure-edition-smalldisk"
         version   = "latest"
       }
       disk_os = {
