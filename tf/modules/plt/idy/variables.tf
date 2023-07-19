@@ -121,14 +121,14 @@ variable "vms" {
       caching      = string
       createOption = string
       diskType     = string
-      diskSizeGb   = number
+      diskSizeGB   = number
     })
     disk_data = object({
       dataDiskName = string
       caching      = string
       createOption = string
       diskType     = string
-      diskSizeGb   = number
+      diskSizeGB   = number
     })
     os_profile = map(string)
   }))
