@@ -361,7 +361,7 @@ variable "vntName" {
 variable "vntAddressPrefixes" {
   type        = list(string)
   description = "values for virtual network address prefix"
-  default     = ["10.0.0.0/27"]
+  default     = ["10.0.0.0/26"]
 }
 variable "dns_servers" {
   type        = list(string)
@@ -405,7 +405,7 @@ variable "bas" {
   description = "values for bastion"
   default = {
     name = "AzureBastionSubnet"
-    address_prefix = "10.0.0.16/27"
+    address_prefix = "10.0.0.32/27"
     pub_ip = {
       name = "idy-bas-pip"
       sku = "Standard"
