@@ -70,34 +70,6 @@ resource "azurerm_virtual_network" "idy" {
   }
 }
 
-# resource "azurerm_network_interface" "ads01" {
-#   name                = var.ads_nics[0].name
-#   location            = var.primary_location
-#   resource_group_name = azurerm_resource_group.idy.name
-
-#   ip_configuration {
-#     name                          = var.ads_nics[0].ipconfig
-#     subnet_id           = azurerm_virtual_network.idy.subnet.*.id[0]
-#     # https://stackoverflow.com/questions/56861532/how-to-reference-objects-in-terraform
-#     private_ip_address_allocation = var.ads_nics[0].prvIpAlloc
-#     private_ip_address            = var.ads_nics[0].prvIpAddr
-#   }
-# }
-
-# resource "azurerm_network_interface" "ads02" {
-#   name                = var.ads_nics[1].name
-#   location            = var.primary_location
-#   resource_group_name = azurerm_resource_group.idy.name
-
-#   ip_configuration {
-#     name                          = var.ads_nics[1].ipconfig
-#     subnet_id           = azurerm_virtual_network.idy.subnet.*.id[0]
-#     # https://stackoverflow.com/questions/56861532/how-to-reference-objects-in-terraform
-#     private_ip_address_allocation = var.ads_nics[1].prvIpAlloc
-#     private_ip_address            = var.ads_nics[1].prvIpAddr
-#   }
-# }
-
 resource "azurerm_network_interface" "ads" {
   count = length(var.ads_nics)
   name = var.ads_nics[count.index].name
@@ -111,14 +83,6 @@ resource "azurerm_network_interface" "ads" {
     private_ip_address            = var.ads_nics[count.index].prvIpAddr
   }
 }
-# resource "azurerm_availability_set" "avs_adds" {
-#   name  = "${var.resource_codes.availaiblity_set}-adds"
-#   location            = var.primary_location
-#   resource_group_name = azurerm_resource_group.idy.name
-#   platform_update_domain_count = var.avs_adds.update_domain
-#   platform_fault_domain_count = var.avs_adds.fault_domain
-#   managed = var.avs_adds.managed
-# }
 
 resource "azurerm_availability_set" "avs_idy" {
   count = length(var.avs_idy)
