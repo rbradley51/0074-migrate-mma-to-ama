@@ -18,8 +18,20 @@ variable "ads_nics" {
     prvIpAlloc = "Static"
     prvIpAddr = "10.0.0.5"
     ipconfig = "ads02-ipconfig"
-  }]
+  }
+  ]
 }
+variable "svr_nics" {
+  type        = map(string)
+  description = "values for network interface"
+  default = {
+    name       = "svr01-nic"
+    prvIpAlloc = "Static"
+    prvIpAddr = "10.0.0.12"
+    ipconfig = "svr01-ipconfig"
+  }
+}
+
 
 variable "kvt_sku" {
   type        = string
