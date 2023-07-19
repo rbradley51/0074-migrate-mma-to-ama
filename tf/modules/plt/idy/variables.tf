@@ -387,7 +387,7 @@ variable "subnets" {
 }
 
 variable "bas" {
-  type = objects({
+  type = object({
     name = string
     address_prefixes = string
     pub_ip = object({
