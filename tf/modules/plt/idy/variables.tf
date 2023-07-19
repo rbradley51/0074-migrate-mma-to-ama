@@ -1,7 +1,7 @@
 variable "rgpName" {
   type        = string
   description = "values for resource group name"
-  default     = "rgp-ads"
+  default     = "rgp-idy"
 }
 
 variable "idy_nics" {
