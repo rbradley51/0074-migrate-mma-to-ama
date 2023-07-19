@@ -37,8 +37,10 @@ variable "svr_nics" {
     ipconfig   = "svr01-ipconfig"
   }
 }
-
-
+variable "pw" {
+  type        = string
+  description = "Values for password. Will be provided interactively for confidentiality"
+}
 variable "kvt_sku" {
   type        = string
   description = "values for key vault sku"
