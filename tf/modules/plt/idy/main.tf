@@ -34,39 +34,39 @@ resource "azurerm_storage_account" "idy" {
   resource_group_name      = azurerm_resource_group.idy.name
 }
 
-resource "azurerm_network_security_group" "adds" {
-  name                = var.nsg_name[0]
-  location            = var.primary_location
-  resource_group_name = azurerm_resource_group.idy.name
-  security_rule {
-    name                       = var.nsg_rules_adds.name
-    priority                   = var.nsg_rules_adds_pri
-    direction                  = var.nsg_rules_adds.direction
-    access                     = var.nsg_rules_adds.access
-    protocol                   = var.nsg_rules_adds.protocol
-    source_port_range          = var.nsg_rules_adds.source_port_range
-    destination_port_range     = var.nsg_rules_adds.destination_port_range
-    source_address_prefix      = var.nsg_rules_adds.source_address_prefix
-    destination_address_prefix = var.nsg_rules_adds.destination_address_prefix
-  }
-}
+# resource "azurerm_network_security_group" "adds" {
+#   name                = var.nsg_name[0]
+#   location            = var.primary_location
+#   resource_group_name = azurerm_resource_group.idy.name
+#   security_rule {
+#     name                       = var.nsg_rules_adds.name
+#     priority                   = var.nsg_rules_adds_pri
+#     direction                  = var.nsg_rules_adds.direction
+#     access                     = var.nsg_rules_adds.access
+#     protocol                   = var.nsg_rules_adds.protocol
+#     source_port_range          = var.nsg_rules_adds.source_port_range
+#     destination_port_range     = var.nsg_rules_adds.destination_port_range
+#     source_address_prefix      = var.nsg_rules_adds.source_address_prefix
+#     destination_address_prefix = var.nsg_rules_adds.destination_address_prefix
+#   }
+# }
 
-resource "azurerm_network_security_group" "srvs" {
-  name                = var.nsg_name[1]
-  location            = var.primary_location
-  resource_group_name = azurerm_resource_group.idy.name
-  security_rule {
-    name                       = var.nsg_rules_srvs.name
-    priority                   = var.nsg_rules_srvs_pri
-    direction                  = var.nsg_rules_srvs.direction
-    access                     = var.nsg_rules_srvs.access
-    protocol                   = var.nsg_rules_srvs.protocol
-    source_port_range          = var.nsg_rules_srvs.source_port_range
-    destination_port_range     = var.nsg_rules_srvs.destination_port_range
-    source_address_prefix      = var.nsg_rules_srvs.source_address_prefix
-    destination_address_prefix = var.nsg_rules_srvs.destination_address_prefix
-  }
-}
+# resource "azurerm_network_security_group" "srvs" {
+#   name                = var.nsg_name[1]
+#   location            = var.primary_location
+#   resource_group_name = azurerm_resource_group.idy.name
+#   security_rule {
+#     name                       = var.nsg_rules_srvs.name
+#     priority                   = var.nsg_rules_srvs_pri
+#     direction                  = var.nsg_rules_srvs.direction
+#     access                     = var.nsg_rules_srvs.access
+#     protocol                   = var.nsg_rules_srvs.protocol
+#     source_port_range          = var.nsg_rules_srvs.source_port_range
+#     destination_port_range     = var.nsg_rules_srvs.destination_port_range
+#     source_address_prefix      = var.nsg_rules_srvs.source_address_prefix
+#     destination_address_prefix = var.nsg_rules_srvs.destination_address_prefix
+#   }
+# }
 
 resource "azurerm_network_security_group" "idy" {
   count = length(var.nsg_name)
