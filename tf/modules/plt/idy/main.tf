@@ -84,14 +84,14 @@ resource "azurerm_network_interface" "ads" {
   }
 }
 resource "azurerm_network_interface" "svr" {
-  name = var.srv_nics.name
+  name = var.svr_nics.name
   location           = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
   ip_configuration {
-    name                         = var.srv_nics.ipconfig
+    name                         = var.svr_nics.ipconfig
     subnet_id           = azurerm_virtual_network.idy.subnet.*.id[1]
-    private_ip_address_allocation = var.srv_nics.prvIpAlloc
-    private_ip_address            = var.srv_nics.prvIpAddr
+    private_ip_address_allocation = var.svr_nics.prvIpAlloc
+    private_ip_address            = var.svr_nics.prvIpAddr
   }
 }
 resource "azurerm_availability_set" "avs_idy" {
