@@ -197,7 +197,7 @@ variable "vms" {
       }
       os_profile = {
         admin_username = "adsadmin"
-        admin_password = ""
+        admin_password = "InvalidPlaceHolderPw@1253!"
       }
 
       windows_config = {
@@ -233,11 +233,9 @@ variable "vms" {
         admin_username = "adsadmin"
         admin_password = ""
       }
-
       windows_config = {
         provision_vm_agent        = true
         enable_automatic_upgrades = true
-      }
       }
     }
   ]
