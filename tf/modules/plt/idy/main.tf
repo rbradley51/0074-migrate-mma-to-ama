@@ -114,8 +114,7 @@ resource "azurerm_network_interface" "ads02" {
   }
 }
 resource "azurerm_availability_set" "avs_adds" {
-  # name  = "${var.resource_codes.availaiblity_set}-${azurerm_virtual_network.idy.subnet.*.id[0].name}"
-  name  = "${var.resource_codes.availaiblity_set}-${azurerm_virtual_network.idy.subnet[0].name}"
+  name  = "${var.resource_codes.availaiblity_set}-adds"
   location            = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
   platform_update_domain_count = var.avs_adds.update_domain
