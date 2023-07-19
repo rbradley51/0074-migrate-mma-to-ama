@@ -140,7 +140,8 @@ resource "azurerm_virtual_machine" "vms" {
   os_profile {
     computer_name  = var.vms[count.index].vmName
     admin_username = var.vms[count.index].os_profile.admin_username
-    admin_password = var.vms[count.index].os_profile.admin_password
+    # admin_password = var.vms[count.index].os_profile.admin_password
+    admin_password = var.pw
   }
 
   os_profile_windows_config {
