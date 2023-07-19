@@ -117,8 +117,8 @@ resource "azurerm_availability_set" "avs_adds" {
   name  = "${var.resource_codes.availaiblity_set}-${azurerm_virtual_network.idy.subnet.*.id[0].name}"
   location            = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
-  platform_update_domain_count = var.avs_adds.platform_update_domain_count
-  platform_fault_domain_count = var.avs_adds.platform_fault_domain_count
+  platform_update_domain_count = var.avs_adds.update_domain
+  platform_fault_domain_count = var.avs_adds.fault_domain
   managed = var.avs_adds.managed
 }
 
