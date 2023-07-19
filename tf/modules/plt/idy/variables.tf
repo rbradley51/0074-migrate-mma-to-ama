@@ -145,6 +145,7 @@ variable "vms" {
         caching      = "ReadWrite"
         createOption = "FromImage"
         diskType     = "Standard_LRS"
+        diskSizeGB   = 32
       }
       disk_data = {
         dataDiskName = "data"
@@ -179,6 +180,7 @@ variable "vms" {
         caching      = "ReadWrite"
         createOption = "FromImage"
         diskType     = "Standard_LRS"
+        diskSizeGB   = 32
       }
       disk_data = {
         dataDiskName = "data"
@@ -213,6 +215,7 @@ variable "vms" {
         caching      = "ReadWrite"
         createOption = "FromImage"
         diskType     = "Standard_LRS"
+        diskSizeGB   = 32
       }
       disk_data = {
         dataDiskName = "data"
