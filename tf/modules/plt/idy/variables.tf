@@ -352,31 +352,6 @@ variable "nsg_rule_sets" {
       destination_address_prefix = "*"
   }]
 }
-# variable "nsg_rules_adds_pri" {
-#   type        = number
-#   description = "value for nsg rules adds priority"
-#   default     = 100
-# }
-# variable "nsg_rules_srvs" {
-#   description = "A list of security rules to apply to the network security group."
-#   type        = map(string)
-#   default = {
-#     name                       = "placeholder-srvs"
-#     direction                  = "Inbound"
-#     access                     = "Allow"
-#     protocol                   = "Tcp"
-#     source_port_range          = "*"
-#     destination_port_range     = "*"
-#     source_address_prefix      = "*"
-#     destination_address_prefix = "*"
-#   }
-# }
-# variable "nsg_rules_srvs_pri" {
-#   type        = number
-#   description = "value for nsg rules srvs priority"
-#   default     = 100
-# }
-
 variable "vntName" {
   type        = string
   description = "values for virtual network name"
@@ -409,4 +384,38 @@ variable "subnets" {
       address_prefix = "10.0.0.8/29"
     }
   ]
+}
+
+variable "bas" {
+  type = objects({
+    name = string
+    address_prefixes = string
+    pub_ip = object({
+      name = string
+      sku = string
+      allocation_method = string
+    })
+    host = object({
+      name = string
+      ip_configuration = object({
+        name = string
+      })
+    })
+  })
+  description = "values for bastion"
+  default = {
+    name = "AzureBastionSubnet"
+    address_prefix = "10.0.0.16/27"
+    pub_ip = {
+      name = "idy-bas-pip"
+      sku = "Standard"
+      allocation_method = "Static"
+    }
+    host = {
+      name = "idy-bas-hst"
+      ip_configuration = {
+        name = "idy-bas-ipconfig"
+      }
+    }
+  }
 }
