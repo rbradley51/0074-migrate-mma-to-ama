@@ -107,7 +107,7 @@ resource "azurerm_network_interface" "ads02" {
 
   ip_configuration {
     name                          = var.ads_nics[1].ipconfig
-    subnet_id           = azurerm_virtual_network.idy.subnet.*.id[1]
+    subnet_id           = azurerm_virtual_network.idy.subnet.*.id[0]
     # https://stackoverflow.com/questions/56861532/how-to-reference-objects-in-terraform
     # subnet_id                     = azurerm_virtual_network.idy.subnet.*.id[0]
     private_ip_address_allocation = var.ads_nics[1].prvIpAlloc
