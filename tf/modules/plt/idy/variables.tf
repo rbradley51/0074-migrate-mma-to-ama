@@ -57,6 +57,19 @@ variable "disk" {
   }
 }
 
+variable "avs_adds" {
+  type        = object({
+    update_domain = number
+    fault_domain = number
+    managed = bool
+  })
+  description = "values for availability set adds"
+  default     = {
+    update_domain = 5
+    fault_domain = 3
+    managed = true
+  }
+}
 variable "vm" {
   type        = map(string)
   description = "values for virtual machine"

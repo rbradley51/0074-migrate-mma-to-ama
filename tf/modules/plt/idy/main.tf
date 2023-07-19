@@ -109,16 +109,19 @@ resource "azurerm_network_interface" "ads02" {
     name                          = var.ads_nics[1].ipconfig
     subnet_id           = azurerm_virtual_network.idy.subnet.*.id[0]
     # https://stackoverflow.com/questions/56861532/how-to-reference-objects-in-terraform
-    # subnet_id                     = azurerm_virtual_network.idy.subnet.*.id[0]
     private_ip_address_allocation = var.ads_nics[1].prvIpAlloc
     private_ip_address            = var.ads_nics[1].prvIpAddr
   }
 }
-# resource "azurerm_availability_set" "avs01" {
-#   name                = var.idy.settings.identity.config.avset.avsetName
-#   location            = var.idy.settings.identity.config.primary_location
-#   resource_group_name = var.idy.settings.identity.config.rgpName
-# }
+resource "azurerm_availability_set" "avs_adds" {
+  name  = "${var.resource_codes.availaiblity_set}-${azurerm_virtual_network.idy.subnet.*.id[0].name}"
+  location            = var.primary_location
+  resource_group_name = azurerm_resource_group.idy.name
+  platform_update_domain_count = var.avs_adds.platform_update_domain_count
+  platform_fault_domain_count = var.avs_adds.platform_fault_domain_count
+  managed = var.avs_adds.managed
+}
+
 # resource "azurerm_virtual_machine" "ads01" {
 #   name                  = var.idy.settings.identity.config.vm.vmName
 #   location            = var.idy.settings.identity.config.primary_location
