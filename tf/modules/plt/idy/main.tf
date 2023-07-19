@@ -86,7 +86,7 @@ resource "azurerm_bastion_host" "bas" {
   location            = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
   ip_configuration {
-    name                 = var.bas.ipconfig.name
+    name                 = var.bas.host.ip_configuration.name
     subnet_id            = azurerm_virtual_network.idy.subnet.*.id[2]
     public_ip_address_id = azurerm_public_ip.bas.id
   }
