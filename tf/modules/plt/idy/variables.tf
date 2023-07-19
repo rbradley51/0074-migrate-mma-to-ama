@@ -4,21 +4,27 @@ variable "rgpName" {
   default     = "rgp-ads"
 }
 
-variable "ads_nics" {
+variable "idy_nics" {
   type        = list(map(string))
   description = "values for network interface"
   default = [{
     name       = "ads01-nic"
     prvIpAlloc = "Static"
-    prvIpAddr = "10.0.0.4"
-    ipconfig = "ads01-ipconfig"
-  },
-  {
-    name       = "ads02-nic"
-    prvIpAlloc = "Static"
-    prvIpAddr = "10.0.0.5"
-    ipconfig = "ads02-ipconfig"
-  }
+    prvIpAddr  = "10.0.0.4"
+    ipconfig   = "ads01-ipconfig"
+    },
+    {
+      name       = "ads02-nic"
+      prvIpAlloc = "Static"
+      prvIpAddr  = "10.0.0.5"
+      ipconfig   = "ads02-ipconfig"
+    },
+    {
+      name       = "svr01-nic"
+      prvIpAlloc = "Static"
+      prvIpAddr  = "10.0.0.12"
+      ipconfig   = "svr01-ipconfig"
+    }
   ]
 }
 variable "svr_nics" {
@@ -27,8 +33,8 @@ variable "svr_nics" {
   default = {
     name       = "svr01-nic"
     prvIpAlloc = "Static"
-    prvIpAddr = "10.0.0.12"
-    ipconfig = "svr01-ipconfig"
+    prvIpAddr  = "10.0.0.12"
+    ipconfig   = "svr01-ipconfig"
   }
 }
 
@@ -70,53 +76,172 @@ variable "disk" {
 }
 
 variable "avs_adds" {
-  type        = object({
+  type = object({
     update_domain = number
-    fault_domain = number
-    managed = bool
+    fault_domain  = number
+    managed       = bool
   })
   description = "values for availability set adds"
-  default     = {
+  default = {
     update_domain = 5
-    fault_domain = 3
-    managed = true
+    fault_domain  = 3
+    managed       = true
   }
 }
 
 variable "avs_idy" {
-  type        = list(object({
-    name = string
+  type = list(object({
+    name          = string
     update_domain = number
-    fault_domain = number
-    managed = bool
+    fault_domain  = number
+    managed       = bool
   }))
   description = "values for availability set for the identity resources"
-  default     = [{
-    name = "avs-adds"
+  default = [{
+    name          = "avs-adds"
     update_domain = 5
-    fault_domain = 3
-    managed = true
-  },
-  {
-    name = "avs-srvs"
-    update_domain = 5
-    fault_domain = 3
-    managed = true
+    fault_domain  = 3
+    managed       = true
+    },
+    {
+      name          = "avs-svrs"
+      update_domain = 5
+      fault_domain  = 3
+      managed       = true
   }]
 }
 
-variable "vm" {
-  type        = map(string)
-  description = "values for virtual machine"
-  default = {
-    userName         = "adsadmin"
-    pw               = ""
-    provisionVmAgent = true
-    vmName           = "azrads01"
-    vmSize           = "Standard_DS2_v2"
-  }
-}
+variable "vms" {
+  type = list(object({
+    vmName           = string
+    userName         = string
+    pw               = string
+    provisionVmAgent = bool
+    vmSize           = string
+    image            = map(string)
+    disk_os = list(object({
+      osDiskName   = string
+      caching      = string
+      createOption = string
+      diskType     = string
+      diskSizeGb   = number
+    }))
+    disk_data = list(object({
+      dataDiskName = string
+      caching      = string
+      createOption = string
+      diskType     = string
+      diskSizeGb   = number
+    }))
+    os_profile = map(string)
+  }))
+  description = "Values for virtual machines"
+  default = [
+    {
+      vmName           = "azrads01"
+      provisionVmAgent = true
+      vmSize           = "Standard_DS2_v2"
+      image = {
+        publisher = "MicrosoftWindowsServer"
+        offer     = "WindowsServer"
+        sku       = "2022-Datacenter"
+        version   = "latest"
+      }
+      disk_os = {
+        osDiskName   = "syst"
+        caching      = "ReadWrite"
+        createOption = "FromImage"
+        diskType     = "Standard_LRS"
+        diskSizeGB   = 128
+      }
+      disk_data = {
+        dataDiskName = "data"
+        caching      = "ReadWrite"
+        createOption = "Empty"
+        diskType     = "Standard_LRS"
+        diskSizeGB   = 32
+      }
+      os_profile = {
+        admin_username = "adsadmin"
+        admin_password = ""
+      }
 
+      windows_config = {
+        provision_vm_agent        = true
+        enable_automatic_upgrades = true
+      }
+    },
+    {
+      vmName           = "azrads02"
+      provisionVmAgent = true
+      vmSize           = "Standard_DS2_v2"
+      image = {
+        publisher = "MicrosoftWindowsServer"
+        offer     = "WindowsServer"
+        sku       = "2022-Datacenter"
+        version   = "latest"
+      }
+      disk_os = {
+        osDiskName   = "syst"
+        caching      = "ReadWrite"
+        createOption = "FromImage"
+        diskType     = "Standard_LRS"
+        diskSizeGB   = 128
+      }
+      disk_data = {
+        dataDiskName = "data"
+        caching      = "ReadWrite"
+        createOption = "Empty"
+        diskType     = "Standard_LRS"
+        diskSizeGB   = 32
+      }
+      os_profile = {
+        admin_username = "adsadmin"
+        admin_password = ""
+      }
+
+      windows_config = {
+        provision_vm_agent        = true
+        enable_automatic_upgrades = true
+      }
+    },
+    {
+      vmName           = "azrsvr01"
+      provisionVmAgent = true
+      vmSize           = "Standard_DS2_v2"
+      image = {
+        publisher = "MicrosoftWindowsServer"
+        offer     = "WindowsServer"
+        sku       = "2022-Datacenter"
+        version   = "latest"
+      }
+      disk_os = {
+        osDiskName   = "syst"
+        caching      = "ReadWrite"
+        createOption = "FromImage"
+        diskType     = "Standard_LRS"
+        diskSizeGB   = 128
+      }
+      disk_data = {
+        dataDiskName = "data"
+        caching      = "ReadWrite"
+        createOption = "Empty"
+        diskType     = "Standard_LRS"
+        diskSizeGB   = 32
+      }
+      os_profile = {
+        admin_username = "adsadmin"
+        admin_password = ""
+      }
+
+      windows_config = {
+        provision_vm_agent        = true
+        enable_automatic_upgrades = true
+      }
+      }
+    }
+  ]
+}
 variable "root_id" {
   type        = string
   description = "root id value for organization"
@@ -223,7 +348,7 @@ variable "nsg_rule_sets" {
     source_address_prefix      = string
     destination_address_prefix = string
   }))
-  default = [ {
+  default = [{
     priority                   = 100
     direction                  = "Inbound"
     access                     = "Allow"
@@ -232,18 +357,18 @@ variable "nsg_rule_sets" {
     destination_port_range     = "*"
     source_address_prefix      = "*"
     destination_address_prefix = "*"
-  },
-  {
-    name                       = "srvs"
-    priority                   = 100
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  } ]
+    },
+    {
+      name                       = "srvs"
+      priority                   = 100
+      direction                  = "Inbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_port_range          = "*"
+      destination_port_range     = "*"
+      source_address_prefix      = "*"
+      destination_address_prefix = "*"
+  }]
 }
 # variable "nsg_rules_adds_pri" {
 #   type        = number
