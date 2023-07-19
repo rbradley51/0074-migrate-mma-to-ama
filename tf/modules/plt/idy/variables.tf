@@ -114,9 +114,6 @@ variable "avs_idy" {
 variable "vms" {
   type = list(object({
     vmName           = string
-    userName         = string
-    pw               = string
-    provisionVmAgent = bool
     vmSize           = string
     image            = map(string)
     disk_os = list(object({
@@ -272,10 +269,10 @@ variable "rsv_sku" {
   default     = "Standard"
 }
 
-variable "pw" {
-  type        = string
-  description = "Values for password. Will be provided interactively for confidentiality"
-}
+# variable "pw" {
+#   type        = string
+#   description = "Values for password. Will be provided interactively for confidentiality"
+# }
 
 variable "resource_codes" {
   type        = map(string)
