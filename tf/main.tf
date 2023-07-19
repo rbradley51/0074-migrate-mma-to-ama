@@ -7,5 +7,5 @@ module "idy" {
   root_id = var.root_id
   root_name = var.root_name
   identitySubscriptionId = var.identitySubscriptionId
-  pw = var.pw
+  # pw = var.pw
 }
