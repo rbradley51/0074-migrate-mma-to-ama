@@ -61,12 +61,12 @@ resource "azurerm_virtual_network" "idy" {
   subnet {
     name           = var.subnets[0].name
     address_prefix = var.subnets[0].address_prefix
-    security_group = azurerm_network_security_group.idy.*.id[0]
+    security_group = azurerm_network_security_group.idy[0].*.id[0]
   }
   subnet {
     name           = var.subnets[1].name
     address_prefix = var.subnets[1].address_prefix
-    security_group = azurerm_network_security_group.idy.*.id[1]
+    security_group = azurerm_network_security_group.idy[1].*.id[1]
   }
 }
 
@@ -141,7 +141,7 @@ resource "azurerm_virtual_machine" "vms" {
     computer_name  = var.vms[count.index].vmName
     admin_username = var.vms[count.index].os_profile.admin_username
     # admin_password = var.vms[count.index].os_profile.admin_password
-    admin_password = pw
+    admin_password = var.pw
   }
 
   os_profile_windows_config {
