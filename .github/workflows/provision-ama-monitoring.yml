@@ -28,9 +28,9 @@ jobs:
       azCliVer: 2.50.0
       tfVersion: 1.5.3
       workingdir: tf
-      planOnly: false # Set to true to plan only, false to deploy
+      planOnly: true # Set to true to plan only, false to deploy
       rollback: false # Set to true to rollback, false to deploy
-      skipUAMI: true # Set to true to skip UAMI creation, false to create UAMI if necessary
+      skipUAMI: false # Set to true to skip UAMI creation, false to create UAMI if necessary
 
     runs-on: ubuntu-latest
 
