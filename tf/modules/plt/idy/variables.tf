@@ -162,31 +162,34 @@ variable "nsg_name" {
     "nsg-srvs"
   ]
 }
-variable "nsg_rules_adds" {
-  description = "A list of security rules to apply to the network security group."
-  type        = map(string)
-  default = {
-    name                       = "placeholder-adds"
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
-}
+# variable "nsg_rules_adds" {
+#   description = "A list of security rules to apply to the network security group."
+#   type        = map(string)
+#   default = {
+#     name                       = "placeholder-adds"
+#     direction                  = "Inbound"
+#     access                     = "Allow"
+#     protocol                   = "Tcp"
+#     source_port_range          = "*"
+#     destination_port_range     = "*"
+#     source_address_prefix      = "*"
+#     destination_address_prefix = "*"
+#   }
+# }
 
-variable "nsg_rules_adds_pri" {
-  type        = number
-  description = "value for nsg rules adds priority"
-  default     = 100
-}
-variable "nsg_rules_srvs" {
-  description = "A list of security rules to apply to the network security group."
-  type        = map(string)
-  default = {
-    name                       = "placeholder-srvs"
+variable "nsg_rule_sets" {
+  type = list(object({
+    priority                   = number
+    direction                  = string
+    access                     = string
+    protocol                   = string
+    source_port_range          = string
+    destination_port_range     = string
+    source_address_prefix      = string
+    destination_address_prefix = string
+  }))
+  default = [ {
+    priority                   = 100
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
@@ -194,13 +197,43 @@ variable "nsg_rules_srvs" {
     destination_port_range     = "*"
     source_address_prefix      = "*"
     destination_address_prefix = "*"
-  }
+  },
+  {
+    name                       = "srvs"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  } ]
 }
-variable "nsg_rules_srvs_pri" {
-  type        = number
-  description = "value for nsg rules srvs priority"
-  default     = 100
-}
+# variable "nsg_rules_adds_pri" {
+#   type        = number
+#   description = "value for nsg rules adds priority"
+#   default     = 100
+# }
+# variable "nsg_rules_srvs" {
+#   description = "A list of security rules to apply to the network security group."
+#   type        = map(string)
+#   default = {
+#     name                       = "placeholder-srvs"
+#     direction                  = "Inbound"
+#     access                     = "Allow"
+#     protocol                   = "Tcp"
+#     source_port_range          = "*"
+#     destination_port_range     = "*"
+#     source_address_prefix      = "*"
+#     destination_address_prefix = "*"
+#   }
+# }
+# variable "nsg_rules_srvs_pri" {
+#   type        = number
+#   description = "value for nsg rules srvs priority"
+#   default     = 100
+# }
 
 variable "vntName" {
   type        = string

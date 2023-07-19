@@ -68,6 +68,24 @@ resource "azurerm_network_security_group" "srvs" {
   }
 }
 
+resource "azurerm_network_security_group" "idy" {
+  count = length(var.nsg_name)
+  name                = var.nsg_name[count.index]
+  location            = var.primary_location
+  resource_group_name = azurerm_resource_group.idy.name
+  security_rule {
+    name                       = var.nsg_name[count.index].name
+    priority                   = var.nsg_rule_sets[count.index].priority
+    direction                  = var.nsg_rule_sets[count.index].direction
+    access                     = var.nsg_rule_sets[count.index].access
+    protocol                   = var.nsg_rule_sets[count.index].protocol
+    source_port_range          = var.nsg_rule_sets[count.index].source_port_range
+    destination_port_range     = var.nsg_rule_sets[count.index].destination_port_range
+    source_address_prefix      = var.nsg_rule_sets[count.index].source_address_prefix
+    destination_address_prefix = var.nsg_rule_sets[count.index].destination_address_prefix
+  }
+}
+
 resource "azurerm_virtual_network" "idy" {
   name                = var.vntName
   location            = var.primary_location
