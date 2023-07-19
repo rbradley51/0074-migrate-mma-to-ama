@@ -70,6 +70,29 @@ variable "avs_adds" {
     managed = true
   }
 }
+
+variable "avs_idy" {
+  type        = list(object({
+    name = string
+    update_domain = number
+    fault_domain = number
+    managed = bool
+  }))
+  description = "values for availability set for the identity resources"
+  default     = [{
+    name = "avs-adds"
+    update_domain = 5
+    fault_domain = 3
+    managed = true
+  },
+  {
+    name = "avs-srvs"
+    update_domain = 5
+    fault_domain = 3
+    managed = true
+  }]
+}
+
 variable "vm" {
   type        = map(string)
   description = "values for virtual machine"

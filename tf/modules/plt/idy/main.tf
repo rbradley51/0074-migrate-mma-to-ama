@@ -111,13 +111,23 @@ resource "azurerm_network_interface" "ads" {
     private_ip_address            = var.ads_nics[count.index].prvIpAddr
   }
 }
-resource "azurerm_availability_set" "avs_adds" {
-  name  = "${var.resource_codes.availaiblity_set}-adds"
+# resource "azurerm_availability_set" "avs_adds" {
+#   name  = "${var.resource_codes.availaiblity_set}-adds"
+#   location            = var.primary_location
+#   resource_group_name = azurerm_resource_group.idy.name
+#   platform_update_domain_count = var.avs_adds.update_domain
+#   platform_fault_domain_count = var.avs_adds.fault_domain
+#   managed = var.avs_adds.managed
+# }
+
+resource "azurerm_availability_set" "avs_idy" {
+  count = length(var.avs_idy)
+  name  = var.avs_idy[count.index].name
   location            = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
-  platform_update_domain_count = var.avs_adds.update_domain
-  platform_fault_domain_count = var.avs_adds.fault_domain
-  managed = var.avs_adds.managed
+  platform_update_domain_count = var.avs_idy[count.index].update_domain
+  platform_fault_domain_count = var.avs_idy[count.index].fault_domain
+  managed = var.avs_idy[count.index].managed
 }
 
 # resource "azurerm_virtual_machine" "ads01" {
