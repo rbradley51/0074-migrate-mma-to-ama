@@ -116,20 +116,20 @@ variable "vms" {
     vmName           = string
     vmSize           = string
     image            = map(string)
-    disk_os = list(object({
+    disk_os = object({
       osDiskName   = string
       caching      = string
       createOption = string
       diskType     = string
       diskSizeGb   = number
-    }))
-    disk_data = list(object({
+    })
+    disk_data = object({
       dataDiskName = string
       caching      = string
       createOption = string
       diskType     = string
       diskSizeGb   = number
-    }))
+    })
     os_profile = map(string)
   }))
   description = "Values for virtual machines"
