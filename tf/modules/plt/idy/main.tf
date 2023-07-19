@@ -109,7 +109,7 @@ resource "azurerm_virtual_machine" "vms" {
   count                 = length(var.vms)
   name                  = var.vms[count.index].name
   location              = var.primary_location
-  resource_group_name   = azurerm_network_security_group.idy.name
+  resource_group_name   = azurerm_resource_group.idy.name
   network_interface_ids = (var.idy_nics[count.index].name == "svr01-nic" ? azurerm_network_interface.idy[2].id : azurerm_network_interface.idy[count.index].id)
   vm_size               = var.vms[count.index].size
   availability_set_id   = (var.avs_idy[count.index].name == "avs-svrs" ? azurerm_availability_set.avs_idy[1].id : azurerm_availability_set.avs_idy[0].id)
