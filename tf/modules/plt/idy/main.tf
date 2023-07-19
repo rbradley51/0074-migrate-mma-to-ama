@@ -95,12 +95,12 @@ resource "azurerm_virtual_network" "idy" {
   subnet {
     name = var.subnets[0].name
     address_prefix = var.subnets[0].address_prefix
-    security_group = azurerm_network_security_group.adds.id
+    security_group = azurerm_network_security_group.idy.*.id[0]
   }
   subnet {
     name = var.subnets[1].name
     address_prefix = var.subnets[1].address_prefix
-    security_group = azurerm_network_security_group.srvs.id 
+    security_group = azurerm_network_security_group.idy.*.id[1]
   }
 }
 
