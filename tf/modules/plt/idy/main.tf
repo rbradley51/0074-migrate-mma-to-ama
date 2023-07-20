@@ -81,7 +81,7 @@ resource "azurerm_network_interface" "idy" {
   resource_group_name = azurerm_resource_group.idy.name
   ip_configuration {
     name = var.idy_nics[count.index].ipconfig
-    subnet_id = (var.idy_nics[count.index].name == "svr01-nic" ? azurerm_virtual_network.idy.subnet.*.id[2] : azurerm_virtual_network.idy.subnet.*.id[count.index])
+    subnet_id = (var.idy_nics[count.index].name == "svr01-nic" ? azurerm_virtual_network.idy.subnet.*.id[1] : azurerm_virtual_network.idy.subnet.*.id[count.index])
     # https://stackoverflow.com/questions/56861532/how-to-reference-objects-in-terraform
     private_ip_address_allocation = var.idy_nics[count.index].prvIpAlloc
     private_ip_address            = var.idy_nics[count.index].prvIpAddr
