@@ -82,7 +82,7 @@ resource "azurerm_public_ip" "bas" {
 }
 
 resource "azurerm_bastion_host" "bas" {
-  name                = var.bas.name
+  name                = var.bas.host.name
   location            = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
   ip_configuration {
