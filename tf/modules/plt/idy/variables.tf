@@ -414,7 +414,7 @@ variable "bas" {
     host = {
       name = "idy-bas-hst"
       ip_configuration = {
-        name = "AzureBastionSubnet"
+        name = "idy-bas-ipconfig"
       }
     }
   }
