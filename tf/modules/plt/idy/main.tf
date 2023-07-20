@@ -69,11 +69,11 @@ resource "azurerm_virtual_network" "idy" {
     security_group = azurerm_network_security_group.idy.*.id[1]
   }
   subnet {
-    name           = var.subnets[2].name
-    address_prefix = var.subnets[2].address_prefix
-    security_group = azurerm_network_security_group.idy.*.id[1]
+    name           = var.bastion.subnetName
+    address_prefix = var.bastion.address_prefix
   }
 }
+
 resource "azurerm_network_interface" "idy" {
   count               = length(var.idy_nics)
   name                = var.idy_nics[count.index].name
@@ -85,6 +85,26 @@ resource "azurerm_network_interface" "idy" {
     # https://stackoverflow.com/questions/56861532/how-to-reference-objects-in-terraform
     private_ip_address_allocation = var.idy_nics[count.index].prvIpAlloc
     private_ip_address            = var.idy_nics[count.index].prvIpAddr
+  }
+}
+resource "azurerm_public_ip" "bas" {
+  count = local.deploy_bastion ? 1 : 0
+  name                = var.bastion.public_ip.name
+  location            = var.primary_location
+  resource_group_name = azurerm_resource_group.idy.name
+  allocation_method   = var.bastion.public_ip.allocation_method
+  sku                 = var.bastion.public_ip.sku
+  dns_name_label      = var.bastion.public_ip.dns_label
+}
+resource "azurerm_bastion_host" "bas" {
+  count = local.deploy_bastion ? 1 : 0
+  name                = var.bastion.name
+  location            = var.primary_location
+  resource_group_name = azurerm_resource_group.idy.name
+  ip_configuration {
+    name                 = var.bastion.ipconfig.name
+    subnet_id            = azurerm_virtual_network.idy.subnet.*.id[2]
+    public_ip_address_id = azurerm_public_ip.bas.id
   }
 }
 resource "azurerm_availability_set" "avs_idy" {

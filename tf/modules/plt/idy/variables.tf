@@ -389,9 +389,16 @@ variable "subnets" {
 variable "bastion" {
   type        = object({
     name     = string
+    subnetName = string
     address_prefix = string
     allocation_method = string
     sku      = string
+    public_ip = object({
+      name = string
+      sku = string
+      allocation_method = string
+      dns_label = string
+    })
     ipconfig = object({
       name = string
     })
@@ -399,28 +406,20 @@ variable "bastion" {
   description = "values for bastion"
   default = {
     name     = "azr-idy-bas"
+    subnetName = "AzureBastionSubnet"
     address_prefix = "10.0.0.64/26"
     allocation_method = "Static"
     sku      = "Standard"
+    public_ip = {
+      name = "azr-idy-bas-pip"
+      sku = "Standard"
+      allocation_method = "Static"
+      dns_label = "azr-idy-bas-pip"
+    }
     ipconfig = {
-      name = "azr-bas-cfg"
+      name = "azr-bas-ipconfig"
     }
   }
-}
-
-resource "azurerm_subnet" "example" {
-  name                 = "AzureBastionSubnet"
-  resource_group_name  = azurerm_resource_group.example.name
-  virtual_network_name = azurerm_virtual_network.example.name
-  address_prefixes     = ["192.168.1.224/27"]
-}
-
-resource "azurerm_public_ip" "example" {
-  name                = "examplepip"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
-  allocation_method   = "Static"
-  sku                 = "Standard"
 }
 
 resource "azurerm_bastion_host" "example" {
