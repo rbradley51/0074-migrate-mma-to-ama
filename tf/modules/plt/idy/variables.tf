@@ -382,15 +382,16 @@ variable "subnets" {
     {
       name           = "srvs"
       address_prefix = "10.0.0.8/29"
-    }
+    },
+    {
+      name           = "AzureBastionSubnet"
+      address_prefix = "10.0.0.64/26"
   ]
 }
 
 variable "bastion" {
   type        = object({
     name     = string
-    subnetName = string
-    address_prefix = string
     allocation_method = string
     sku      = string
     public_ip = object({
@@ -405,8 +406,6 @@ variable "bastion" {
   description = "values for bastion"
   default = {
     name     = "azr-idy-bas"
-    subnetName = "AzureBastionSubnet"
-    address_prefix = "10.0.0.64/26"
     allocation_method = "Static"
     sku      = "Standard"
     public_ip = {
