@@ -162,14 +162,3 @@ resource "azurerm_virtual_machine" "vms" {
     enable_automatic_upgrades = var.vms[count.index].windows_config.enable_automatic_upgrades
   }
 }
-
-module "bastion" {
-  source = "../net"
-
-  # Deploy conditionally based on Feature Flag variable
-  count = local.deploy_bastion == true ? 1 : 0
-
-  example = module.idy.example
-
-  # module attributes here
-}
