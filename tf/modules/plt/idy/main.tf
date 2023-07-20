@@ -69,8 +69,8 @@ resource "azurerm_virtual_network" "idy" {
     security_group = azurerm_network_security_group.idy.*.id[1]
   }
   subnet {
-    name           = var.bastion.subnetName
-    address_prefix = var.bastion.address_prefix
+    name           = var.subnets[2].name
+    address_prefix = var.subnets[2].address_prefix
   }
 }
 
