@@ -179,6 +179,6 @@ resource "azurerm_log_analytics_workspace" "law" {
 resource "azurerm_log_analytics_linked_service" "aaa_law" {
   count = local.link_aaa_law ? 1 : 0
   resource_group_name = azurerm_resource_group.idy.name
-  workspace_id        = azurerm_log_analytics_workspace.law.id
-  read_access_id      = azurerm_automation_account.aaa.id
+  workspace_id        = azurerm_log_analytics_workspace.law[0].id
+  read_access_id      = azurerm_automation_account.aaa[0].id
 }
