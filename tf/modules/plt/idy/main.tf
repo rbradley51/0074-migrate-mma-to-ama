@@ -69,7 +69,7 @@ resource "azurerm_virtual_network" "idy" {
     security_group = azurerm_network_security_group.idy.*.id[1]
   }
   subnet {
-    name           = var.bas.name
+    name           = "AzureBastionSubnet"
     address_prefix = var.bas.address_prefix
   }
 }
