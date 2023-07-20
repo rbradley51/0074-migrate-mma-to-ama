@@ -386,6 +386,7 @@ variable "subnets" {
     {
       name           = "AzureBastionSubnet"
       address_prefix = "10.0.0.64/26"
+    }
   ]
 }
 
