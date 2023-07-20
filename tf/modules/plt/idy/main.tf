@@ -68,6 +68,11 @@ resource "azurerm_virtual_network" "idy" {
     address_prefix = var.subnets[1].address_prefix
     security_group = azurerm_network_security_group.idy.*.id[1]
   }
+  subnet {
+    name           = var.subnets[2].name
+    address_prefix = var.subnets[2].address_prefix
+    security_group = azurerm_network_security_group.idy.*.id[1]
+  }
 }
 resource "azurerm_network_interface" "idy" {
   count               = length(var.idy_nics)
@@ -136,4 +141,15 @@ resource "azurerm_virtual_machine" "vms" {
     provision_vm_agent        = var.vms[count.index].windows_config.provision_vm_agent
     enable_automatic_upgrades = var.vms[count.index].windows_config.enable_automatic_upgrades
   }
+}
+
+module "bastion" {
+  source = "../net"
+
+  # Deploy conditionally based on Feature Flag variable
+  count = local.deploy_bastion == true ? 1 : 0
+
+  example = module.idy.example
+
+  # module attributes here
 }
