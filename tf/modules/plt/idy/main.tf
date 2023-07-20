@@ -118,32 +118,32 @@ resource "azurerm_network_interface" "idy" {
 #   resource_group_name = azurerm_resource_group.idy.name
 #   ip_configuration {
 #     name                 = var.idy_nics[2].ipconfig
-#     subnet_id            = azurerm_virtual_network.idy.subnet.*.id[1]
+#     subnet_id            = azurerm_virtual_network.idy.subnet.*.id[2]
 #     private_ip_address   = var.idy_nics[2].prvIpAddr
 #     private_ip_address_allocation = var.idy_nics[2].prvIpAlloc
 #   }
 # }
 
 
-# resource "azurerm_public_ip" "bas" {
-#   count = local.deploy_bastion ? 1 : 0
-#   name                = var.bastion.public_ip.name
-#   location            = var.primary_location
-#   resource_group_name = azurerm_resource_group.idy.name
-#   allocation_method   = var.bastion.public_ip.allocation_method
-#   sku                 = var.bastion.public_ip.sku
-# }
-# resource "azurerm_bastion_host" "bas" {
-#   count = local.deploy_bastion ? 1 : 0
-#   name                = var.bastion.name
-#   location            = var.primary_location
-#   resource_group_name = azurerm_resource_group.idy.name
-#   ip_configuration {
-#     name                 = var.bastion.ipconfig.name
-#     subnet_id            = azurerm_virtual_network.idy.subnet.*.id[2]
-#     public_ip_address_id = azurerm_public_ip.bas[0].id
-#   }
-# }
+resource "azurerm_public_ip" "bas" {
+  count = local.deploy_bastion ? 1 : 0
+  name                = var.bastion.public_ip.name
+  location            = var.primary_location
+  resource_group_name = azurerm_resource_group.idy.name
+  allocation_method   = var.bastion.public_ip.allocation_method
+  sku                 = var.bastion.public_ip.sku
+}
+resource "azurerm_bastion_host" "bas" {
+  count = local.deploy_bastion ? 1 : 0
+  name                = var.bastion.name
+  location            = var.primary_location
+  resource_group_name = azurerm_resource_group.idy.name
+  ip_configuration {
+    name                 = var.bastion.ipconfig.name
+    subnet_id            = azurerm_virtual_network.idy.subnet.*.id[1]
+    public_ip_address_id = azurerm_public_ip.bas[0].id
+  }
+}
 resource "azurerm_availability_set" "avs_idy" {
   count                        = length(var.avs_idy)
   name                         = var.avs_idy[count.index].name
