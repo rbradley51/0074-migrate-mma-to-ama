@@ -385,37 +385,3 @@ variable "subnets" {
     }
   ]
 }
-
-variable "bas" {
-  type = object({
-    name = string
-    address_prefix = string
-    pub_ip = object({
-      name = string
-      sku = string
-      allocation_method = string
-    })
-    host = object({
-      name = string
-      ip_configuration = object({
-        name = string
-      })
-    })
-  })
-  description = "values for bastion"
-  default = {
-    name = "AzureBastionSubnet"
-    address_prefix = "10.0.0.32/27"
-    pub_ip = {
-      name = "idy-bas-pip"
-      sku = "Standard"
-      allocation_method = "Static"
-    }
-    host = {
-      name = "idy-bas-hst"
-      ip_configuration = {
-        name = "idy-bas-ipconfig"
-      }
-    }
-  }
-}
