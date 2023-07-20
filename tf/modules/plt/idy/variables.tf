@@ -419,3 +419,22 @@ variable "bastion" {
     }
   }
 }
+
+variable "aaa" {
+  type = map(string) 
+  description = "values for automation account"
+  default = {
+    name = "azr-idy-aaa"
+    sku = "Basic"
+  }
+}
+
+variable "law" {
+  type = map(string)
+  description = "values for log analytics workspace"
+  default = {
+    name = "azr-idy-law"
+    sku = "PerGB2018"
+    retention_in_days = 30
+  }
+}

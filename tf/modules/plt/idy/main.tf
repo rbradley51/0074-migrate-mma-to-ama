@@ -160,3 +160,19 @@ resource "azurerm_virtual_machine" "vms" {
     enable_automatic_upgrades = var.vms[count.index].windows_config.enable_automatic_upgrades
   }
 }
+
+resource "azurerm_automation_account" "aaa" {
+  count = local.deploy_aaa ? 1 : 0
+  name                = var.aaa.name
+  location            = var.primary_location
+  resource_group_name = azurerm_resource_group.idy.name
+  sku_name            = var.aaa.sku
+}
+resource "azurerm_log_analytics_workspace" "law" {
+  count = local.deploy_law ? 1 : 0
+  name                = var.law.name
+  location            = var.primary_location
+  resource_group_name = azurerm_resource_group.idy.name
+  sku                 = var.law.sku
+  retention_in_days   = var.law.retention_in_days
+}
