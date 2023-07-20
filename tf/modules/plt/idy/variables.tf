@@ -361,7 +361,7 @@ variable "vntName" {
 variable "vntAddressPrefixes" {
   type        = list(string)
   description = "values for virtual network address prefix"
-  default     = ["10.0.0.0/26"]
+  default     = ["10.0.0.0/24"]
 }
 variable "dns_servers" {
   type        = list(string)
