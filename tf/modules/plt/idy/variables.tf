@@ -438,3 +438,14 @@ variable "law" {
     retention_in_days = 30
   }
 }
+
+variable "boot_diag" {
+  type = bool
+  description = "enable boot diagnostics for virtual machines"
+  default = true
+}
+variable "umi_prefix" {
+  type = string
+  description = "prefix for user managed identity"
+  default = "azr-umi"
+}

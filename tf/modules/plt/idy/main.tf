@@ -5,6 +5,13 @@ resource "azurerm_resource_group" "idy" {
   name     = var.rgpName
   location = var.primary_location
 }
+
+resource "azurerm_user_assigned_identity" "idy" {
+  resource_group_name = azurerm_resource_group.idy.name
+  location            = var.primary_location
+  name                = "${var.umi_prefix}-${local.rndPrefix}"
+}
+
 resource "azurerm_recovery_services_vault" "rsv" {
   name                = "${var.resource_codes.recovery_vault}-${local.rndPrefix}"
   location            = var.primary_location
@@ -34,6 +41,11 @@ resource "azurerm_storage_account" "idy" {
   resource_group_name      = azurerm_resource_group.idy.name
 }
 
+data "azurerm_storage_account" "uri" {
+  name                     = azurerm_storage_account.idy.name
+  resource_group_name      = azurerm_resource_group.idy.name
+  url                      = azurerm_storage_account.idy.primary_blob_endpoint
+}
 resource "azurerm_network_security_group" "idy" {
   count               = length(var.nsg_name)
   name                = var.nsg_name[count.index]
@@ -126,6 +138,10 @@ resource "azurerm_virtual_machine" "vms" {
   vm_size               = var.vms[count.index].vmSize
   availability_set_id   = ("${count.index}" == 1 ? azurerm_availability_set.avs_idy[1].id : azurerm_availability_set.avs_idy[0].id)
 
+  # Uncomment this line to delete the OS disk automatically when deleting the VM
+  delete_os_disk_on_termination = true
+  # Uncomment this line to delete the data disks automatically when deleting the VM
+  delete_data_disks_on_termination = true
   storage_image_reference {
     publisher = var.vms[count.index].image.publisher
     offer     = var.vms[count.index].image.offer
@@ -149,16 +165,29 @@ resource "azurerm_virtual_machine" "vms" {
     disk_size_gb      = var.vms[count.index].disk_data.diskSizeGB
     lun               = var.vms[count.index].disk_data.lun
   }
-
   os_profile {
     computer_name  = var.vms[count.index].vmName
     admin_username = var.vms[count.index].os_profile.admin_username
     admin_password = var.pw
   }
+ 
+  identity {
+    type = "UserAssigned"
+    identity_ids = [azurerm_user_assigned_identity.idy.id]
+  }
   os_profile_windows_config {
     provision_vm_agent        = var.vms[count.index].windows_config.provision_vm_agent
     enable_automatic_upgrades = var.vms[count.index].windows_config.enable_automatic_upgrades
   }
+
+  boot_diagnostics {
+    enabled     = var.boot_diag
+    storage_uri = data.azurerm_storage_account.uri.primary_blob_endpoint
+  }
+
+  tags = var.vms[count.index].tags
+
+  # https://www.terraform.io/docs/providers/azurerm/r/virtual_machine.html
 }
 
 resource "azurerm_automation_account" "aaa" {
