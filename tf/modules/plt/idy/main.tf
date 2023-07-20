@@ -103,7 +103,7 @@ resource "azurerm_bastion_host" "bas" {
   ip_configuration {
     name                 = var.bastion.ipconfig.name
     subnet_id            = azurerm_virtual_network.idy.subnet.*.id[2]
-    public_ip_address_id = azurerm_public_ip.bas.id
+    public_ip_address_id = azurerm_public_ip.bas[0].id
   }
 }
 resource "azurerm_availability_set" "avs_idy" {
