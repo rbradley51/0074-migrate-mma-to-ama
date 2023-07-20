@@ -88,43 +88,6 @@ resource "azurerm_network_interface" "idy" {
   }
 }
 
-# resource "azurerm_network_interface" "ads01" {
-#   name                = var.idy_nics[0].name
-#   location            = var.primary_location
-#   resource_group_name = azurerm_resource_group.idy.name
-#   ip_configuration {
-#     name                 = var.idy_nics[0].ipconfig
-#     subnet_id            = azurerm_virtual_network.idy.subnet.*.id[0]
-#     private_ip_address   = var.idy_nics[0].prvIpAddr
-#     private_ip_address_allocation = var.idy_nics[0].prvIpAlloc
-#   }
-# }
-
-# resource "azurerm_network_interface" "ads02" {
-#   name                = var.idy_nics[1].name
-#   location            = var.primary_location
-#   resource_group_name = azurerm_resource_group.idy.name
-#   ip_configuration {
-#     name                 = var.idy_nics[1].ipconfig
-#     subnet_id            = azurerm_virtual_network.idy.subnet.*.id[0]
-#     private_ip_address   = var.idy_nics[1].prvIpAddr
-#     private_ip_address_allocation = var.idy_nics[1].prvIpAlloc
-#   }
-# }
-
-# resource "azurerm_network_interface" "svr01" {
-#   name                = var.idy_nics[2].name
-#   location            = var.primary_location
-#   resource_group_name = azurerm_resource_group.idy.name
-#   ip_configuration {
-#     name                 = var.idy_nics[2].ipconfig
-#     subnet_id            = azurerm_virtual_network.idy.subnet.*.id[2]
-#     private_ip_address   = var.idy_nics[2].prvIpAddr
-#     private_ip_address_allocation = var.idy_nics[2].prvIpAlloc
-#   }
-# }
-
-
 resource "azurerm_public_ip" "bas" {
   count = local.deploy_bastion ? 1 : 0
   name                = var.bastion.public_ip.name
@@ -190,10 +153,8 @@ resource "azurerm_virtual_machine" "vms" {
   os_profile {
     computer_name  = var.vms[count.index].vmName
     admin_username = var.vms[count.index].os_profile.admin_username
-    # admin_password = var.vms[count.index].os_profile.admin_password
     admin_password = var.pw
   }
-
   os_profile_windows_config {
     provision_vm_agent        = var.vms[count.index].windows_config.provision_vm_agent
     enable_automatic_upgrades = var.vms[count.index].windows_config.enable_automatic_upgrades
