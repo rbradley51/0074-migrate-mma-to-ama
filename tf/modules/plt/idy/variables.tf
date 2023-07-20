@@ -397,7 +397,6 @@ variable "bastion" {
       name = string
       sku = string
       allocation_method = string
-      dns_label = string
     })
     ipconfig = object({
       name = string
@@ -414,7 +413,6 @@ variable "bastion" {
       name = "azr-idy-bas-pip"
       sku = "Standard"
       allocation_method = "Static"
-      dns_label = "azr-idy-bas-pip"
     }
     ipconfig = {
       name = "azr-bas-ipconfig"

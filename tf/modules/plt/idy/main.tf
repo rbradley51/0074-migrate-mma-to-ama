@@ -94,7 +94,6 @@ resource "azurerm_public_ip" "bas" {
   resource_group_name = azurerm_resource_group.idy.name
   allocation_method   = var.bastion.public_ip.allocation_method
   sku                 = var.bastion.public_ip.sku
-  dns_name_label      = var.bastion.public_ip.dns_label
 }
 resource "azurerm_bastion_host" "bas" {
   count = local.deploy_bastion ? 1 : 0
