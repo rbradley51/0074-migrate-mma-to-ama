@@ -176,3 +176,9 @@ resource "azurerm_log_analytics_workspace" "law" {
   sku                 = var.law.sku
   retention_in_days   = var.law.retention_in_days
 }
+resource "azurerm_log_analytics_linked_service" "aaa_law" {
+  count = local.link_aaa_law ? 1 : 0
+  resource_group_name = azurerm_resource_group.idy.name
+  workspace_id        = azurerm_log_analytics_workspace.law.id
+  read_access_id      = azurerm_automation_account.aaa.id
+}

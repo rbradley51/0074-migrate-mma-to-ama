@@ -3,4 +3,5 @@ locals {
   deploy_bastion = true
   deploy_aaa = true
   deploy_law = true
+  link_aaa_law = true
 }
