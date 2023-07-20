@@ -68,28 +68,6 @@ resource "azurerm_virtual_network" "idy" {
     address_prefix = var.subnets[1].address_prefix
     security_group = azurerm_network_security_group.idy.*.id[1]
   }
-  subnet {
-    name = var.bas.name
-    address_prefix = var.bas.address_prefix
-  }
-}
-resource "azurerm_public_ip" "bas" {
-  name                = var.bas.pub_ip.name
-  location            = var.primary_location
-  resource_group_name = azurerm_resource_group.idy.name
-  allocation_method   = var.bas.pub_ip.allocation_method
-  sku                 = var.bas.pub_ip.sku
-}
-
-resource "azurerm_bastion_host" "bas" {
-  name                = var.bas.host.name
-  location            = var.primary_location
-  resource_group_name = azurerm_resource_group.idy.name
-  ip_configuration {
-    name                 = var.bas.host.ip_configuration.name
-    subnet_id            = azurerm_virtual_network.idy.subnet.*.id[2]
-    public_ip_address_id = azurerm_public_ip.bas.id
-  }
 }
 resource "azurerm_network_interface" "idy" {
   count               = length(var.idy_nics)
