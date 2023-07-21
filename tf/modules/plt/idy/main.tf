@@ -176,7 +176,7 @@ resource "azurerm_virtual_machine" "vms" {
 
   boot_diagnostics {
     enabled     = var.boot_diag
-    storage_uri = data.azurerm_storage_account.uri.primary_blob_endpoint
+    storage_uri = azurerm_storage_account.idy.primary_blob_endpoint
   }
 
   tags = var.vms[count.index].tags
