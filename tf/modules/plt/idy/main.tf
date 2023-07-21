@@ -40,6 +40,11 @@ resource "azurerm_storage_account" "idy" {
   account_replication_type = var.sta.replication_type
   resource_group_name      = azurerm_resource_group.idy.name
 }
+resource "azurerm_storage_container" "ama" {
+  name                  = var.sta.container_name
+  storage_account_name  = azurerm_storage_account.example.name
+  container_access_type = var.sta.container_access_type
+}
 resource "azurerm_network_security_group" "idy" {
   count               = length(var.nsg_name)
   name                = var.nsg_name[count.index]

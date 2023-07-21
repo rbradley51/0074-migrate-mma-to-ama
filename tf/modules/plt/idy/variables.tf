@@ -300,6 +300,8 @@ variable "sta" {
     kind             = "StorageV2"
     tier             = "Standard"
     replication_type = "LRS"
+    container_name   = "azr-ama-container"
+    container_access_type = "private"
   }
 }
 variable "retention_days" {
@@ -448,4 +450,74 @@ variable "umi_prefix" {
   type = string
   description = "prefix for user managed identity"
   default = "azr-umi"
+}
+
+variable "ama_dcr" {
+  type = object({
+    name = "idy-dcr"
+    destinations = object({
+      log_analytics = object({
+        workspace_resource_id = string
+        name = string
+      })
+      event_hub = object({
+        event_hub_id = string
+      })
+      storage_blob = object({
+        storage_account_id = string
+        container_name = string
+        name = string
+      })
+      azure_monitor_metrics = object({
+        name = string
+    })
+    data_flow_metrics = object({
+      streams = list(string)
+      destinations = list(string)
+    })
+    data_flow_logs = object({
+      streams = list(string)
+      destinations = list(string)
+    })
+    data_flow_kql = object({
+      streams = list(string)
+      destinations = list(string)
+      output_stream = string
+      transform_kql = string
+    })
+    data_sources = object({
+      syslog = object({
+        facility_names = list(string)
+        log_levels = list(string)
+        name = string 
+      })
+      iis_log = object({
+        streams = list(string)
+        name = string
+        log_directories = list(string)
+      })
+      log_file = object({
+        name = string
+        format = string
+        streams = list(string)
+        file_pattern = list(string)
+        settings = object({
+          text = object({
+            record_start_timestamp_format = string 
+          }) 
+        })
+      })
+      performance_counter = object({
+        streams = list(string)
+        name = string
+        sampling_frequency_in_seconds = number
+        counter_specifiers = list(string)
+      })
+      windows_event_log = object({
+        streams = list(string)
+        x_path_queries = list(string)
+      })
+    })
+  })
+})
 }
