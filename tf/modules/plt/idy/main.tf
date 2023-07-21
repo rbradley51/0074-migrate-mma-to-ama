@@ -173,14 +173,10 @@ resource "azurerm_virtual_machine" "vms" {
     provision_vm_agent        = var.vms[count.index].windows_config.provision_vm_agent
     enable_automatic_upgrades = var.vms[count.index].windows_config.enable_automatic_upgrades
   }
-
   boot_diagnostics {
     enabled     = var.boot_diag
     storage_uri = azurerm_storage_account.idy.primary_blob_endpoint
   }
-
-  tags = var.vms[count.index].tags
-
   # https://www.terraform.io/docs/providers/azurerm/r/virtual_machine.html
 }
 
