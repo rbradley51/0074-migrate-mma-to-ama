@@ -212,8 +212,8 @@ resource "azurerm_log_analytics_solution" "law" {
   solution_name       = var.law_solutions[count.index]
   location            = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
-  workspace_resource_id = azurerm_log_analytics_workspace.law[local.deploy_law].id
-  workspace_name        = azurerm_log_analytics_workspace.law[local.deploy_law].name
+  workspace_resource_id = azurerm_log_analytics_workspace.law[0].id
+  workspace_name        = azurerm_log_analytics_workspace.law[0].name
 
   plan {
     publisher = "Microsoft"
