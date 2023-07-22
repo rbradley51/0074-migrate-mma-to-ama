@@ -42,7 +42,7 @@ resource "azurerm_storage_account" "idy" {
 }
 resource "azurerm_storage_container" "ama" {
   name                  = var.sta.container_name
-  storage_account_name  = azurerm_storage_account.example.name
+  storage_account_name  = azurerm_storage_account.idy.name
   container_access_type = var.sta.container_access_type
 }
 resource "azurerm_network_security_group" "idy" {
@@ -209,7 +209,7 @@ resource "azurerm_log_analytics_linked_service" "aaa_law" {
 
 resource "azurerm_log_analytics_solution" "law" {
   count = length(var.law_solutions)
-  solution_name       = var.law_solutions[count.index].name
+  solution_name       = var.law_solutions[count.index]
   location            = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
   workspace_resource_id = azurerm_log_analytics_workspace.law[local.deploy_law].id
@@ -217,6 +217,6 @@ resource "azurerm_log_analytics_solution" "law" {
 
   plan {
     publisher = "Microsoft"
-    product   = "OMSGallery/var.law_solutions[count.index].name"
+    product   = "OMSGallery/var.law_solutions[count.index]"
   }
 }
