@@ -472,10 +472,6 @@ variable "ama_dcr" {
   type = object({
     name = string
     destinations = object({
-      log_analytics = object({
-        workspace_resource_id = string
-        name                  = string
-      })
       azure_monitor_metrics = object({
       name = string
     })
