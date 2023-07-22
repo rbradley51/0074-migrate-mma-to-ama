@@ -606,4 +606,5 @@ variable "ama_dcr" {
       "VMInsights",                  
       "ContainerInsights"  
     ]                  
-  }  
+  }
+}
