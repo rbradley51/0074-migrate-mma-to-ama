@@ -471,6 +471,15 @@ variable "ama_dce" {
 variable "ama_dcr" {
   type = object({
     name = string
+    destinations = object({
+      log_analytics = object({
+        workspace_resource_id = string
+        name                  = string
+      })
+      azure_monitor_metrics = object({
+      name = string
+    })
+    })
     # event_hub = object({
     #   event_hub_id = string
     # })
@@ -478,9 +487,6 @@ variable "ama_dcr" {
     #   storage_account_id = string
     #   container_name     = string
     #   name               = string
-    # })
-    # azure_monitor_metrics = object({
-    #   name = string
     # })
     # data_flow_metrics = object({
     #   streams      = list(string)
@@ -520,6 +526,11 @@ variable "ama_dcr" {
   description = "values for diagnostic settings"
   default = {
     name = "azr-idy-dcr"
+    destinations = {
+      azure_monitor_metrics = {
+        name = "azr-dcr-metrics"
+      }
+    }
     data_flow = {
       streams = [ 
         "10.0.0.12-InsightMetrics",
