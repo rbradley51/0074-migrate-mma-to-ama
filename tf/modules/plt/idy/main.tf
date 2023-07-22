@@ -217,6 +217,6 @@ resource "azurerm_log_analytics_solution" "law" {
 
   plan {
     publisher = "Microsoft"
-    product   = "OMSGallery/var.law_solutions[count.index]"
+    product   = "OMSGallery/${var.law_solutions[count.index]}"
   }
 }
