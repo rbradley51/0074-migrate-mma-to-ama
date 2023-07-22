@@ -496,6 +496,10 @@ variable "ama_dcr" {
     #   output_stream = string
     #   transform_kql = string
     # })
+    data_flow = object({
+      streams      = list(string)
+      destinations = list(string)
+    })
     data_sources = object({
       performance_counter = object({
         streams                       = list(string)
@@ -516,6 +520,14 @@ variable "ama_dcr" {
   description = "values for diagnostic settings"
   default = {
     name = "azr-idy-dcr"
+    data_flow = {
+      streams = [ 
+        "10.0.0.12-InsightMetrics",
+        "10.0.0.12-Syslog",
+        "10.0.0.12-Perf"
+        ]
+      destinations = ["10.0.0.12-destination-log"]
+    }
     data_sources = {
       performance_counter = {
         streams                       = ["10.0.0.12", "10.0.0.12-InsightsMetrics"]
