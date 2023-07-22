@@ -592,7 +592,7 @@ variable "ama_dcr" {
 variable "law_solutions" {
     type        = list(string)
     description = "values for monitoring solutions"
-    solutions = [
+    name = [
       "AgentHealthAssessment",
       "AntiMalware",
       "ChangeTracking",
