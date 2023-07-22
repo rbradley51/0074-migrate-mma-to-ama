@@ -623,3 +623,23 @@ variable "law_solutions" {
     "ContainerInsights"
   ]
 }
+
+variable "ehb" {
+  type        = object({
+    namespace = string
+    sku  = string
+    capacity = number
+    name = string
+    partition_count = number
+    message_retention = number
+  })
+  description = "values for event hub namespace"
+  default = {
+    namespace = "azr-idy-ehn"
+    sku  = "Standard"
+    capacity = 1
+    name = "azr-idy-ehb"
+    partition_count = 2
+    message_retention = 1
+  }
+}
