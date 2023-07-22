@@ -456,7 +456,7 @@ variable "ama_dce" {
   type = object({
     name = string
     lifecycle = object({
-      create_before_destroy = bool
+      create_before_destroy = bool # not used
     }) 
   })
   description = "values for diagnostic collection endpoint"

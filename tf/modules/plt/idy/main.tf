@@ -226,6 +226,6 @@ resource "azurerm_monitor_data_collection_endpoint" "idy" {
   location            = var.primary_location
 
   lifecycle {
-    create_before_destroy = var.ama_dce.create_before_destroy
+    create_before_destroy = true
   }
 }
