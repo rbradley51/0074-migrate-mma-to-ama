@@ -588,8 +588,8 @@ variable "ama_dcr" {
       }
     }
   }
-
-  variable "law_solutions" {
+}
+variable "law_solutions" {
     type        = list(string)
     description = "values for monitoring solutions"
     solutions = [
@@ -607,4 +607,3 @@ variable "ama_dcr" {
       "ContainerInsights"
     ]
   }
-}
