@@ -104,9 +104,9 @@ variable "avs_idy" {
 
 variable "vms" {
   type = list(object({
-    vmName           = string
-    vmSize           = string
-    image            = map(string)
+    vmName = string
+    vmSize = string
+    image  = map(string)
     disk_os = object({
       osDiskName   = string
       caching      = string
@@ -153,7 +153,7 @@ variable "vms" {
         createOption = "Empty"
         diskType     = "Standard_LRS"
         diskSizeGB   = 32
-        lun = 2
+        lun          = 2
       }
       os_profile = {
         admin_username = "adsadmin"
@@ -188,7 +188,7 @@ variable "vms" {
         createOption = "Empty"
         diskType     = "Standard_LRS"
         diskSizeGB   = 32
-        lun = 2
+        lun          = 2
       }
       os_profile = {
         admin_username = "adsadmin"
@@ -223,7 +223,7 @@ variable "vms" {
         createOption = "Empty"
         diskType     = "Standard_LRS"
         diskSizeGB   = 32
-        lun = 2
+        lun          = 2
       }
       os_profile = {
         admin_username = "adsadmin"
@@ -297,10 +297,10 @@ variable "sta" {
   type        = map(string)
   description = "values for storage account"
   default = {
-    kind             = "StorageV2"
-    tier             = "Standard"
-    replication_type = "LRS"
-    container_name   = "azr-ama-container"
+    kind                  = "StorageV2"
+    tier                  = "Standard"
+    replication_type      = "LRS"
+    container_name        = "azr-ama-container"
     container_access_type = "private"
   }
 }
@@ -393,13 +393,13 @@ variable "subnets" {
 }
 
 variable "bastion" {
-  type        = object({
-    name     = string
+  type = object({
+    name              = string
     allocation_method = string
-    sku      = string
+    sku               = string
     public_ip = object({
-      name = string
-      sku = string
+      name              = string
+      sku               = string
       allocation_method = string
     })
     ipconfig = object({
@@ -408,12 +408,12 @@ variable "bastion" {
   })
   description = "values for bastion"
   default = {
-    name     = "azr-idy-bas"
+    name              = "azr-idy-bas"
     allocation_method = "Static"
-    sku      = "Standard"
+    sku               = "Standard"
     public_ip = {
-      name = "azr-idy-bas-pip"
-      sku = "Standard"
+      name              = "azr-idy-bas-pip"
+      sku               = "Standard"
       allocation_method = "Static"
     }
     ipconfig = {
@@ -423,33 +423,33 @@ variable "bastion" {
 }
 
 variable "aaa" {
-  type = map(string) 
+  type        = map(string)
   description = "values for automation account"
   default = {
     name = "azr-idy-aaa"
-    sku = "Basic"
+    sku  = "Basic"
   }
 }
 
 variable "law" {
-  type = map(string)
+  type        = map(string)
   description = "values for log analytics workspace"
   default = {
-    name = "azr-idy-law"
-    sku = "PerGB2018"
+    name              = "azr-idy-law"
+    sku               = "PerGB2018"
     retention_in_days = 30
   }
 }
 
 variable "boot_diag" {
-  type = bool
+  type        = bool
   description = "enable boot diagnostics for virtual machines"
-  default = true
+  default     = true
 }
 variable "umi_prefix" {
-  type = string
+  type        = string
   description = "prefix for user managed identity"
-  default = "azr-umi"
+  default     = "azr-umi"
 }
 
 variable "ama_dcr" {
@@ -458,153 +458,153 @@ variable "ama_dcr" {
     destinations = object({
       log_analytics = object({
         workspace_resource_id = string
-        name = string
+        name                  = string
       })
       event_hub = object({
         event_hub_id = string
       })
       storage_blob = object({
         storage_account_id = string
-        container_name = string
-        name = string
+        container_name     = string
+        name               = string
       })
       azure_monitor_metrics = object({
         name = string
-    })
-    data_flow_metrics = object({
-      streams = list(string)
-      destinations = list(string)
-    })
-    data_flow_logs = object({
-      streams = list(string)
-      destinations = list(string)
-    })
-    data_flow_kql = object({
-      streams = list(string)
-      destinations = list(string)
-      output_stream = string
-      transform_kql = string
-    })
-    data_sources = object({
-      syslog = object({
-        facility_names = list(string)
-        log_levels = list(string)
-        name = string 
       })
-      iis_log = object({
-        streams = list(string)
-        name = string
-        log_directories = list(string)
+      data_flow_metrics = object({
+        streams      = list(string)
+        destinations = list(string)
       })
-      log_file = object({
-        name = string
-        format = string
-        streams = list(string)
-        file_pattern = list(string)
-        settings = object({
-          text = object({
-            record_start_timestamp_format = string 
-          }) 
+      data_flow_logs = object({
+        streams      = list(string)
+        destinations = list(string)
+      })
+      data_flow_kql = object({
+        streams       = list(string)
+        destinations  = list(string)
+        output_stream = string
+        transform_kql = string
+      })
+      data_sources = object({
+        syslog = object({
+          facility_names = list(string)
+          log_levels     = list(string)
+          name           = string
         })
-      })
-      performance_counter = object({
-        streams = list(string)
-        name = string
-        sampling_frequency_in_seconds = number
-        counter_specifiers = list(string)
-      })
-      windows_event_log = object({
-        streams = list(string)
-        x_path_queries = list(string)
+        iis_log = object({
+          streams         = list(string)
+          name            = string
+          log_directories = list(string)
+        })
+        log_file = object({
+          name         = string
+          format       = string
+          streams      = list(string)
+          file_pattern = list(string)
+          settings = object({
+            text = object({
+              record_start_timestamp_format = string
+            })
+          })
+        })
+        performance_counter = object({
+          streams                       = list(string)
+          name                          = string
+          sampling_frequency_in_seconds = number
+          counter_specifiers            = list(string)
+        })
+        windows_event_log = object({
+          streams        = list(string)
+          x_path_queries = list(string)
+        })
       })
     })
   })
-})
   description = "values for diagnostic settings"
   default = {
     name = "idy-dcr"
     destinations = {
       log_analytics = {
         workspace_resource_id = "/subscriptions/1d790e78-7852-498d-8087-f5d48686a50e/resourcegroups/rgp-idy/providers/microsoft.operationalinsights/workspaces/azr-idy-law"
-        name = "idy-law"
+        name                  = "idy-law"
       }
       event_hub = {
         event_hub_id = "/subscriptions/1d790e78-7852-498d-8087-f5d48686a50e/resourcegroups/rgp-idy/providers/microsoft.eventhub/namespaces/azr-idy-ehb"
       }
       storage_blob = {
         storage_account_id = "/subscriptions/1d790e78-7852-498d-8087-f5d48686a50e/resourcegroups/rgp-idy/providers/microsoft.storage/storageaccounts/azridysta"
-        container_name = "idy-dcr"
-        name = "idy-dcr"
+        container_name     = "idy-dcr"
+        name               = "idy-dcr"
       }
       azure_monitor_metrics = {
         name = "idy-dcr"
       }
-    }
-    data_flow_metrics = {
-      streams = ["idy-law"]
-      destinations = ["idy-dcr"]
-    }
-    data_flow_logs = {
-      streams = ["idy-law"]
-      destinations = ["idy-dcr"]
-    }
-    data_flow_kql = {
-      streams = ["idy-law"]
-      destinations = ["idy-dcr"]
-      output_stream = "idy-law"
-      transform_kql = "source | project TimeGenerated=Time, Computer, Message=AdditionalContext"
-    }
-    data_sources = {
-      syslog = {
-        facility_names = ["idy-law"]
-        log_levels = ["idy-law"]
-        name = "example-datasource-syslog"
+      data_flow_metrics = {
+        streams      = ["idy-law"]
+        destinations = ["idy-dcr"]
       }
-      iis_log = {
-        streams = ["idy-law"]
-        name = "example-datasource-iis"
-        log_directories = ["idy-law"]
+      data_flow_logs = {
+        streams      = ["idy-law"]
+        destinations = ["idy-dcr"]
       }
-      log_file = {
-        name = "example-datasource-logfile"
-        format = "text"
-        streams = ["idy-law"]
-        file_pattern = ["idy-law"]
-        settings = {
-          text = {
-            record_start_timestamp_format = "ISO 8601"
+      data_flow_kql = {
+        streams       = ["idy-law"]
+        destinations  = ["idy-dcr"]
+        output_stream = "idy-law"
+        transform_kql = "source | project TimeGenerated=Time, Computer, Message=AdditionalContext"
+      }
+      data_sources = {
+        syslog = {
+          facility_names = ["idy-law"]
+          log_levels     = ["idy-law"]
+          name           = "example-datasource-syslog"
+        }
+        iis_log = {
+          streams         = ["idy-law"]
+          name            = "example-datasource-iis"
+          log_directories = ["idy-law"]
+        }
+        log_file = {
+          name         = "example-datasource-logfile"
+          format       = "text"
+          streams      = ["idy-law"]
+          file_pattern = ["idy-law"]
+          settings = {
+            text = {
+              record_start_timestamp_format = "ISO 8601"
+            }
           }
         }
-      }
-      performance_counter = {
-        streams = ["idy-law", "idy-law"]
-        name = "example-datasource-perfcounter"
-        sampling_frequency_in_seconds = 60
-        counter_specifiers = ["Processor (*)\\% Processor Time"]
+        performance_counter = {
+          streams                       = ["idy-law", "idy-law"]
+          name                          = "example-datasource-perfcounter"
+          sampling_frequency_in_seconds = 60
+          counter_specifiers            = ["Processor (*)\\% Processor Time"]
         }
-      windows_event_log = { 
-        streams = ["idy-law"]
-        x_path_queries = ["idy-law"]
+        windows_event_log = {
+          streams        = ["idy-law"]
+          x_path_queries = ["idy-law"]
+        }
       }
     }
   }
 
   variables "law_solutions" {
-    type = list(string)
+    type        = list(string)
     description = "values for monitoring solutions"
     solutions = [
       "AgentHealthAssessment",
-      "AntiMalware",                 
-      "ChangeTracking",              
-      "Security",                    
+      "AntiMalware",
+      "ChangeTracking",
+      "Security",
       "SecurityInsights",
       "ServiceMap",
-      "SQLAssessment",               
-      "SQLVulnerabilityAssessment",  
-      "SQLAdvancedThreatProtection",  
-      "Updates",                     
-      "VMInsights",                  
-      "ContainerInsights"  
-    ]                  
+      "SQLAssessment",
+      "SQLVulnerabilityAssessment",
+      "SQLAdvancedThreatProtection",
+      "Updates",
+      "VMInsights",
+      "ContainerInsights"
+    ]
   }
 }
