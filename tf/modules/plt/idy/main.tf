@@ -220,3 +220,12 @@ resource "azurerm_log_analytics_solution" "law" {
     product   = "OMSGallery/${var.law_solutions[count.index]}"
   }
 }
+resource "azurerm_monitor_data_collection_endpoint" "idy" {
+  name                = var.ama_dce.name
+  resource_group_name = azurerm_resource_group.idy.name
+  location            = var.primary_location
+
+  lifecycle {
+    create_before_destroy = var.ama_dce.create_before_destroy
+  }
+}

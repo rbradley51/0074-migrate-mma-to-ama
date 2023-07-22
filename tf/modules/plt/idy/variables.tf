@@ -452,6 +452,22 @@ variable "umi_prefix" {
   default     = "azr-umi"
 }
 
+variable "ama_dce" {
+  type = object({
+    name = string
+    lifecycle = object({
+      create_before_destroy = bool
+    }) 
+  })
+  description = "values for diagnostic collection endpoint"
+  default = {
+    name = "idy-dce"
+    lifecycle = {
+      create_before_destroy = true
+    }
+  }
+
+}
 variable "ama_dcr" {
   type = object({
     name = string
