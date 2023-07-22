@@ -557,9 +557,9 @@ variable "ama_dcr" {
       data_flow_metrics = {
         streams      = [
           "Microsoft-Event",
-          Microsoft-Perf,
-          Microsoft-Syslog,
-          Microsoft-WindowsEvent
+          "Microsoft-Perf",
+          "Microsoft-Syslog",
+          "Microsoft-WindowsEvent"
           ]
         destinations = ["azr-idy-law"]
       }
