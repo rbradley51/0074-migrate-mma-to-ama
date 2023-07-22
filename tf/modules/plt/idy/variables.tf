@@ -592,18 +592,20 @@ variable "ama_dcr" {
 variable "law_solutions" {
     type        = list(string)
     description = "values for monitoring solutions"
-    name = [
-      "AgentHealthAssessment",
-      "AntiMalware",
-      "ChangeTracking",
-      "Security",
-      "SecurityInsights",
-      "ServiceMap",
-      "SQLAssessment",
-      "SQLVulnerabilityAssessment",
-      "SQLAdvancedThreatProtection",
-      "Updates",
-      "VMInsights",
-      "ContainerInsights"
-    ]
+    default = {
+      name = [
+        "AgentHealthAssessment",
+        "AntiMalware",
+        "ChangeTracking",
+        "Security",
+        "SecurityInsights",
+        "ServiceMap",
+        "SQLAssessment",
+        "SQLVulnerabilityAssessment",
+        "SQLAdvancedThreatProtection",
+        "Updates",
+        "VMInsights",
+        "ContainerInsights"
+      ]
   }
+}
