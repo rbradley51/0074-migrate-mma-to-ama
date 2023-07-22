@@ -244,7 +244,6 @@ resource "azurerm_eventhub" "idy" {
   name                = var.ehb.name
   namespace_name = var.ehb.namespace
   resource_group_name = azurerm_resource_group.idy.name
-  location            = var.primary_location
   partition_count     = var.ehb.partition_count
   message_retention   = var.ehb.message_retention
 }
