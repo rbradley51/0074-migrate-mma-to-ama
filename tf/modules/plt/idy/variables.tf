@@ -457,7 +457,7 @@ variable "ama_dce" {
     name = string
     lifecycle = object({
       create_before_destroy = bool # not used
-    }) 
+    })
   })
   description = "values for diagnostic collection endpoint"
   default = {
@@ -471,141 +471,73 @@ variable "ama_dce" {
 variable "ama_dcr" {
   type = object({
     name = string
-    destinations = object({
-      log_analytics = object({
-        workspace_resource_id = string
-        name                  = string
+    # event_hub = object({
+    #   event_hub_id = string
+    # })
+    # storage_blob = object({
+    #   storage_account_id = string
+    #   container_name     = string
+    #   name               = string
+    # })
+    # azure_monitor_metrics = object({
+    #   name = string
+    # })
+    # data_flow_metrics = object({
+    #   streams      = list(string)
+    #   destinations = list(string)
+    # })
+    # data_flow_logs = object({
+    #   streams      = list(string)
+    #   destinations = list(string)
+    # })
+    # data_flow_kql = object({
+    #   streams       = list(string)
+    #   destinations  = list(string)
+    #   output_stream = string
+    #   transform_kql = string
+    # })
+    data_sources = object({
+      performance_counter = object({
+        streams                       = list(string)
+        name                          = string
+        sampling_frequency_in_seconds = number
+        counter_specifiers            = list(string)
       })
-      event_hub = object({
-        event_hub_id = string
-      })
-      storage_blob = object({
-        storage_account_id = string
-        container_name     = string
-        name               = string
-      })
-      azure_monitor_metrics = object({
-        name = string
-      })
-      data_flow_metrics = object({
-        streams      = list(string)
-        destinations = list(string)
-      })
-      data_flow_logs = object({
-        streams      = list(string)
-        destinations = list(string)
-      })
-      data_flow_kql = object({
-        streams       = list(string)
-        destinations  = list(string)
-        output_stream = string
-        transform_kql = string
-      })
-      data_sources = object({
-        syslog = object({
-          facility_names = list(string)
-          log_levels     = list(string)
-          name           = string
-        })
-        iis_log = object({
-          streams         = list(string)
-          name            = string
-          log_directories = list(string)
-        })
-        log_file = object({
-          name         = string
-          format       = string
-          streams      = list(string)
-          file_pattern = list(string)
-          settings = object({
-            text = object({
-              record_start_timestamp_format = string
-            })
-          })
-        })
-        performance_counter = object({
-          streams                       = list(string)
-          name                          = string
-          sampling_frequency_in_seconds = number
-          counter_specifiers            = list(string)
-        })
-        windows_event_log = object({
-          streams        = list(string)
-          x_path_queries = list(string)
-        })
+      windows_event_log = object({
+        streams        = list(string)
+        x_path_queries = list(string)
       })
     })
+    identity = object({
+      type = string
+    })
+
   })
   description = "values for diagnostic settings"
   default = {
     name = "azr-idy-dcr"
-    destinations = {
-      log_analytics = {
-        name = "idy-law"
+    data_sources = {
+      performance_counter = {
+        streams                       = ["10.0.0.12", "10.0.0.12-InsightsMetrics"]
+        name                          = "10.0.0.12-perfcounter"
+        sampling_frequency_in_seconds = 60
+        counter_specifiers            = ["Processor (*)\\% Processor Time"]
       }
-      event_hub = {
-        event_hub_id = "/subscriptions/1d790e78-7852-498d-8087-f5d48686a50e/resourcegroups/rgp-idy/providers/microsoft.eventhub/namespaces/azr-idy-ehb"
+      windows_event_log = {
+        streams = [
+          "10.0.0.4",
+          "10.0.0.5",
+          "10.0.0.12"
+        ]
+        x_path_queries = [
+          "10.0.0.4",
+          "10.0.0.5",
+          "10.0.0.12"
+        ]
       }
-      storage_blob = {
-        storage_account_id = "/subscriptions/1d790e78-7852-498d-8087-f5d48686a50e/resourcegroups/rgp-idy/providers/microsoft.storage/storageaccounts/azridysta"
-        container_name     = "idy-dcr"
-        name               = "idy-dcr"
-      }
-      azure_monitor_metrics = {
-        name = ["InsightsMetrics"]
-      }
-      data_flow_metrics = {
-        streams      = [
-          "Microsoft-Event",
-          "Microsoft-Perf",
-          "Microsoft-Syslog",
-          "Microsoft-WindowsEvent"
-          ]
-        destinations = ["azr-idy-law"]
-      }
-      data_flow_logs = {
-        streams      = ["idy-law"]
-        destinations = ["idy-dcr"]
-      }
-      data_flow_kql = {
-        streams       = ["idy-law"]
-        destinations  = ["idy-dcr"]
-        output_stream = "idy-law"
-        transform_kql = "source | project TimeGenerated=Time, Computer, Message=AdditionalContext"
-      }
-      data_sources = {
-        syslog = {
-          facility_names = ["idy-law"]
-          log_levels     = ["idy-law"]
-          name           = "example-datasource-syslog"
-        }
-        iis_log = {
-          streams         = ["idy-law"]
-          name            = "example-datasource-iis"
-          log_directories = ["idy-law"]
-        }
-        log_file = {
-          name         = "example-datasource-logfile"
-          format       = "text"
-          streams      = ["idy-law"]
-          file_pattern = ["idy-law"]
-          settings = {
-            text = {
-              record_start_timestamp_format = "ISO 8601"
-            }
-          }
-        }
-        performance_counter = {
-          streams                       = ["idy-law", "idy-law"]
-          name                          = "example-datasource-perfcounter"
-          sampling_frequency_in_seconds = 60
-          counter_specifiers            = ["Processor (*)\\% Processor Time"]
-        }
-        windows_event_log = {
-          streams        = ["idy-law"]
-          x_path_queries = ["idy-law"]
-        }
-      }
+    }
+    identity = {
+      type = "UserAssigned"
     }
   }
 }
@@ -629,21 +561,21 @@ variable "law_solutions" {
 }
 
 variable "ehb" {
-  type        = object({
-    namespace = string
-    sku  = string
-    capacity = number
-    name = string
-    partition_count = number
+  type = object({
+    namespace         = string
+    sku               = string
+    capacity          = number
+    name              = string
+    partition_count   = number
     message_retention = number
   })
   description = "values for event hub namespace"
   default = {
-    namespace = "azr-idy-ehn"
-    sku  = "Standard"
-    capacity = 1
-    name = "azr-idy-ehb"
-    partition_count = 2
+    namespace         = "azr-idy-ehn"
+    sku               = "Standard"
+    capacity          = 1
+    name              = "azr-idy-ehb"
+    partition_count   = 2
     message_retention = 1
   }
 }

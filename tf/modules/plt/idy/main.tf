@@ -256,34 +256,28 @@ resource "azurerm_monitor_data_collection_rule" "idy" {
   location                    = var.primary_location
   data_collection_endpoint_id = azurerm_monitor_data_collection_endpoint.idy.id
   destinations {
-    azure_monitor_metrics {
-      name                  = var.ama_dcr.destinations.azure_monitor_metrics.name
-      workspace_resource_id = azurerm_log_analytics_workspace.law[0].id
-      workspace_name        = azurerm_log_analytics_workspace.law[0].name
-    }
     log_analytics {
-      workspace_resource_id = azurerm_log_analytics_workspace.law[0].id
-      name                  = azurerm_log_analytics_workspace.law[0].name
+      workspace_resource_id = azurerm_log_analytics_workspace.law.id
+      name                  = azurerm_log_analytics_workspace.law.name
+    }
+    azure_monitor_metrics {
+      name = var.ama_dcr.destinations.azure_monitor_metrics.name
     }
   }
   data_sources {
     performance_counter {
-      streams                       = ["10.0.0.12", "10.0.0.12-InsightsMetrics"]
-      sampling_frequency_in_seconds = 60
-      counter_specifiers            = ["Processor (*)\\% Processor Time"]
-      name                          = "10.0.0.12-perfcounter"
+      streams                       = var.ama_dcr.data_sources.performance_counter.streams
+      name                          = var.ama_dcr.data_sources.performance_counter.name
+      sampling_frequency_in_seconds = var.ama_dcr.data_sources.performance_counter.sampling_frequency_in_seconds
+      counter_specifiers            = var.ama_dcr.data_sources.performance_counter.counter_specifiers
     }
     windows_event_log {
-      streams = [
-        "10.0.0.4",
-        "10.0.0.5",
-        "10.0.0.12"
-      ]
-      x_path_queries = [
-        "10.0.0.4",
-        "10.0.0.5",
-        "10.0.0.12"
-      ]
+      streams        = var.ama_dcr.data_sources.windows_event_log.streams
+      x_path_queries = var.ama_dcr.data_sources.windows_event_log.x_path_queries
     }
+  }
+  identity {
+    type         = var.ama_dcr.identity.type
+    identity_ids = [azurerm_user_assigned_identity.idy.id]
   }
 }
