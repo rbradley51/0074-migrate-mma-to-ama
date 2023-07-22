@@ -520,4 +520,90 @@ variable "ama_dcr" {
     })
   })
 })
-}
+  description = "values for diagnostic settings"
+  default = {
+    name = "idy-dcr"
+    destinations = {
+      log_analytics = {
+        workspace_resource_id = "/subscriptions/1d790e78-7852-498d-8087-f5d48686a50e/resourcegroups/rgp-idy/providers/microsoft.operationalinsights/workspaces/azr-idy-law"
+        name = "idy-law"
+      }
+      event_hub = {
+        event_hub_id = "/subscriptions/1d790e78-7852-498d-8087-f5d48686a50e/resourcegroups/rgp-idy/providers/microsoft.eventhub/namespaces/azr-idy-ehb"
+      }
+      storage_blob = {
+        storage_account_id = "/subscriptions/1d790e78-7852-498d-8087-f5d48686a50e/resourcegroups/rgp-idy/providers/microsoft.storage/storageaccounts/azridysta"
+        container_name = "idy-dcr"
+        name = "idy-dcr"
+      }
+      azure_monitor_metrics = {
+        name = "idy-dcr"
+      }
+    }
+    data_flow_metrics = {
+      streams = ["idy-law"]
+      destinations = ["idy-dcr"]
+    }
+    data_flow_logs = {
+      streams = ["idy-law"]
+      destinations = ["idy-dcr"]
+    }
+    data_flow_kql = {
+      streams = ["idy-law"]
+      destinations = ["idy-dcr"]
+      output_stream = "idy-law"
+      transform_kql = "source | project TimeGenerated=Time, Computer, Message=AdditionalContext"
+    }
+    data_sources = {
+      syslog = {
+        facility_names = ["idy-law"]
+        log_levels = ["idy-law"]
+        name = "example-datasource-syslog"
+      }
+      iis_log = {
+        streams = ["idy-law"]
+        name = "example-datasource-iis"
+        log_directories = ["idy-law"]
+      }
+      log_file = {
+        name = "example-datasource-logfile"
+        format = "text"
+        streams = ["idy-law"]
+        file_pattern = ["idy-law"]
+        settings = {
+          text = {
+            record_start_timestamp_format = "ISO 8601"
+          }
+        }
+      }
+      performance_counter = {
+        streams = ["idy-law", "idy-law"]
+        name = "example-datasource-perfcounter"
+        sampling_frequency_in_seconds = 60
+        counter_specifiers = ["Processor (*)\\% Processor Time"]
+        }
+      windows_event_log = { 
+        streams = ["idy-law"]
+        x_path_queries = ["idy-law"]
+      }
+    }
+  }
+
+  variables "law_solutions" {
+    type = list(string)
+    description = "values for monitoring solutions"
+    solutions = [
+      "AgentHealthAssessment",
+      "AntiMalware",                 
+      "ChangeTracking",              
+      "Security",                    
+      "SecurityInsights",
+      "ServiceMap",
+      "SQLAssessment",               
+      "SQLVulnerabilityAssessment",  
+      "SQLAdvancedThreatProtection",  
+      "Updates",                     
+      "VMInsights",                  
+      "ContainerInsights"  
+    ]                  
+  }  

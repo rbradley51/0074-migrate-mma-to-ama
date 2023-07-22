@@ -206,3 +206,17 @@ resource "azurerm_log_analytics_linked_service" "aaa_law" {
   workspace_id        = azurerm_log_analytics_workspace.law[0].id
   read_access_id      = azurerm_automation_account.aaa[0].id
 }
+
+resource "azurerm_log_analytics_solution" "law" {
+  count = length(var.law_solutions)
+  solution_name       = var.law_solutions[count.index].name
+  location            = var.primary_location
+  resource_group_name = azurerm_resource_group.idy.name
+  workspace_resource_id = azurerm_log_analytics_workspace.law[local.deploy_law].id
+  workspace_name        = azurerm_log_analytics_workspace.law[local.deploy_law].name
+
+  plan {
+    publisher = "Microsoft"
+    product   = "OMSGallery/var.law_solutions[count.index].name"
+  }
+}
