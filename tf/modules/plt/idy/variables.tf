@@ -589,7 +589,7 @@ variable "ama_dcr" {
     }
   }
 
-  variables "law_solutions" {
+  variable "law_solutions" {
     type        = list(string)
     description = "values for monitoring solutions"
     solutions = [
