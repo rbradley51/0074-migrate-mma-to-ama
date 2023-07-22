@@ -454,7 +454,7 @@ variable "umi_prefix" {
 
 variable "ama_dcr" {
   type = object({
-    name = "idy-dcr"
+    name = string
     destinations = object({
       log_analytics = object({
         workspace_resource_id = string
