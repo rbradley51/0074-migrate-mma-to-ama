@@ -590,22 +590,20 @@ variable "ama_dcr" {
   }
 }
 variable "law_solutions" {
-    type        = list(string)
-    description = "values for monitoring solutions"
-    default = {
-      name = [
-        "AgentHealthAssessment",
-        "AntiMalware",
-        "ChangeTracking",
-        "Security",
-        "SecurityInsights",
-        "ServiceMap",
-        "SQLAssessment",
-        "SQLVulnerabilityAssessment",
-        "SQLAdvancedThreatProtection",
-        "Updates",
-        "VMInsights",
-        "ContainerInsights"
-      ]
-  }
+  type        = list(string)
+  description = "values for monitoring solutions"
+  default = [
+    "AgentHealthAssessment",
+    "AntiMalware",
+    "ChangeTracking",
+    "Security",
+    "SecurityInsights",
+    "ServiceMap",
+    "SQLAssessment",
+    "SQLVulnerabilityAssessment",
+    "SQLAdvancedThreatProtection",
+    "Updates",
+    "VMInsights",
+    "ContainerInsights"
+  ]
 }
