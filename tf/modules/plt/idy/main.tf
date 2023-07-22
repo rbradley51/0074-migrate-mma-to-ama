@@ -91,7 +91,7 @@ resource "azurerm_network_interface" "idy" {
   location            = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
   ip_configuration {
-    name = var.idy_nics[count.index].ipconfig
+    name      = var.idy_nics[count.index].ipconfig
     subnet_id = (var.idy_nics[count.index].name == "svr01-nic" ? azurerm_virtual_network.idy.subnet.*.id[2] : azurerm_virtual_network.idy.subnet.*.id[0])
     # https://stackoverflow.com/questions/56861532/how-to-reference-objects-in-terraform
     private_ip_address_allocation = var.idy_nics[count.index].prvIpAlloc
@@ -100,7 +100,7 @@ resource "azurerm_network_interface" "idy" {
 }
 
 resource "azurerm_public_ip" "bas" {
-  count = local.deploy_bastion ? 1 : 0
+  count               = local.deploy_bastion ? 1 : 0
   name                = var.bastion.public_ip.name
   location            = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
@@ -108,7 +108,7 @@ resource "azurerm_public_ip" "bas" {
   sku                 = var.bastion.public_ip.sku
 }
 resource "azurerm_bastion_host" "bas" {
-  count = local.deploy_bastion ? 1 : 0
+  count               = local.deploy_bastion ? 1 : 0
   name                = var.bastion.name
   location            = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
@@ -169,9 +169,9 @@ resource "azurerm_virtual_machine" "vms" {
     admin_username = var.vms[count.index].os_profile.admin_username
     admin_password = var.pw
   }
- 
+
   identity {
-    type = "UserAssigned"
+    type         = "UserAssigned"
     identity_ids = [azurerm_user_assigned_identity.idy.id]
   }
   os_profile_windows_config {
@@ -186,14 +186,14 @@ resource "azurerm_virtual_machine" "vms" {
 }
 
 resource "azurerm_automation_account" "aaa" {
-  count = local.deploy_aaa ? 1 : 0
+  count               = local.deploy_aaa ? 1 : 0
   name                = var.aaa.name
   location            = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
   sku_name            = var.aaa.sku
 }
 resource "azurerm_log_analytics_workspace" "law" {
-  count = local.deploy_law ? 1 : 0
+  count               = local.deploy_law ? 1 : 0
   name                = var.law.name
   location            = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
@@ -201,17 +201,17 @@ resource "azurerm_log_analytics_workspace" "law" {
   retention_in_days   = var.law.retention_in_days
 }
 resource "azurerm_log_analytics_linked_service" "aaa_law" {
-  count = local.link_aaa_law ? 1 : 0
+  count               = local.link_aaa_law ? 1 : 0
   resource_group_name = azurerm_resource_group.idy.name
   workspace_id        = azurerm_log_analytics_workspace.law[0].id
   read_access_id      = azurerm_automation_account.aaa[0].id
 }
 
 resource "azurerm_log_analytics_solution" "law" {
-  count = length(var.law_solutions)
-  solution_name       = var.law_solutions[count.index]
-  location            = var.primary_location
-  resource_group_name = azurerm_resource_group.idy.name
+  count                 = length(var.law_solutions)
+  solution_name         = var.law_solutions[count.index]
+  location              = var.primary_location
+  resource_group_name   = azurerm_resource_group.idy.name
   workspace_resource_id = azurerm_log_analytics_workspace.law[0].id
   workspace_name        = azurerm_log_analytics_workspace.law[0].name
 
@@ -232,7 +232,7 @@ resource "azurerm_monitor_data_collection_endpoint" "idy" {
 
 # Create an event hub namespace resource
 resource "azurerm_eventhub_namespace" "idy" {
-  name                = var.ehb.namespace 
+  name                = var.ehb.namespace
   location            = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
   sku                 = var.ehb.sku
@@ -242,9 +242,48 @@ resource "azurerm_eventhub_namespace" "idy" {
 # Create an event hub resource
 resource "azurerm_eventhub" "idy" {
   name                = var.ehb.name
-  namespace_name = var.ehb.namespace
+  namespace_name      = var.ehb.namespace
   resource_group_name = azurerm_resource_group.idy.name
   partition_count     = var.ehb.partition_count
   message_retention   = var.ehb.message_retention
-  depends_on = [ azurerm_eventhub_namespace.idy ]
+  depends_on          = [azurerm_eventhub_namespace.idy]
+}
+
+# Create a data collection rule resource
+resource "azurerm_monitor_data_collection_rule" "idy" {
+  name                        = var.ama_dcr.name
+  resource_group_name         = azurerm_resource_group.idy.name
+  location                    = var.primary_location
+  data_collection_endpoint_id = azurerm_monitor_data_collection_endpoint.idy.id
+  destinations {
+    azure_monitor_metrics {
+      name                  = var.ama_dcr.destinations.azure_monitor_metrics.name
+      workspace_resource_id = azurerm_log_analytics_workspace.law[0].id
+      workspace_name        = azurerm_log_analytics_workspace.law[0].name
+    }
+    log_analytics {
+      workspace_resource_id = azurerm_log_analytics_workspace.law[0].id
+      name                  = azurerm_log_analytics_workspace.law[0].name
+    }
+  }
+  data_sources {
+    performance_counter {
+      streams                       = ["10.0.0.12", "10.0.0.12-InsightsMetrics"]
+      sampling_frequency_in_seconds = 60
+      counter_specifiers            = ["Processor (*)\\% Processor Time"]
+      name                          = "10.0.0.12-perfcounter"
+    }
+    windows_event_log {
+      streams = [
+        "10.0.0.4",
+        "10.0.0.5",
+        "10.0.0.12"
+      ]
+      x_path_queries = [
+        "10.0.0.4",
+        "10.0.0.5",
+        "10.0.0.12"
+      ]
+    }
+  }
 }

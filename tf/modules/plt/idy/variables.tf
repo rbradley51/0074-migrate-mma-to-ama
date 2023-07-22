@@ -538,11 +538,10 @@ variable "ama_dcr" {
   })
   description = "values for diagnostic settings"
   default = {
-    name = "idy-dcr"
+    name = "azr-idy-dcr"
     destinations = {
       log_analytics = {
-        workspace_resource_id = "/subscriptions/1d790e78-7852-498d-8087-f5d48686a50e/resourcegroups/rgp-idy/providers/microsoft.operationalinsights/workspaces/azr-idy-law"
-        name                  = "idy-law"
+        name = "idy-law"
       }
       event_hub = {
         event_hub_id = "/subscriptions/1d790e78-7852-498d-8087-f5d48686a50e/resourcegroups/rgp-idy/providers/microsoft.eventhub/namespaces/azr-idy-ehb"
@@ -553,11 +552,16 @@ variable "ama_dcr" {
         name               = "idy-dcr"
       }
       azure_monitor_metrics = {
-        name = "idy-dcr"
+        name = ["InsightsMetrics"]
       }
       data_flow_metrics = {
-        streams      = ["idy-law"]
-        destinations = ["idy-dcr"]
+        streams      = [
+          "Microsoft-Event",
+          Microsoft-Perf,
+          Microsoft-Syslog,
+          Microsoft-WindowsEvent
+          ]
+        destinations = ["azr-idy-law"]
       }
       data_flow_logs = {
         streams      = ["idy-law"]
