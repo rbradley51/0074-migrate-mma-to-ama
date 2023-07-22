@@ -257,8 +257,8 @@ resource "azurerm_monitor_data_collection_rule" "idy" {
   data_collection_endpoint_id = azurerm_monitor_data_collection_endpoint.idy.id
   destinations {
     log_analytics {
-      workspace_resource_id = azurerm_log_analytics_workspace.law.id
-      name                  = azurerm_log_analytics_workspace.law.name
+      workspace_resource_id = azurerm_log_analytics_workspace.law[0].id
+      name                  = azurerm_log_analytics_workspace.law[0].name
     }
     azure_monitor_metrics {
       name = var.ama_dcr.destinations.azure_monitor_metrics.name
