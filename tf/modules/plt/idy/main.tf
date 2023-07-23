@@ -309,4 +309,23 @@ resource "azurerm_resource_group_policy_assignment" "umi" {
   name                 = var.umi_policy.name
   resource_group_id = azurerm_resource_group.idy.id
   policy_definition_id = var.umi_policy.policy_def_id
+    parameters = <<PARAMS
+    {
+      "dcrResourceId": {
+        "value": "${azurerm_monitor_data_collection_rule.idy.id}"
+      },
+      "bringYourOwnUserAssignedManagedIdentity": {
+        "value": true
+      },
+      "userAssignedManagedIdentityName": {
+        "value": "${azurerm_user_assigned_identity.idy.name}"
+      },
+      "userAssignedManagedIdentityResourceGroup": {
+        "value": "${azurerm_resource_group.idy.name}"
+      },
+      "builtInIdentityResourceGroupLocation": {
+        "value": "${var.primary_location}"
+      }
+    }
+PARAMS
 }
