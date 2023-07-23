@@ -356,7 +356,7 @@ resource "azurerm_resource_group_policy_assignment" "dcra" {
         "value": "${var.dcra_policy.user_given_dcr_name}"
       },
       "enableProcessesAndDependencies": {
-        "value": "${var.dcra_policy.enable_pad}"
+        "value": true
       }
     }
 PARAMS
