@@ -307,6 +307,6 @@ resource "azurerm_monitor_data_collection_rule" "idy" {
 # Add a policy assignment to this resource group scope to assign the user assigned identity to virtual machines
 resource "azurerm_resource_group_policy_assignment" "umi" {
   name                 = var.umi_policy.name
-  resource_group_name  = azurerm_resource_group.idy.name
+  resource_group_id = azurerm_resource_group.idy.id
   policy_definition_id = var.umi_policy.policy_def_id
 }
