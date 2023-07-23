@@ -170,10 +170,10 @@ resource "azurerm_virtual_machine" "vms" {
     admin_password = var.pw
   }
 
-  identity {
-    type         = "UserAssigned"
-    identity_ids = [azurerm_user_assigned_identity.idy.id]
-  }
+  # identity {
+  #   type         = "UserAssigned"
+  #   identity_ids = [azurerm_user_assigned_identity.idy.id]
+  # }
   os_profile_windows_config {
     provision_vm_agent        = var.vms[count.index].windows_config.provision_vm_agent
     enable_automatic_upgrades = var.vms[count.index].windows_config.enable_automatic_upgrades
@@ -302,4 +302,11 @@ resource "azurerm_monitor_data_collection_rule" "idy" {
     type         = var.ama_dcr.identity.type
     identity_ids = [azurerm_user_assigned_identity.idy.id]
   }
+}
+
+# Add a policy assignment to this resource group scope to assign the user assigned identity to virtual machines
+resource "azurerm_resource_group_policy_assignment" "umi" {
+  name                 = var.umi_policy.name
+  resource_group_name  = azurerm_resource_group.idy.name
+  policy_definition_id = var.umi_policy.policy_def_id
 }

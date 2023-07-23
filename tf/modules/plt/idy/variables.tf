@@ -641,3 +641,12 @@ variable "ehb" {
     message_retention = 1
   }
 }
+
+variable "umi_policy" {
+type = map(string)
+  description = "values for user managed identity policy"
+  default = {
+    name = "azr-umi-policy"
+    policy_def_id = "/providers/Microsoft.Authorization/policySetDefinitions/0d1b56c6-6d1f-4a5d-8695-b15efbea6b49"
+  }
+}
