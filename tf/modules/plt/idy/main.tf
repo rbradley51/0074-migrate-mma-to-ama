@@ -276,6 +276,7 @@ resource "azurerm_monitor_data_collection_rule" "idy" {
       counter_specifiers            = var.ama_dcr.data_sources.performance_counter.counter_specifiers
     }
     windows_event_log {
+      name           = var.ama_dcr.data_sources.windows_event_log.name
       streams        = var.ama_dcr.data_sources.windows_event_log.streams
       x_path_queries = var.ama_dcr.data_sources.windows_event_log.x_path_queries
     }
