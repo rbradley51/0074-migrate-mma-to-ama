@@ -266,7 +266,7 @@ resource "azurerm_monitor_data_collection_rule" "idy" {
   }
   data_flow {
     streams      = var.ama_dcr.data_flow.streams
-    destinations = azurerm_log_analytics_workspace.law[0].name
+    destinations = [azurerm_log_analytics_workspace.law[0].name]
   }
 
   # data_flow {
