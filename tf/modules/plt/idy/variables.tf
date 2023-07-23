@@ -650,3 +650,21 @@ type = map(string)
     policy_def_id = "/providers/Microsoft.Authorization/policySetDefinitions/0d1b56c6-6d1f-4a5d-8695-b15efbea6b49"
   }
 }
+
+variable "vm_ext" {
+  type = object({
+    name                  = string
+    publisher             = string
+    type                  = string
+    type_handler_version  = string
+    auto_upgrade_minor_version = bool
+  })
+  description = "values for virtual machine extension"
+  default = {
+    name = "AzureMonitorWindowsAgent"
+    publisher = "Microsoft.Azure.Monitor"
+    type = "AzureMonitorWindowsAgent"
+    type_handler_version = "1.17.0.0"
+    auto_upgrade_minor_version = true
+  }
+}
