@@ -538,8 +538,8 @@ variable "ama_dcr" {
     }
     data_sources = {
       performance_counter = {
-        streams                       = ["10.0.0.12", "10.0.0.12-InsightsMetrics"]
-        name                          = "10.0.0.12-perfcounter"
+        streams                       = ["Microsoft-Perf"]
+        name                          = "perfcounters"
         sampling_frequency_in_seconds = 60
         counter_specifiers            = [
           "CPU\\% Processor Time",
