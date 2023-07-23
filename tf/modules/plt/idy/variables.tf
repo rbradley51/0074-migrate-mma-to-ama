@@ -473,8 +473,8 @@ variable "ama_dcr" {
     name = string
     destinations = object({
       azure_monitor_metrics = object({
-      name = string
-    })
+        name = string
+      })
     })
     # event_hub = object({
     #   event_hub_id = string
@@ -499,8 +499,7 @@ variable "ama_dcr" {
     #   transform_kql = string
     # })
     data_flow = object({
-      streams      = list(string)
-      destinations = list(string)
+      streams = list(string)
     })
     data_sources = object({
       performance_counter = object({
@@ -510,7 +509,7 @@ variable "ama_dcr" {
         counter_specifiers            = list(string)
       })
       windows_event_log = object({
-        name = string
+        name           = string
         streams        = list(string)
         x_path_queries = list(string)
       })
@@ -529,19 +528,17 @@ variable "ama_dcr" {
       }
     }
     data_flow = {
-      streams = [ 
-        "10.0.0.12-InsightMetrics",
-        "10.0.0.12-Syslog",
-        "10.0.0.12-Perf"
-        ]
-      destinations = ["10.0.0.12-destination-log"]
+      streams = [
+        "Microsoft-Perf",
+        "Microsoft-Event"
+      ]
     }
     data_sources = {
       performance_counter = {
         streams                       = ["Microsoft-Perf"]
         name                          = "perfcounters"
         sampling_frequency_in_seconds = 60
-        counter_specifiers            = [
+        counter_specifiers = [
           "CPU\\% Processor Time",
           "CPU\\% User Time",
           "CPU\\% Privileged Time",
