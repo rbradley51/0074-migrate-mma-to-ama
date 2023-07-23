@@ -668,3 +668,28 @@ variable "vm_ext" {
     auto_upgrade_minor_version = true
   }
 }
+
+variable "dcr_assoc" {
+  type = map(string)
+  description = "values for dcr settings association"
+  default = {
+    name = "azr-idy-dca"
+    description = "Data collection rule association to VMs within the scope of this resource group"
+  }
+}
+
+variable "dcra_policy" {
+  type = object({
+    name = string
+    user_given_dcr_name = string
+    enable_pad = bool
+    policy_def_id = string 
+  })
+  description = "values for dcr settings association policy"
+  default = {
+    name = "VMInsights-Dcr-Association"
+    user_given_dcr_name = "azr-idy-dca-policy"
+    enable_pad = true
+    policy_def_id = "/providers/Microsoft.Authorization/policyDefinitions/a0f27bdc-5b15-4810-b81d-7c4df9df1a37"
+  }
+}
