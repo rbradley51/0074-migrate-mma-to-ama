@@ -664,7 +664,7 @@ variable "vm_ext" {
     name = "AzureMonitorWindowsAgent"
     publisher = "Microsoft.Azure.Monitor"
     type = "AzureMonitorWindowsAgent"
-    type_handler_version = "1.17.0.0"
+    type_handler_version = "1.0.18067.0"
     auto_upgrade_minor_version = true
   }
 }
