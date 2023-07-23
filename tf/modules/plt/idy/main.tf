@@ -264,14 +264,14 @@ resource "azurerm_monitor_data_collection_rule" "idy" {
       name = var.ama_dcr.destinations.azure_monitor_metrics.name
     }
   }
-  # data_flow {
-  #   streams      = var.ama_dcr.data_flow.streams
-  #   destinations = var.ama_dcr.data_flow.destinations
-  # }
+  data_flow {
+    streams      = var.ama_dcr.data_flow.streams
+    destinations = azurerm_log_analytics_workspace.law[0].name
+  }
 
   # data_flow {
   #   streams      = ["Microsoft-InsightsMetrics"]
-  #   destinations = ["example-destination-metrics"]
+  #   destinations = ["destination-metrics"]
   # }
 
   # data_flow {
