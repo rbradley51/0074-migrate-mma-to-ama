@@ -169,11 +169,10 @@ resource "azurerm_virtual_machine" "vms" {
     admin_username = var.vms[count.index].os_profile.admin_username
     admin_password = var.pw
   }
-
-  # identity {
-  #   type         = "UserAssigned"
-  #   identity_ids = [azurerm_user_assigned_identity.idy.id]
-  # }
+  identity {
+    type         = "UserAssigned"
+    identity_ids = [azurerm_user_assigned_identity.idy.id]
+  }
   os_profile_windows_config {
     provision_vm_agent        = var.vms[count.index].windows_config.provision_vm_agent
     enable_automatic_upgrades = var.vms[count.index].windows_config.enable_automatic_upgrades
