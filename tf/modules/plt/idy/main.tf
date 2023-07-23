@@ -264,9 +264,6 @@ resource "azurerm_monitor_data_collection_rule" "idy" {
       name = var.ama_dcr.destinations.azure_monitor_metrics.name
     }
   }
-  azure_monitor_metrics {
-    name = var.ama_dcr.azure_monitor_metrics.name
-  }
   data_flow {
     streams      = var.ama_dcr.data_flow.streams
     destinations = var.ama_dcr.data_flow.destinations

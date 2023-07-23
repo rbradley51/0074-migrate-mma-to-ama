@@ -510,6 +510,7 @@ variable "ama_dcr" {
         counter_specifiers            = list(string)
       })
       windows_event_log = object({
+        name = string
         streams        = list(string)
         x_path_queries = list(string)
       })
@@ -540,18 +541,63 @@ variable "ama_dcr" {
         streams                       = ["10.0.0.12", "10.0.0.12-InsightsMetrics"]
         name                          = "10.0.0.12-perfcounter"
         sampling_frequency_in_seconds = 60
-        counter_specifiers            = ["Processor (*)\\% Processor Time"]
+        counter_specifiers            = [
+          "CPU\\% Processor Time",
+          "CPU\\% User Time",
+          "CPU\\% Privileged Time",
+          "CPU\\Interrupts/sec",
+          "CPU\\% DPC Time",
+          "CPU\\DPCs Queued/sec",
+          "CPU\\% Interrupt Time",
+          "CPU\\% Idle Time",
+          "Processor Information(_Total)\\% Processor Time",
+          "Processor Information(_Total)\\% User Time",
+          "Processor Information(_Total)\\% Privileged Time",
+          "Processor Information(_Total)\\Interrupts/sec",
+          "Processor Information(_Total)\\% DPC Time",
+          "Processor Information(_Total)\\DPCs Queued/sec",
+          "Processor Information(_Total)\\% Interrupt Time",
+          "Memory\\Available MBytes",
+          "Memory\\% Committed Bytes In Use",
+          "Memory\\Cache Faults/sec",
+          "Memory\\Demand Zero Faults/sec",
+          "Memory\\Page Faults/sec",
+          "Memory\\Pages/sec",
+          "Memory\\Transition Faults/sec",
+          "Memory\\Write Copies/sec",
+          "Memory\\Pool Nonpaged Bytes",
+          "Memory\\Pool Paged Bytes",
+          "Memory\\Standby Cache Reserve Bytes",
+          "Memory\\Standby Cache Normal Priority Bytes",
+          "Memory\\Standby Cache Core Bytes",
+          "Memory\\Free & Zero Page List Bytes",
+          "Memory\\Modified Page List Bytes",
+          "Memory\\Standby List Bytes",
+          "Memory\\Available Bytes",
+          "Memory\\Committed Bytes",
+          "Memory\\Commit Limit",
+          "Memory\\Pool Paged Resident Bytes",
+          "Memory\\Pool Nonpaged Resident Bytes",
+          "LogicalDisk(*)\\% Free Space",
+          "LogicalDisk(*)\\Avg. Disk sec/Read",
+          "LogicalDisk(*)\\Avg. Disk sec/Write",
+          "LogicalDisk(*)\\Disk Reads/sec",
+          "LogicalDisk(*)\\Disk Writes/sec",
+          "LogicalDisk(*)\\Disk Transfers/sec",
+          "LogicalDisk(*)\\Disk Bytes/sec",
+          "LogicalDisk(*)\\Disk Read Bytes/sec",
+          "LogicalDisk(*)\\Disk Write Bytes/sec",
+          "LogicalDisk(*)\\Split IO/Sec"
+        ]
       }
       windows_event_log = {
+        name = "eventLogsDataSource"
         streams = [
-          "10.0.0.4",
-          "10.0.0.5",
-          "10.0.0.12"
+          "Microsoft-Event"
         ]
         x_path_queries = [
-          "10.0.0.4",
-          "10.0.0.5",
-          "10.0.0.12"
+          "Application!*[System[(Level=1 or Level=2 or Level=5)]]",
+          "System!*[System[(Level=1 or Level=2 or Level=5)]]"
         ]
       }
     }
