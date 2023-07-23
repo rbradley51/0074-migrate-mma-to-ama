@@ -264,9 +264,26 @@ resource "azurerm_monitor_data_collection_rule" "idy" {
       name = var.ama_dcr.destinations.azure_monitor_metrics.name
     }
   }
+  # data_flow {
+  #   streams      = var.ama_dcr.data_flow.streams
+  #   destinations = var.ama_dcr.data_flow.destinations
+  # }
+
   data_flow {
-    streams      = var.ama_dcr.data_flow.streams
-    destinations = var.ama_dcr.data_flow.destinations
+    streams      = ["Microsoft-InsightsMetrics"]
+    destinations = ["example-destination-metrics"]
+  }
+
+  data_flow {
+    streams      = ["Microsoft-InsightsMetrics", "Microsoft-Syslog", "Microsoft-Perf"]
+    destinations = ["example-destination-log"]
+  }
+
+  data_flow {
+    streams       = ["Custom-MyTableRawData"]
+    destinations  = ["example-destination-log"]
+    output_stream = "Microsoft-Syslog"
+    transform_kql = "source | project TimeGenerated = Time, Computer, Message = AdditionalContext"
   }
   data_sources {
     performance_counter {
