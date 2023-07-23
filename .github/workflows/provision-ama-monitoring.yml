@@ -29,7 +29,7 @@ jobs:
       tfVersion: 1.5.3
       workingdir: tf
       planOnly: false # Set to true to plan only, false to deploy
-      rollback: false # Set to true to rollback, false to deploy
+      rollback: true # Set to true to rollback, false to deploy
       skipUAMI: true # Set to true to skip UAMI creation, false to create UAMI if necessary
 
     runs-on: ubuntu-latest
@@ -100,7 +100,7 @@ jobs:
 
     # Deploy
     - name: 'Terraform Deploy'
-      if: ${{ env.planOnly == 'false' }}
+      if: ${{ env.planOnly == 'false' && env.rollback == 'false' }}
       id: apply
       run: terraform apply -auto-approve -var "pw=${{ secrets.VM_PASSWORD }}"
       env:
@@ -111,7 +111,7 @@ jobs:
 
     # Rollback
     - name: 'Terraform Rollback'
-      if: ${{ env.rollback == 'true' }}
+      if: ${{ env.rollback == 'true' && env.planOnly == 'false' }}
       id: destroy
       run: terraform destroy -auto-approve
       env:
