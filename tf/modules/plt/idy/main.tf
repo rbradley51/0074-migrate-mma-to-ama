@@ -336,13 +336,11 @@ PARAMS
 resource "azurerm_virtual_machine_extension" "idy" {
   count               = length(var.vms)
   name                = var.vm_ext.name
-  location            = var.primary_location
-  resource_group_name = azurerm_resource_group.idy.name
   virtual_machine_id  = azurerm_virtual_machine.vms[count.index].id
   publisher           = var.vm_ext.publisher
   type                = var.vm_ext.type
   type_handler_version = var.vm_ext.type_handler_version
-  auto_upgrade_minor_version = var.vms[count.index].vm_extension.auto_upgrade_minor_version
+  auto_upgrade_minor_version = var.vm_ext.auto_upgrade_minor_version
   settings = <<SETTINGS
     {
       "workspaceId": "${azurerm_log_analytics_workspace.law[0].id}"
