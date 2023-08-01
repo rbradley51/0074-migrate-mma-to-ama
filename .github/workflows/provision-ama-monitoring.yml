@@ -30,7 +30,8 @@ jobs:
       tfVersion: 1.5.3
       workingdir: tf
       planOnly: false # Set to true to plan only, false to deploy
-      rollback: false # Set to true to rollback, false to deploy
+      rollback: true # Set to true to rollback, false to deploy
+      skipUAMI: true # Set to true to skip UAMI creation, false to create UAMI if necessary
 
     runs-on: ubuntu-latest
 
@@ -54,6 +55,7 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
     - name: Create and assign UAMI
+      if: ${{ env.skipUAMI == 'false' }}
       uses: Azure/CLI@v1
       with: 
         azcliversion: ${{ env.azCliVer }}
@@ -89,7 +91,8 @@ jobs:
     # Plan
     - name: 'Terraform Plan'
       id: plan
-      run: terraform plan
+      run: terraform plan -lock=false -out=tfplan -var "pw=${{ secrets.VM_PASSWORD }}"
+      timeout-minutes: 20
       env:
         ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
         ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
@@ -98,7 +101,7 @@ jobs:
 
     # Deploy
     - name: 'Terraform Deploy'
-      if: ${{ env.planOnly == 'false' }}
+      if: ${{ env.planOnly == 'false' && env.rollback == 'false' }}
       id: apply
       run: terraform apply -auto-approve -var "pw=${{ secrets.VM_PASSWORD }}"
       env:
@@ -109,7 +112,7 @@ jobs:
 
     # Rollback
     - name: 'Terraform Rollback'
-      if: ${{ env.rollback == 'true' }}
+      if: ${{ env.rollback == 'true' && env.planOnly == 'false' }}
       id: destroy
       run: terraform destroy -auto-approve
       env:

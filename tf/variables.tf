@@ -23,5 +23,4 @@ variable "identitySubscriptionId" {
 }
 variable "pw" {
   type    = string
-  default = "InvalidUnusedPassword123!"
 }
