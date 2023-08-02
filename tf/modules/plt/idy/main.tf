@@ -182,6 +182,7 @@ resource "azurerm_virtual_machine" "vms" {
     storage_uri = azurerm_storage_account.idy.primary_blob_endpoint
   }
   # https://www.terraform.io/docs/providers/azurerm/r/virtual_machine.html
+  # https://stackoverflow.com/questions/60265902/terraform-azurerm-virtual-machine-extension-run-local-powershell-script-using-c/60276573#60276573
 }
 
 resource "azurerm_automation_account" "aaa" {
@@ -324,6 +325,7 @@ resource "azurerm_virtual_machine_extension" "idy" {
   type                = var.vm_ext.type
   type_handler_version = var.vm_ext.type_handler_version
   auto_upgrade_minor_version = var.vm_ext.auto_upgrade_minor_version
+  automatic_upgrade_enabled = var.vm_ext.automatic_upgrade_enabled
   settings = <<SETTINGS
     {
       "workspaceId": "${azurerm_log_analytics_workspace.law[0].id}"

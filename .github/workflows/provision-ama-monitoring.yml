@@ -22,6 +22,8 @@ jobs:
       AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       uamiName: ama-uami-01
       uamiResourceGroup: ama-rg-01
+      rgpName: rgp-idy
+      rgpLocation: centralus
       uamiLocation: eastus2
       uamiRoleAssignmentVmContrib: "Virtual Machine Contributor"
       uamiRoleAssignmentLogAnalyticsContrib: "Log Analytics Contributor"
@@ -109,12 +111,16 @@ jobs:
         ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
         ARM_USE_OIDC: true
-
-    # Enable AMA Automatic Upgrades
-    - name: Enable VM Extenation AMA Automatic Upgrades
-      shell: pwsh
-      run: | 
-        $env:GITHUB_WORKSPACE/az-scripts/Enable-AutomaticUpgradeAMA.ps1
+    
+    # Enable AMA upgrade
+    - name: Enable AMA upgrade
+      if: ${{ env.planOnly == 'false' }}
+      uses: Azure/CLI@v1
+      with: 
+        azcliversion: ${{ env.azCliVer }}
+        inlineScript: |
+          chmod +x $GITHUB_WORKSPACE/az-scripts/enableAMAUpgrade.sh
+          $GITHUB_WORKSPACE/az-scripts/enableAMAUpgrade.sh
 
     # Rollback
     - name: 'Terraform Rollback'
