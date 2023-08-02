@@ -658,6 +658,7 @@ variable "vm_ext" {
     type                  = string
     type_handler_version  = string
     auto_upgrade_minor_version = bool
+    automatic_upgrade_enabled = bool
   })
   description = "values for virtual machine extension"
   default = {
@@ -666,6 +667,7 @@ variable "vm_ext" {
     type = "AzureMonitorWindowsAgent"
     type_handler_version = "1.0"
     auto_upgrade_minor_version = true
+    automatic_upgrade_enabled = true
   }
 }
 
