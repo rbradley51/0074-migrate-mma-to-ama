@@ -110,6 +110,11 @@ jobs:
         ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
         ARM_USE_OIDC: true
 
+    # Enable AMA Automatic Upgrades
+    - name: Enable VM Extenation AMA Automatic Upgrades
+      shell: pwsh
+      run: $GIT_WORKSPACE/az-scripts/enableAMAUpgrade.ps1 -environment AzVM -Verbose
+
     # Rollback
     - name: 'Terraform Rollback'
       if: ${{ env.rollback == 'true' && env.planOnly == 'false' }}
