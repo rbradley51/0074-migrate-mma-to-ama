@@ -27,7 +27,7 @@ jobs:
       uamiRoleAssignmentLogAnalyticsContrib: "Log Analytics Contributor"
       uamiRoleAssignmentArcContrib: "Azure Arc Connected Resource Administrator"
       azCliVer: 2.50.0
-      tfVersion: 1.5.3
+      tfVersion: 1.5.4
       workingdir: tf
       planOnly: true # Set to true to plan only, false to deploy
       rollback: false # Set to true to rollback, false to deploy
