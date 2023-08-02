@@ -113,7 +113,7 @@ jobs:
     # Enable AMA Automatic Upgrades
     - name: Enable VM Extenation AMA Automatic Upgrades
       shell: pwsh
-      run: $GIT_WORKSPACE/az-scripts/enableAMAUpgrade.ps1 -environment AzVM -Verbose
+      run: $env:GITHUB_WORKSPACE/az-scripts/enableAMAUpgrade.ps1 -environment AzVM -Verbose
 
     # Rollback
     - name: 'Terraform Rollback'
