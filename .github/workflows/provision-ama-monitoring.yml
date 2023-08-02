@@ -112,16 +112,6 @@ jobs:
         ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
         ARM_USE_OIDC: true
     
-    # Enable AMA upgrade
-    - name: Enable AMA upgrade
-      if: ${{ env.planOnly == 'false' }}
-      uses: Azure/CLI@v1
-      with: 
-        azcliversion: ${{ env.azCliVer }}
-        inlineScript: |
-          chmod +x $GITHUB_WORKSPACE/az-scripts/enableAMAUpgrade.sh
-          $GITHUB_WORKSPACE/az-scripts/enableAMAUpgrade.sh
-
     # Rollback
     - name: 'Terraform Rollback'
       if: ${{ env.rollback == 'true' && env.planOnly == 'false' }}
