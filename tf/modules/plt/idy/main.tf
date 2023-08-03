@@ -385,7 +385,7 @@ resource "azurerm_resource_group_policy_assignment" "mde" {
       },
       "microsoftDefenderForEndpointLinuxArcAgentDeployEffect": {
         "value": "${var.mde_policy.microsoftDefenderForEndpointLinuxArcAgentDeployEffect}"
-      },
+      }
     }
 PARAMS
 }
