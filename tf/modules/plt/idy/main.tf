@@ -420,7 +420,7 @@ resource "azurerm_network_connection_monitor" "idy" {
 
     filter {
       item {
-        address = azurerm_network_interface.idy[0].ip_configuration[0].private_ip_address
+        address = azurerm_network_interface.idy[0].*.private_ip_address
         type    = "AgentAddress"
       }
       type = "Include"
@@ -433,7 +433,7 @@ resource "azurerm_network_connection_monitor" "idy" {
 
     filter {
       item {
-        address = azurerm_network_interface.idy[2].ip_configuration[2].private_ip_address
+        address = azurerm_network_interface.idy[2].*.private_ip_address
         type    = "AgentAddress"
       }
       type = "Include"
