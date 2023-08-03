@@ -457,7 +457,7 @@ resource "azurerm_network_connection_monitor" "idy" {
 
   test_configuration {
     name                      = "https"
-    protocol                  = "HTTP"
+    protocol                  = "Http"
     test_frequency_in_seconds = 30
     tcp_configuration {
       port = 443
@@ -478,7 +478,7 @@ resource "azurerm_network_connection_monitor" "idy" {
     test_configuration_names = ["https"]
   }
 
-  notes = "connection monitor created by Terraform"
+  notes = "NOTE: The 'AzureResourceManager' service tag must also be added to the NSG subnet of the source VMs or a firewall."
 
   output_workspace_resource_ids = [azurerm_log_analytics_workspace.law[0].id]
 
