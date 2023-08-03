@@ -721,7 +721,7 @@ variable "nw_ext" {
   description = "values for virtual machine extension"
   default = {
     name = "NetworkWatcher"
-    publisher = "Microsoft.Azure"
+    publisher = "Microsoft.Azure.NetworkWatcher"
     type = "NetworkWatcherAgentWindows"
     type_handler_version = "1.4"
     auto_upgrade_minor_version = true
