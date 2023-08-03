@@ -402,10 +402,10 @@ PARAMS
 }
 
 # Conectivity checks
-resource "azurerm_network_watcher" "idy" {
-  name                = "idy-nwr-${local.rndPrefix}"
-  location            = azurerm_resource_group.idy.location
-  resource_group_name = azurerm_resource_group.idy.name
+data "azurerm_network_watcher" "idy" {
+  name                = "NetworkWatcher_${var.primary_location}"
+  resource_group_name = "NetworkWatcherRG"
+  location            = var.primary_location
 }
 
 # Network watcher
