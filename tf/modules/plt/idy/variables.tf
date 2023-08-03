@@ -343,17 +343,17 @@ variable "nsg_rule_sets" {
       source_address_prefix      = "*"
       destination_address_prefix = "*"
     },
-    {
-      name                       = "adds-outbound"
-      priority                   = 100
-      direction                  = "Outbound"
-      access                     = "Allow"
-      protocol                   = "Tcp"
-      source_port_range          = "*"
-      destination_port_range     = "443"
-      source_address_prefix      = "*"
-      destination_address_prefix = "*"
-    },
+    # {
+    #   name                       = "adds-outbound"
+    #   priority                   = 100
+    #   direction                  = "Outbound"
+    #   access                     = "Allow"
+    #   protocol                   = "Tcp"
+    #   source_port_range          = "*"
+    #   destination_port_range     = "443"
+    #   source_address_prefix      = "*"
+    #   destination_address_prefix = "*"
+    # },
     {
       name                       = "svrs-place-holder"
       priority                   = 100
@@ -364,18 +364,18 @@ variable "nsg_rule_sets" {
       destination_port_range     = "*"
       source_address_prefix      = "*"
       destination_address_prefix = "*"
-    },
-    {
-      name                       = "srvs-outbound"
-      priority                   = 100
-      direction                  = "Outbound"
-      access                     = "Allow"
-      protocol                   = "Tcp"
-      source_port_range          = "*"
-      destination_port_range     = "443"
-      source_address_prefix      = "*"
-      destination_address_prefix = "*"
     }
+    # {
+    #   name                       = "srvs-outbound"
+    #   priority                   = 100
+    #   direction                  = "Outbound"
+    #   access                     = "Allow"
+    #   protocol                   = "Tcp"
+    #   source_port_range          = "*"
+    #   destination_port_range     = "443"
+    #   source_address_prefix      = "*"
+    #   destination_address_prefix = "*"
+    # }
   ]
 }
 variable "vntName" {
