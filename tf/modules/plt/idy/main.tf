@@ -480,7 +480,7 @@ resource "azurerm_network_connection_monitor" "idy" {
 
   notes = "connection monitor created by Terraform"
 
-  output_workspace_resource_ids = [azurerm_log_analytics_workspace.law.id]
+  output_workspace_resource_ids = [azurerm_log_analytics_workspace.law[0].id]
 
   depends_on = [azurerm_virtual_machine_extension.nw]
 }
