@@ -341,7 +341,6 @@ resource "azurerm_virtual_machine_extension" "nw" {
   type                = var.nw_ext.type
   type_handler_version = var.nw_ext.type_handler_version
   auto_upgrade_minor_version = var.nw_ext.auto_upgrade_minor_version
-  automatic_upgrade_enabled = var.nw_ext.automatic_upgrade_enabled
 }
 
 # resource "azurerm_data_collection_rule_association" "idy" {
