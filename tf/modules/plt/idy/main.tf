@@ -410,7 +410,7 @@ data "azurerm_network_watcher" "idy" {
 # Network watcher
 resource "azurerm_network_connection_monitor" "idy" {
   name               = "idy-cmr-${local.rndPrefix}"
-  network_watcher_id = azurerm_network_watcher.idy.id
+  network_watcher_id = data.azurerm_network_watcher.idy.id
   location           = azurerm_network_watcher.idy.location
 
   endpoint {
