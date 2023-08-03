@@ -411,7 +411,7 @@ data "azurerm_network_watcher" "idy" {
 resource "azurerm_network_connection_monitor" "idy" {
   name               = "idy-cmr-${local.rndPrefix}"
   network_watcher_id = data.azurerm_network_watcher.idy.id
-  location           = azurerm_network_watcher.idy.location
+  location           = data.azurerm_network_watcher.idy.location
 
   endpoint {
     name               = azurerm_virtual_machine.vms[0].name
