@@ -456,7 +456,7 @@ resource "azurerm_network_connection_monitor" "idy" {
 
   test_configuration {
     name                      = "https"
-    protocol                  = "HttpConfiguration"
+    protocol                  = "Tcp"
     test_frequency_in_seconds = 30
     tcp_configuration {
       port = 443
