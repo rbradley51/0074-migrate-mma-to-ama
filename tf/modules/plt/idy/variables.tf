@@ -708,3 +708,23 @@ variable "dcra_policy" {
     policy_def_id = "/providers/Microsoft.Authorization/policyDefinitions/a0f27bdc-5b15-4810-b81d-7c4df9df1a37"
   }
 }
+
+variable "nw_ext" {
+  type = object({
+    name                  = string
+    publisher             = string
+    type                  = string
+    type_handler_version  = string
+    auto_upgrade_minor_version = bool
+    automatic_upgrade_enabled = bool
+  })
+  description = "values for virtual machine extension"
+  default = {
+    name = "NetworkWatcher"
+    publisher = "Microsoft.Azure"
+    type = "NetworkWatcherAgentWindows"
+    type_handler_version = "1.4"
+    auto_upgrade_minor_version = true
+    automatic_upgrade_enabled = true
+  }
+}

@@ -333,6 +333,17 @@ resource "azurerm_virtual_machine_extension" "idy" {
 SETTINGS
 }
 
+resource "azurerm_virtual_machine_extension" "nw" {
+  count               = length(var.vms)
+  name                = var.nw_ext.name
+  virtual_machine_id  = azurerm_virtual_machine.vms[count.index].id
+  publisher           = var.nw_ext.publisher
+  type                = var.nw_ext.type
+  type_handler_version = var.nw_ext.type_handler_version
+  auto_upgrade_minor_version = var.nw_ext.auto_upgrade_minor_version
+  automatic_upgrade_enabled = var.nw_ext.automatic_upgrade_enabled
+}
+
 # resource "azurerm_data_collection_rule_association" "idy" {
 #   count               = length(var.vms)
 #   name                = var.dcr_assoc.name
