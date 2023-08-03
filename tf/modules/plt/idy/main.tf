@@ -420,7 +420,7 @@ resource "azurerm_network_connection_monitor" "idy" {
 
     filter {
       item {
-        address = "10.0.0.4"
+        address = azurerm_virtual_machine.vms[0].id
         type    = "AgentAddress"
       }
       type = "Include"
@@ -433,7 +433,7 @@ resource "azurerm_network_connection_monitor" "idy" {
 
     filter {
       item {
-        address = "10.0.0.12"
+        address = azurerm_virtual_machine.vms[2].id
         type    = "AgentAddress"
       }
       type = "Include"
