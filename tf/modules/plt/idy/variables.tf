@@ -331,16 +331,28 @@ variable "nsg_rule_sets" {
     source_address_prefix      = string
     destination_address_prefix = string
   }))
-  default = [{
-    name                       = "adds-place-holder"
-    priority                   = 100
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
+  default = [
+    {
+      name                       = "adds-place-holder"
+      priority                   = 100
+      direction                  = "Inbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_port_range          = "*"
+      destination_port_range     = "*"
+      source_address_prefix      = "*"
+      destination_address_prefix = "*"
+    },
+    {
+      name                       = "adds-outbound"
+      priority                   = 100
+      direction                  = "Outbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_port_range          = "*"
+      destination_port_range     = "443"
+      source_address_prefix      = "*"
+      destination_address_prefix = "*"
     },
     {
       name                       = "svrs-place-holder"
@@ -352,7 +364,19 @@ variable "nsg_rule_sets" {
       destination_port_range     = "*"
       source_address_prefix      = "*"
       destination_address_prefix = "*"
-  }]
+    },
+    {
+      name                       = "srvs-outbound"
+      priority                   = 100
+      direction                  = "Outbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_port_range          = "*"
+      destination_port_range     = "443"
+      source_address_prefix      = "*"
+      destination_address_prefix = "*"
+    }
+  ]
 }
 variable "vntName" {
   type        = string
@@ -643,88 +667,88 @@ variable "ehb" {
 }
 
 variable "umi_policy" {
-type = map(string)
+  type        = map(string)
   description = "values for user managed identity policy"
   default = {
-    name = "azr-umi-policy"
+    name          = "azr-umi-policy"
     policy_def_id = "/providers/Microsoft.Authorization/policySetDefinitions/0d1b56c6-6d1f-4a5d-8695-b15efbea6b49"
   }
 }
 
 variable "mde_policy" {
-  type = map(string)
+  type        = map(string)
   description = "values for mde policy"
   default = {
-    name = "azr-mde-policy"
-    policy_def_id = "/providers/Microsoft.Authorization/policySetDefinitions/e20d08c5-6d64-656d-6465-ce9e37fd0ebc"
-    microsoftDefenderForEndpointWindowsVmAgentDeployEffect = "DeployIfNotExists"
-    microsoftDefenderForEndpointLinuxVmAgentDeployEffect = "DeployIfNotExists"
+    name                                                    = "azr-mde-policy"
+    policy_def_id                                           = "/providers/Microsoft.Authorization/policySetDefinitions/e20d08c5-6d64-656d-6465-ce9e37fd0ebc"
+    microsoftDefenderForEndpointWindowsVmAgentDeployEffect  = "DeployIfNotExists"
+    microsoftDefenderForEndpointLinuxVmAgentDeployEffect    = "DeployIfNotExists"
     microsoftDefenderForEndpointWindowsArcAgentDeployEffect = "DeployIfNotExists"
-    microsoftDefenderForEndpointLinuxArcAgentDeployEffect = "DeployIfNotExists"
+    microsoftDefenderForEndpointLinuxArcAgentDeployEffect   = "DeployIfNotExists"
   }
 }
 
 variable "vm_ext" {
   type = object({
-    name                  = string
-    publisher             = string
-    type                  = string
-    type_handler_version  = string
+    name                       = string
+    publisher                  = string
+    type                       = string
+    type_handler_version       = string
     auto_upgrade_minor_version = bool
-    automatic_upgrade_enabled = bool
+    automatic_upgrade_enabled  = bool
   })
   description = "values for virtual machine extension"
   default = {
-    name = "AzureMonitorWindowsAgent"
-    publisher = "Microsoft.Azure.Monitor"
-    type = "AzureMonitorWindowsAgent"
-    type_handler_version = "1.0"
+    name                       = "AzureMonitorWindowsAgent"
+    publisher                  = "Microsoft.Azure.Monitor"
+    type                       = "AzureMonitorWindowsAgent"
+    type_handler_version       = "1.0"
     auto_upgrade_minor_version = true
-    automatic_upgrade_enabled = true
+    automatic_upgrade_enabled  = true
   }
 }
 
 variable "dcr_assoc" {
-  type = map(string)
+  type        = map(string)
   description = "values for dcr settings association"
   default = {
-    name = "azr-idy-dca"
+    name        = "azr-idy-dca"
     description = "Data collection rule association to VMs within the scope of this resource group"
   }
 }
 
 variable "dcra_policy" {
   type = object({
-    name = string
+    name                = string
     user_given_dcr_name = string
-    enable_pad = bool
-    policy_def_id = string 
+    enable_pad          = bool
+    policy_def_id       = string
   })
   description = "values for dcr settings association policy"
   default = {
-    name = "VMInsights-Dcr-Association"
+    name                = "VMInsights-Dcr-Association"
     user_given_dcr_name = "azr-idy-dca-policy"
-    enable_pad = true
-    policy_def_id = "/providers/Microsoft.Authorization/policyDefinitions/a0f27bdc-5b15-4810-b81d-7c4df9df1a37"
+    enable_pad          = true
+    policy_def_id       = "/providers/Microsoft.Authorization/policyDefinitions/a0f27bdc-5b15-4810-b81d-7c4df9df1a37"
   }
 }
 
 variable "nw_ext" {
   type = object({
-    name                  = string
-    publisher             = string
-    type                  = string
-    type_handler_version  = string
+    name                       = string
+    publisher                  = string
+    type                       = string
+    type_handler_version       = string
     auto_upgrade_minor_version = bool
-    automatic_upgrade_enabled = bool
+    automatic_upgrade_enabled  = bool
   })
   description = "values for virtual machine extension"
   default = {
-    name = "NetworkWatcher"
-    publisher = "Microsoft.Azure.NetworkWatcher"
-    type = "NetworkWatcherAgentWindows"
-    type_handler_version = "1.4"
+    name                       = "NetworkWatcher"
+    publisher                  = "Microsoft.Azure.NetworkWatcher"
+    type                       = "NetworkWatcherAgentWindows"
+    type_handler_version       = "1.4"
     auto_upgrade_minor_version = true
-    automatic_upgrade_enabled = true
+    automatic_upgrade_enabled  = true
   }
 }
