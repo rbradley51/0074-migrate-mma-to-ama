@@ -452,7 +452,7 @@ resource "azurerm_network_connection_monitor" "idy" {
 
   endpoint {
     name    = "dest-law-endpoint"
-    address = "https://${azurerm_log_analytics_workspace.law.id}.ods.opinsights.azure.com"
+    address = "https://${azurerm_log_analytics_workspace.law[0].id}.ods.opinsights.azure.com"
   }
 
   test_configuration {
