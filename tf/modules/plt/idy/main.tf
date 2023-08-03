@@ -290,13 +290,13 @@ resource "azurerm_monitor_data_collection_rule" "idy" {
 # Add a policy assignment to this resource group scope to assign the user assigned identity to virtual machines
 resource "azurerm_resource_group_policy_assignment" "umi" {
   name                 = var.umi_policy.name
-  location = var.primary_location
-  resource_group_id = azurerm_resource_group.idy.id
+  location             = var.primary_location
+  resource_group_id    = azurerm_resource_group.idy.id
   policy_definition_id = var.umi_policy.policy_def_id
   identity {
-    type         = "SystemAssigned"
+    type = "SystemAssigned"
   }
-    parameters = <<PARAMS
+  parameters = <<PARAMS
     {
       "dcrResourceId": {
         "value": "${azurerm_monitor_data_collection_rule.idy.id}"
@@ -318,15 +318,15 @@ PARAMS
 }
 
 resource "azurerm_virtual_machine_extension" "idy" {
-  count               = length(var.vms)
-  name                = var.vm_ext.name
-  virtual_machine_id  = azurerm_virtual_machine.vms[count.index].id
-  publisher           = var.vm_ext.publisher
-  type                = var.vm_ext.type
-  type_handler_version = var.vm_ext.type_handler_version
+  count                      = length(var.vms)
+  name                       = var.vm_ext.name
+  virtual_machine_id         = azurerm_virtual_machine.vms[count.index].id
+  publisher                  = var.vm_ext.publisher
+  type                       = var.vm_ext.type
+  type_handler_version       = var.vm_ext.type_handler_version
   auto_upgrade_minor_version = var.vm_ext.auto_upgrade_minor_version
-  automatic_upgrade_enabled = var.vm_ext.automatic_upgrade_enabled
-  settings = <<SETTINGS
+  automatic_upgrade_enabled  = var.vm_ext.automatic_upgrade_enabled
+  settings                   = <<SETTINGS
     {
       "workspaceId": "${azurerm_log_analytics_workspace.law[0].id}"
     }
@@ -334,14 +334,14 @@ SETTINGS
 }
 
 resource "azurerm_virtual_machine_extension" "nw" {
-  count               = length(var.vms)
-  name                = var.nw_ext.name
-  virtual_machine_id  = azurerm_virtual_machine.vms[count.index].id
-  publisher           = var.nw_ext.publisher
-  type                = var.nw_ext.type
-  type_handler_version = var.nw_ext.type_handler_version
+  count                      = length(var.vms)
+  name                       = var.nw_ext.name
+  virtual_machine_id         = azurerm_virtual_machine.vms[count.index].id
+  publisher                  = var.nw_ext.publisher
+  type                       = var.nw_ext.type
+  type_handler_version       = var.nw_ext.type_handler_version
   auto_upgrade_minor_version = var.nw_ext.auto_upgrade_minor_version
-  automatic_upgrade_enabled = var.nw_ext.automatic_upgrade_enabled
+  automatic_upgrade_enabled  = var.nw_ext.automatic_upgrade_enabled
 }
 
 # resource "azurerm_data_collection_rule_association" "idy" {
@@ -354,13 +354,13 @@ resource "azurerm_virtual_machine_extension" "nw" {
 
 resource "azurerm_resource_group_policy_assignment" "dcra" {
   name                 = var.dcra_policy.name
-  location = var.primary_location
-  resource_group_id = azurerm_resource_group.idy.id
+  location             = var.primary_location
+  resource_group_id    = azurerm_resource_group.idy.id
   policy_definition_id = var.dcra_policy.policy_def_id
   identity {
-    type         = "SystemAssigned"
+    type = "SystemAssigned"
   }
-    parameters = <<PARAMS
+  parameters = <<PARAMS
     {
       "workspaceResourceId": {
         "value": "${azurerm_log_analytics_workspace.law[0].id}"
@@ -376,14 +376,14 @@ PARAMS
 }
 
 resource "azurerm_resource_group_policy_assignment" "mde" {
-  name = var.mde_policy.name
-  location = var.primary_location
-  resource_group_id = azurerm_resource_group.idy.id
+  name                 = var.mde_policy.name
+  location             = var.primary_location
+  resource_group_id    = azurerm_resource_group.idy.id
   policy_definition_id = var.mde_policy.policy_def_id
   identity {
     type = "SystemAssigned"
   }
-    parameters = <<PARAMS
+  parameters = <<PARAMS
     {
       "microsoftDefenderForEndpointWindowsVmAgentDeployEffect": {
         "value": "${var.mde_policy.microsoftDefenderForEndpointWindowsVmAgentDeployEffect}"
@@ -399,4 +399,88 @@ resource "azurerm_resource_group_policy_assignment" "mde" {
       }
     }
 PARAMS
+}
+
+# Conectivity checks
+resource "azurerm_network_watcher" "idy" {
+  name                = "idy-nwr-${local.rndPrefix}"
+  location            = azurerm_resource_group.idy.location
+  resource_group_name = azurerm_resource_group.idy.name
+}
+
+# Network watcher
+resource "azurerm_network_connection_monitor" "idy" {
+  name               = "idy-cmr-${local.rndPrefix}"
+  network_watcher_id = azurerm_network_watcher.idy.id
+  location           = azurerm_network_watcher.idy.location
+
+  endpoint {
+    name               = azurerm_virtual_machine.vms[0].name
+    target_resource_id = azurerm_virtual_machine.vms[0].id
+
+    filter {
+      item {
+        address = azurerm_virtual_machine.vms[0].id
+        type    = "AgentAddress"
+      }
+      type = "Include"
+    }
+  }
+
+  endpoint {
+    name               = azurerm_virtual_machine.vms[2].name
+    target_resource_id = azurerm_virtual_machine.vms[2].id
+
+    filter {
+      item {
+        address = azurerm_virtual_machine.vms[2].id
+        type    = "AgentAddress"
+      }
+      type = "Include"
+    }
+  }
+
+  endpoint {
+    name    = "dest-global-handler"
+    address = "https://global.handler.control.monitor.azure.com"
+  }
+
+  endpoint {
+    name    = "dest-regional-handler"
+    address = "https://${var.primary_location}.handler.control.monitor.azure.com"
+  }
+
+  endpoint {
+    name    = "dest-law-endpoint"
+    address = "https://${azurerm_log_analytics_workspace.law.id}.ods.opinsights.azure.com"
+  }
+
+  test_configuration {
+    name                      = "https"
+    protocol                  = "HTTP"
+    test_frequency_in_seconds = 1
+    tcp_configuration {
+      port = 443
+    }
+  }
+
+  test_group {
+    name = "azure_monitor_endpoints_test_group"
+    destination_endpoints = [
+      "dest-global-handler",
+      "dest-regional-handler",
+      "dest-law-endpoint"
+    ]
+    source_endpoints = [
+      azurerm_virtual_machine.vms[0].name,
+      azurerm_virtual_machine.vms[2].name
+    ]
+    test_configuration_names = ["https"]
+  }
+
+  notes = "connection monitor created by Terraform"
+
+  output_workspace_resource_ids = [azurerm_log_analytics_workspace.law.id]
+
+  depends_on = [azurerm_virtual_machine_extension.nw]
 }
