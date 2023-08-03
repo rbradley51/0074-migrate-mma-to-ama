@@ -363,3 +363,29 @@ resource "azurerm_resource_group_policy_assignment" "dcra" {
     }
 PARAMS
 }
+
+resource "azurerm_resource_group_policy_assignment" "mde" {
+  name = var.mde_policy.name
+  location = var.primary_location
+  resource_group_id = azurerm_resource_group.idy.id
+  policy_definition_id = var.mde_policy.policy_def_id
+  identity {
+    type = "SystemAssigned"
+  }
+    parameters = <<PARAMS
+    {
+      "microsoftDefenderForEndpointWindowsVmAgentDeployEffect": {
+        "value": "${var.mde_policy.microsoftDefenderForEndpointWindowsVmAgentDeployEffect}"
+      },
+      "microsoftDefenderForEndpointLinuxVmAgentDeployEffect": {
+        "value": "${var.mde_policy.microsoftDefenderForEndpointLinuxVmAgentDeployEffect}"
+      },
+      "microsoftDefenderForEndpointWindowsArcAgentDeployEffect": {
+        "value": "${var.mde_policy.microsoftDefenderForEndpointWindowsArcAgentDeployEffect}"
+      },
+      "microsoftDefenderForEndpointLinuxArcAgentDeployEffect": {
+        "value": "${var.mde_policy.microsoftDefenderForEndpointLinuxArcAgentDeployEffect}"
+      },
+    }
+PARAMS
+}

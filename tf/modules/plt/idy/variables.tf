@@ -651,6 +651,19 @@ type = map(string)
   }
 }
 
+variable "mde_policy" {
+  type = map(string)
+  description = "values for mde policy"
+  default = {
+    name = "azr-mde-policy"
+    policy_def_id = "/providers/Microsoft.Authorization/policySetDefinitions/e20d08c5-6d64-656d-6465-ce9e37fd0ebc"
+    microsoftDefenderForEndpointWindowsVmAgentDeployEffect = "DeployIfNotExists"
+    microsoftDefenderForEndpointLinuxVmAgentDeployEffect = "DeployIfNotExists"
+    microsoftDefenderForEndpointWindowsArcAgentDeployEffect = "DeployIfNotExists"
+    microsoftDefenderForEndpointLinuxArcAgentDeployEffect = "DeployIfNotExists"
+  }
+}
+
 variable "vm_ext" {
   type = object({
     name                  = string
