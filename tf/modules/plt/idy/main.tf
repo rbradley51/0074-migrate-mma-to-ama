@@ -461,17 +461,21 @@ resource "azurerm_network_connection_monitor" "idy" {
 
   endpoint {
     name    = "dest-global-handler"
-    address = "global.handler.control.monitor.azure.com"
+    # address = "global.handler.control.monitor.azure.com"
+    address = "www.microsoft.com"
+
   }
 
   endpoint {
     name    = "dest-regional-handler"
-    address = "${var.primary_location}.handler.control.monitor.azure.com"
+    # address = "${var.primary_location}.handler.control.monitor.azure.com"
+    address = "www.amazon.com"
   }
 
   endpoint {
     name    = "dest-law-endpoint"
-    address = "${azurerm_log_analytics_workspace.law[0].id}.ods.opinsights.azure.com"
+    # address = "${azurerm_log_analytics_workspace.law[0].id}.ods.opinsights.azure.com"
+    address = "www.google.com"
   }
 
   test_configuration {
