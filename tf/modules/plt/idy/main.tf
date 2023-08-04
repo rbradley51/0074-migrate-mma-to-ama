@@ -87,7 +87,7 @@ resource "azurerm_virtual_network" "idy" {
   location            = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
   address_space       = var.vntAddressPrefixes
-  # dns_servers         = var.dns_servers
+  dns_servers         = []
   subnet {
     name           = var.subnets[0].name
     address_prefix = var.subnets[0].address_prefix
