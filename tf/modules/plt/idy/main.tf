@@ -54,30 +54,30 @@ resource "azurerm_network_security_group" "idy" {
 
 resource "azurerm_network_security_rule" "ads" {
   count                       = length(var.nsg_rules)
-  name                        = var.name[count.index]
-  priority                    = var.priority[count.index]
-  direction                   = var.direction[count.index]
-  access                      = var.access[count.index]
-  protocol                    = var.protocol[count.index]
-  source_port_range           = var.source_port_range[count.index]
-  destination_port_range      = var.destination_port_range[count.index]
-  source_address_prefix       = var.source_address_prefix[count.index]
-  destination_address_prefix  = var.destination_address_prefix[count.index]
+  name                        = var.nsg_rules.name[count.index]
+  priority                    = var.nsg_rules.priority[count.index]
+  direction                   = var.nsg_rules.direction[count.index]
+  access                      = var.nsg_rules.access[count.index]
+  protocol                    = var.nsg_rules.protocol[count.index]
+  source_port_range           = var.nsg_rules.source_port_range[count.index]
+  destination_port_range      = var.nsg_rules.destination_port_range[count.index]
+  source_address_prefix       = var.nsg_rules.source_address_prefix[count.index]
+  destination_address_prefix  = var.nsg_rules.destination_address_prefix[count.index]
   resource_group_name         = azurerm_resource_group.idy.name
   network_security_group_name = azurerm_network_security_group.idy[0].name
 }
 
 resource "azurerm_network_security_rule" "srv" {
   count                       = length(var.nsg_rules)
-  name                        = var.name[count.index]
-  priority                    = var.priority[count.index]
-  direction                   = var.direction[count.index]
-  access                      = var.access[count.index]
-  protocol                    = var.protocol[count.index]
-  source_port_range           = var.source_port_range[count.index]
-  destination_port_range      = var.destination_port_range[count.index]
-  source_address_prefix       = var.source_address_prefix[count.index]
-  destination_address_prefix  = var.destination_address_prefix[count.index]
+  name                        = var.nsg_rules.name[count.index]
+  priority                    = var.nsg_rules.priority[count.index]
+  direction                   = var.nsg_rules.direction[count.index]
+  access                      = var.nsg_rules.access[count.index]
+  protocol                    = var.nsg_rules.protocol[count.index]
+  source_port_range           = var.nsg_rules.source_port_range[count.index]
+  destination_port_range      = var.nsg_rules.destination_port_range[count.index]
+  source_address_prefix       = var.nsg_rules.source_address_prefix[count.index]
+  destination_address_prefix  = var.nsg_rules.destination_address_prefix[count.index]
   resource_group_name         = azurerm_resource_group.idy.name
   network_security_group_name = azurerm_network_security_group.idy[1].name
 }
