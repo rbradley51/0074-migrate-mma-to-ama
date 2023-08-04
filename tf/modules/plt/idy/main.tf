@@ -54,7 +54,7 @@ resource "azurerm_network_security_group" "idy" {
 
 resource "azurerm_network_security_rule" "ads" {
   count                       = length(var.nsg_rules)
-  name                        = var.nsg_rules[count.index].name
+  name                        = "ads-${var.nsg_rules[count.index].name}"
   priority                    = var.nsg_rules[count.index].priority
   direction                   = var.nsg_rules[count.index].direction
   access                      = var.nsg_rules[count.index].access
@@ -69,7 +69,7 @@ resource "azurerm_network_security_rule" "ads" {
 
 resource "azurerm_network_security_rule" "srv" {
   count                       = length(var.nsg_rules)
-  name                        = var.nsg_rules[count.index].name
+  name                        = "svr-${var.nsg_rules[count.index].name}"
   priority                    = var.nsg_rules[count.index].priority
   direction                   = var.nsg_rules[count.index].direction
   access                      = var.nsg_rules[count.index].access

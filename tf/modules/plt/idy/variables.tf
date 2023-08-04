@@ -333,7 +333,7 @@ variable "nsg_rules" {
   }))
   default = [
     {
-      name                       = "allowTcpAll"
+      name                       = "ingAllowTcpAll"
       priority                   = 100
       direction                  = "Inbound"
       access                     = "Allow"
@@ -344,7 +344,7 @@ variable "nsg_rules" {
       destination_address_prefix = "VirtualNetwork"
     },
     {
-      name                       = "allowTcp443"
+      name                       = "egrAllowTcp443"
       priority                   = 100
       direction                  = "Outbound"
       access                     = "Allow"
@@ -355,7 +355,7 @@ variable "nsg_rules" {
       destination_address_prefix = "*"
     },
     {
-      name                       = "allowAzureMonitor"
+      name                       = "egrAllowAzureMonitor"
       priority                   = 110
       direction                  = "Outbound"
       access                     = "Allow"
@@ -366,52 +366,7 @@ variable "nsg_rules" {
       destination_address_prefix = "VirtualNetwork"
     },
     {
-      name                       = "allowAzureResourceManager"
-      priority                   = 120
-      direction                  = "Outbound"
-      access                     = "Allow"
-      protocol                   = "Tcp"
-      source_port_range          = "*"
-      destination_port_range     = "443"
-      source_address_prefix      = "AzureResourceManager"
-      destination_address_prefix = "VirtualNetwork"
-    },
-
-    {
-      name                       = "allowTcpAll"
-      priority                   = 100
-      direction                  = "Inbound"
-      access                     = "Allow"
-      protocol                   = "Tcp"
-      source_port_range          = "*"
-      destination_port_range     = "*"
-      source_address_prefix      = "*"
-      destination_address_prefix = "VirtualNetwork"
-    },
-    {
-      name                       = "allowTcp443"
-      priority                   = 100
-      direction                  = "Outbound"
-      access                     = "Allow"
-      protocol                   = "Tcp"
-      source_port_range          = "*"
-      destination_port_range     = "443"
-      source_address_prefix      = "*"
-      destination_address_prefix = "*"
-    },
-    {
-      name                       = "allowAzureMonitor"
-      priority                   = 110
-      direction                  = "Outbound"
-      access                     = "Allow"
-      protocol                   = "Tcp"
-      source_port_range          = "*"
-      destination_port_range     = "443"
-      source_address_prefix      = "AzureMonitor"
-      destination_address_prefix = "VirtualNetwork"
-    },
-    {
-      name                       = "allowAzureResourceManager"
+      name                       = "egrAllowAzureResourceManager"
       priority                   = 120
       direction                  = "Outbound"
       access                     = "Allow"
