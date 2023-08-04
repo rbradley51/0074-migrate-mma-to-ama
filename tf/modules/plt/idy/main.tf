@@ -50,17 +50,36 @@ resource "azurerm_network_security_group" "idy" {
   name                = var.nsg_name[count.index]
   location            = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
-  # security_rule {
-  #   name                       = var.nsg_name[count.index]
-  #   priority                   = var.nsg_rule_sets[count.index].priority
-  #   direction                  = var.nsg_rule_sets[count.index].direction
-  #   access                     = var.nsg_rule_sets[count.index].access
-  #   protocol                   = var.nsg_rule_sets[count.index].protocol
-  #   source_port_range          = var.nsg_rule_sets[count.index].source_port_range
-  #   destination_port_range     = var.nsg_rule_sets[count.index].destination_port_range
-  #   source_address_prefix      = var.nsg_rule_sets[count.index].source_address_prefix
-  #   destination_address_prefix = var.nsg_rule_sets[count.index].destination_address_prefix
-  # }
+}
+
+resource "azurerm_network_security_rule" "ads" {
+  count                       = length(var.nsg_rules)
+  name                        = var.name[count.index]
+  priority                    = var.priority[count.index]
+  direction                   = var.direction[count.index]
+  access                      = var.access[count.index]
+  protocol                    = var.protocol[count.index]
+  source_port_range           = var.source_port_range[count.index]
+  destination_port_range      = var.destination_port_range[count.index]
+  source_address_prefix       = var.source_address_prefix[count.index]
+  destination_address_prefix  = var.destination_address_prefix[count.index]
+  resource_group_name         = azurerm_resource_group.idy.name
+  network_security_group_name = azurerm_network_security_group.idy[0].name
+}
+
+resource "azurerm_network_security_rule" "srv" {
+  count                       = length(var.nsg_rules)
+  name                        = var.name[count.index]
+  priority                    = var.priority[count.index]
+  direction                   = var.direction[count.index]
+  access                      = var.access[count.index]
+  protocol                    = var.protocol[count.index]
+  source_port_range           = var.source_port_range[count.index]
+  destination_port_range      = var.destination_port_range[count.index]
+  source_address_prefix       = var.source_address_prefix[count.index]
+  destination_address_prefix  = var.destination_address_prefix[count.index]
+  resource_group_name         = azurerm_resource_group.idy.name
+  network_security_group_name = azurerm_network_security_group.idy[1].name
 }
 
 resource "azurerm_virtual_network" "idy" {

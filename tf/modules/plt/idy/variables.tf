@@ -319,7 +319,7 @@ variable "nsg_name" {
   ]
 }
 
-variable "nsg_rule_sets" {
+variable "nsg_rules" {
   type = list(object({
     name                       = string
     priority                   = number
@@ -333,29 +333,52 @@ variable "nsg_rule_sets" {
   }))
   default = [
     {
-      name                       = "adds-place-holder"
+      name                       = "allowTcpAll"
       priority                   = 100
       direction                  = "Inbound"
       access                     = "Allow"
       protocol                   = "Tcp"
       source_port_range          = "*"
       destination_port_range     = "*"
+      source_address_prefix      = "*"
+      destination_address_prefix = "VirtualNetwork"
+    },
+    {
+      name                       = "allowTcp443"
+      priority                   = 100
+      direction                  = "Outbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_port_range          = "*"
+      destination_port_range     = "443"
       source_address_prefix      = "*"
       destination_address_prefix = "*"
     },
-    # {
-    #   name                       = "adds-outbound"
-    #   priority                   = 100
-    #   direction                  = "Outbound"
-    #   access                     = "Allow"
-    #   protocol                   = "Tcp"
-    #   source_port_range          = "*"
-    #   destination_port_range     = "443"
-    #   source_address_prefix      = "*"
-    #   destination_address_prefix = "*"
-    # },
     {
-      name                       = "svrs-place-holder"
+      name                       = "allowAzureMonitor"
+      priority                   = 110
+      direction                  = "Outbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_port_range          = "*"
+      destination_port_range     = "443"
+      source_address_prefix      = "AzureMonitor"
+      destination_address_prefix = "VirtualNetwork"
+    },
+    {
+      name                       = "allowAzureResourceManager"
+      priority                   = 120
+      direction                  = "Outbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_port_range          = "*"
+      destination_port_range     = "443"
+      source_address_prefix      = "AzureResourceManager"
+      destination_address_prefix = "VirtualNetwork"
+    },
+
+    {
+      name                       = "allowTcpAll"
       priority                   = 100
       direction                  = "Inbound"
       access                     = "Allow"
@@ -363,19 +386,41 @@ variable "nsg_rule_sets" {
       source_port_range          = "*"
       destination_port_range     = "*"
       source_address_prefix      = "*"
+      destination_address_prefix = "VirtualNetwork"
+    },
+    {
+      name                       = "allowTcp443"
+      priority                   = 100
+      direction                  = "Outbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_port_range          = "*"
+      destination_port_range     = "443"
+      source_address_prefix      = "*"
       destination_address_prefix = "*"
+    },
+    {
+      name                       = "allowAzureMonitor"
+      priority                   = 110
+      direction                  = "Outbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_port_range          = "*"
+      destination_port_range     = "443"
+      source_address_prefix      = "AzureMonitor"
+      destination_address_prefix = "VirtualNetwork"
+    },
+    {
+      name                       = "allowAzureResourceManager"
+      priority                   = 120
+      direction                  = "Outbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_port_range          = "*"
+      destination_port_range     = "443"
+      source_address_prefix      = "AzureResourceManager"
+      destination_address_prefix = "VirtualNetwork"
     }
-    # {
-    #   name                       = "srvs-outbound"
-    #   priority                   = 100
-    #   direction                  = "Outbound"
-    #   access                     = "Allow"
-    #   protocol                   = "Tcp"
-    #   source_port_range          = "*"
-    #   destination_port_range     = "443"
-    #   source_address_prefix      = "*"
-    #   destination_address_prefix = "*"
-    # }
   ]
 }
 variable "vntName" {
