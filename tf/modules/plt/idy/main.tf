@@ -424,6 +424,7 @@ PARAMS
 data "azurerm_network_watcher" "idy" {
   name                = "NetworkWatcher_${var.primary_location}"
   resource_group_name = "NetworkWatcherRG"
+  depends_on = [ azurerm_virtual_network.idy ]
 }
 
 # Network watcher
