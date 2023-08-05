@@ -362,8 +362,8 @@ variable "nsg_rules" {
       protocol                   = "Tcp"
       source_port_range          = "*"
       destination_port_range     = "443"
-      source_address_prefix      = "AzureMonitor"
-      destination_address_prefix = "VirtualNetwork"
+      source_address_prefix      = "VirtualNetwork"
+      destination_address_prefix = "AzureMonitor"
     },
     {
       name                       = "egrAllowAzureResourceManager"
@@ -373,8 +373,19 @@ variable "nsg_rules" {
       protocol                   = "Tcp"
       source_port_range          = "*"
       destination_port_range     = "443"
-      source_address_prefix      = "AzureResourceManager"
-      destination_address_prefix = "VirtualNetwork"
+      source_address_prefix      = "VirtualNetwork"
+      destination_address_prefix = "AzureResourceManager"
+    },
+    {
+      name                       = "egrAllowDNS"
+      priority                   = 130
+      direction                  = "Outbound"
+      access                     = "Allow"
+      protocol                   = "Udp"
+      source_port_range          = "*"
+      destination_port_range     = "53"
+      source_address_prefix      = "VirtualNetwork"
+      destination_address_prefix = "*"
     }
   ]
 }
