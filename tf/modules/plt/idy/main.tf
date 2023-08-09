@@ -514,16 +514,8 @@ resource "azurerm_virtual_machine_extension" "mde_test_windows" {
 
   settings = <<SETTINGS
  {
-  "commandToExecute": "powershell -command \"[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('${base64encode(data.template_file.Test-MDEWindows.rendered)}')) | Out-File -filepath Test-MDEWindows.ps1\" && powershell -ExecutionPolicy Unrestricted -File Test-MDEWindows.ps1 -destPath ${data.template_file.Test-MDEWindows.vars.destPath}"
+  "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File Test-MDEWindows.ps1"
  }
 SETTINGS
-}
-
-#Variable input for the Test-MDEWindows.ps1 script
-data "template_file" "Test-MDEWindows" {
-    template = "${file("Test-MDEWindows.ps1")}"
-    vars = {
-        destPath = "${var.destPath}"
-  }
 }
 

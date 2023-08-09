@@ -763,9 +763,3 @@ variable "nw_ext" {
     automatic_upgrade_enabled  = true
   }
 }
-
-variable "destPath" {
-  type        = string
-  description = "destination path for powershell file"
-  default     = "C:\test-MDATP-test"
-}
