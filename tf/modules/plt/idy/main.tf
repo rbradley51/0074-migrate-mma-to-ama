@@ -503,3 +503,27 @@ resource "azurerm_network_connection_monitor" "idy" {
 
   depends_on = [azurerm_virtual_machine_extension.nw]
 }
+
+# "commandToExecute": "powershell -command \"[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('${base64encode(data.template_file.ADDS.rendered)}')) | Out-File -filepath ADDS.ps1\" && powershell -ExecutionPolicy Unrestricted -File ADDS.ps1 -Domain_DNSName ${data.template_file.ADDS.vars.Domain_DNSName} -Domain_NETBIOSName ${data.template_file.ADDS.vars.Domain_NETBIOSName} -SafeModeAdministratorPassword ${data.template_file.ADDS.vars.SafeModeAdministratorPassword}"
+resource "azurerm_virtual_machine_extension" "mde_test_windows" {
+  name                 = azurerm_virtual_machine.vms[2].name
+  virtual_machine_id   = azurerm_virtual_machine.vms[2].id 
+  publisher            = "Microsoft.Azure.Extensions"
+  type                 = "CustomScript"
+  type_handler_version = "2.0"
+
+  settings = <<SETTINGS
+ {
+  "commandToExecute": "powershell -command \"[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('${base64encode(data.template_file.Test-MDEWindows.rendered)}')) | Out-File -filepath Test-MDEWindows.ps1\" && powershell -ExecutionPolicy Unrestricted -File Test-MDEWindows.ps1 -destPath ${data.template_file.Test-MDEWindows.vars.destPath}"
+ }
+SETTINGS
+}
+
+#Variable input for the Test-MDEWindows.ps1 script
+data "template_file" "Test-MDEWindows" {
+    template = "${file("Test-MDEWindows.ps1")}"
+    vars = {
+        destPath = "${var.destPath}"
+  }
+}
+
