@@ -28,7 +28,7 @@ jobs:
       uamiRoleAssignmentVmContrib: "Virtual Machine Contributor"
       uamiRoleAssignmentLogAnalyticsContrib: "Log Analytics Contributor"
       uamiRoleAssignmentArcContrib: "Azure Arc Connected Resource Administrator"
-      azCliVer: 2.50.0
+      azCliVer: 2.51.0
       tfVersion: 1.5.4
       workingdir: tf
       planOnly: false # Set to true to plan only, false to deploy
