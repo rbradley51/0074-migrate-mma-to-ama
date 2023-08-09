@@ -764,8 +764,8 @@ variable "nw_ext" {
   }
 }
 
-var destPath {
+variable "destPath" {
   type        = string
   description = "destination path for powershell file"
-  default     = "C://test-MDATP-test"
+  default     = "C:\test-MDATP-test"
 }
