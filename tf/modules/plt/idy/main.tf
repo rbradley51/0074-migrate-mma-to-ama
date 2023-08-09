@@ -156,7 +156,7 @@ resource "azurerm_virtual_machine" "vms" {
   vm_size               = var.vms[count.index].vmSize
   availability_set_id   = ("${count.index}" == 1 ? azurerm_availability_set.avs_idy[1].id : azurerm_availability_set.avs_idy[0].id)
 
-  # Uncomment this line to delete the OS disk automatically when deleting the VM
+  # Uncomment this line to delete the OS disk automatically when deleting the VM.
   delete_os_disk_on_termination = true
   # Uncomment this line to delete the data disks automatically when deleting the VM
   delete_data_disks_on_termination = true
