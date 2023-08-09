@@ -508,7 +508,7 @@ resource "azurerm_network_connection_monitor" "idy" {
 resource "azurerm_virtual_machine_extension" "mde_test_windows" {
   name                 = azurerm_virtual_machine.vms[2].name
   virtual_machine_id   = azurerm_virtual_machine.vms[2].id 
-  publisher            = "Microsoft.Azure.Extensions"
+  publisher            = "Microsoft.Compute"
   type                 = "CustomScript"
   type_handler_version = "2.0"
 
