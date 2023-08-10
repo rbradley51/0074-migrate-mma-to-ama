@@ -509,7 +509,7 @@ resource "azurerm_virtual_machine_extension" "mde_test_windows" {
   name                 = azurerm_virtual_machine.vms[2].name
   virtual_machine_id   = azurerm_virtual_machine.vms[2].id 
   publisher            = "Microsoft.Compute"
-  type                 = "CustomScript"
+  type                 = "CustomScriptExtension"
   type_handler_version = "2.0"
 
   settings = <<SETTINGS
