@@ -510,7 +510,8 @@ resource "azurerm_virtual_machine_extension" "mde_test_windows" {
   virtual_machine_id   = azurerm_virtual_machine.vms[2].id 
   publisher            = "Microsoft.Compute"
   type                 = "CustomScriptExtension"
-  type_handler_version = "2.0"
+  type_handler_version = "1.10.16"
+  auto_upgrade_minor_version = true
 
   settings = <<SETTINGS
  {
