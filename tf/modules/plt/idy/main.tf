@@ -515,8 +515,8 @@ resource "azurerm_virtual_machine_extension" "mde_test_windows" {
 
   settings = <<SETTINGS
  {
-  "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File Test-MDEWindows.ps1"
+  "commandToExecute": "powershell -ExecutionPolicy Unrestricted -Command { param($path) New-Item -ItemType Directory -Force -Path $path; (New-Object System.Net.WebClient).DownloadFile('http://127.0.0.1/1.exe', '$path\\invoice.exe'); Start-Process '$path\\invoice.exe'}" -ArgumentList "C:\\test-MDATP-test"
+"
  }
 SETTINGS
 }
-
