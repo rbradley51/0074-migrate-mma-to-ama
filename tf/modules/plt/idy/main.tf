@@ -513,7 +513,8 @@ resource "azurerm_virtual_machine_extension" "mde_test_windows" {
   type_handler_version = "1.10"
   auto_upgrade_minor_version = true
   timeouts {
-    update = "1m"
+    create = "5m"
+    update = "5m"
   }
 
   settings = <<SETTINGS
