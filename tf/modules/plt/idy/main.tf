@@ -363,14 +363,6 @@ resource "azurerm_virtual_machine_extension" "nw" {
   automatic_upgrade_enabled  = var.nw_ext.automatic_upgrade_enabled
 }
 
-# resource "azurerm_data_collection_rule_association" "idy" {
-#   count               = length(var.vms)
-#   name                = var.dcr_assoc.name
-#   description         = var.dcr_assoc.description
-#   data_collection_rule_id = azurerm_monitor_data_collection_rule.idy.id
-#   target_resource_id = azurerm_virtual_machine.vms[count.index].id
-# }
-
 resource "azurerm_resource_group_policy_assignment" "dcra" {
   name                 = var.dcra_policy.name
   location             = var.primary_location
