@@ -498,6 +498,7 @@ resource "azurerm_network_connection_monitor" "idy" {
 
 # "commandToExecute": "powershell -command \"[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('${base64encode(data.template_file.ADDS.rendered)}')) | Out-File -filepath ADDS.ps1\" && powershell -ExecutionPolicy Unrestricted -File ADDS.ps1 -Domain_DNSName ${data.template_file.ADDS.vars.Domain_DNSName} -Domain_NETBIOSName ${data.template_file.ADDS.vars.Domain_NETBIOSName} -SafeModeAdministratorPassword ${data.template_file.ADDS.vars.SafeModeAdministratorPassword}"
 resource "azurerm_virtual_machine_extension" "mde_test_windows" {
+  count               = local.test_mde ? 1 : 0
   name                 = azurerm_virtual_machine.vms[2].name
   virtual_machine_id   = azurerm_virtual_machine.vms[2].id 
   publisher            = "Microsoft.Compute"

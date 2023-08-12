@@ -5,4 +5,5 @@ locals {
   deploy_law = true
   link_aaa_law = true
   imperative_dcra = false
+  test_mde = false
 }
