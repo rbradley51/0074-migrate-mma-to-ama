@@ -205,7 +205,7 @@ resource "azurerm_virtual_machine" "vms" {
 }
 
 resource "azurerm_virtual_machine_extension" "adds" {
-  count                      = sum(length(var.vms),-1)
+  count                      = length(var.vms)-1
   depends_on=[azurerm_virtual_machine.vms]
   name                       = "install-adds"
   virtual_machine_id         = azurerm_virtual_machine.vms[count.index].id
