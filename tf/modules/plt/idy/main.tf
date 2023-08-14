@@ -87,7 +87,7 @@ resource "azurerm_virtual_network" "idy" {
   location            = var.primary_location
   resource_group_name = azurerm_resource_group.idy.name
   address_space       = var.vntAddressPrefixes
-  dns_servers         = []
+  dns_servers         = ["10.0.0.4","10.0.0.5"]
   subnet {
     name           = var.subnets[0].name
     address_prefix = var.subnets[0].address_prefix
@@ -205,9 +205,10 @@ resource "azurerm_virtual_machine" "vms" {
 }
 
 resource "azurerm_virtual_machine_extension" "adds" {
+  count                      = sum(length(var.vms),-1)
   depends_on=[azurerm_virtual_machine.vms]
   name                       = "install-adds"
-  virtual_machine_id         = azurerm_virtual_machine.vms[0].id
+  virtual_machine_id         = azurerm_virtual_machine.vms[count.index].id
   publisher                  = "Microsoft.Compute"
   type                       = "CustomScriptExtension"
   type_handler_version       = "1.10"
@@ -220,6 +221,8 @@ resource "azurerm_virtual_machine_extension" "adds" {
    }
   SETTINGS
 }
+
+# https://www.vi-tips.com/2020/10/join-vm-to-active-directory-domain-in.html
 
 resource "azurerm_automation_account" "aaa" {
   count               = local.deploy_aaa ? 1 : 0
@@ -510,7 +513,7 @@ resource "azurerm_network_connection_monitor" "idy" {
 
   output_workspace_resource_ids = [azurerm_log_analytics_workspace.law[0].id]
 
-  depends_on = [azurerm_virtual_machine_extension.nw]
+  depends_on = [azurerm_virtual_machine_extension.nw, azurerm_virtual_machine_extension.adds]
 }
 
 # "commandToExecute": "powershell -command \"[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('${base64encode(data.template_file.ADDS.rendered)}')) | Out-File -filepath ADDS.ps1\" && powershell -ExecutionPolicy Unrestricted -File ADDS.ps1 -Domain_DNSName ${data.template_file.ADDS.vars.Domain_DNSName} -Domain_NETBIOSName ${data.template_file.ADDS.vars.Domain_NETBIOSName} -SafeModeAdministratorPassword ${data.template_file.ADDS.vars.SafeModeAdministratorPassword}"
