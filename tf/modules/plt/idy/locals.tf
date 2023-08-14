@@ -11,4 +11,7 @@ locals {
   mods_3 = "Import-Module -Name ADDSDeployment, DnsServer"
   forest_4 = "Install-ADDSForest -DomainName ${var.domain.fqdn} -DomainNetbiosName ${var.domain.netbios} -DomainMode ${var.domain.mode} -ForestMode ${var.domain.mode} -DatabasePath ${var.domain.database_path} -SysvolPath ${var.domain.sysvol_path} -LogPath ${var.domain.log_path} -NoRebootOnCompletion:$false -Force:$true -SafeModeAdministratorPassword (ConvertTo-SecureString ${var.pw} -AsPlainText -Force)"
   powershell = "${local.adds_1}; ${local.dns_2}; ${local.mods_3}; ${local.forest_4}"
+  join = "Add-Computer -DomainName ${var.domain.fqdn} -Credential ${var.domain.creds} -Restart"
+  promote = "Install-ADDSDomainController -Credential ${var.domain.creds} -DomainName ${var.domain.fqdn} -SafeModeAdministratorPassword (ConvertTo-SecureString ${var.pw} -AsPlainText -Force) -NoGlobalCatalog:$false -InstallDns:$true -Force:$true -NoRebootOnCompletion:$false -Force:$true"
+  addDC = "${local.join}; ${local.promote}"
 }

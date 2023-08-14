@@ -205,10 +205,9 @@ resource "azurerm_virtual_machine" "vms" {
 }
 
 resource "azurerm_virtual_machine_extension" "adds" {
-  count                      = length(var.vms)-1
   depends_on=[azurerm_virtual_machine.vms]
   name                       = "install-adds"
-  virtual_machine_id         = azurerm_virtual_machine.vms[count.index].id
+  virtual_machine_id         = azurerm_virtual_machine.vms[0].id
   publisher                  = "Microsoft.Compute"
   type                       = "CustomScriptExtension"
   type_handler_version       = "1.10"
@@ -217,6 +216,23 @@ resource "azurerm_virtual_machine_extension" "adds" {
   settings = <<SETTINGS
     {
        "commandToExecute": "powershell.exe -Command \"${local.powershell}\""
+ 
+   }
+  SETTINGS
+}
+
+resource "azurerm_virtual_machine_extension" "join" {
+  depends_on=[azurerm_virtual_machine_extension.adds]
+  name                       = "join-adds"
+  virtual_machine_id         = azurerm_virtual_machine.vms[1].id
+  publisher                  = "Microsoft.Compute"
+  type                       = "CustomScriptExtension"
+  type_handler_version       = "1.10"
+  auto_upgrade_minor_version = true
+
+  settings = <<SETTINGS
+    {
+       "commandToExecute": "powershell.exe -Command \"${local.addDC}\""
  
    }
   SETTINGS
