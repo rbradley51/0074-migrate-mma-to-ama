@@ -240,6 +240,9 @@ resource "azurerm_virtual_machine_extension" "join" {
 
 # https://www.vi-tips.com/2020/10/join-vm-to-active-directory-domain-in.html
 
+# task-item: allow network traffic between subnets
+# Join svr1 to domain
+
 resource "azurerm_automation_account" "aaa" {
   count               = local.deploy_aaa ? 1 : 0
   name                = var.aaa.name
