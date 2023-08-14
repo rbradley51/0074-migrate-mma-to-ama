@@ -336,22 +336,21 @@ resource "azurerm_resource_group_policy_assignment" "umi" {
 PARAMS
 }
 
-# task-item: Is this redundant since the dcra policy will be applied? Test by commenting out.
-# resource "azurerm_virtual_machine_extension" "idy" {
-#   count                      = length(var.vms)
-#   name                       = var.vm_ext.name
-#   virtual_machine_id         = azurerm_virtual_machine.vms[count.index].id
-#   publisher                  = var.vm_ext.publisher
-#   type                       = var.vm_ext.type
-#   type_handler_version       = var.vm_ext.type_handler_version
-#   auto_upgrade_minor_version = var.vm_ext.auto_upgrade_minor_version
-#   automatic_upgrade_enabled  = var.vm_ext.automatic_upgrade_enabled
-#   settings                   = <<SETTINGS
-#     {
-#       "workspaceId": "${azurerm_log_analytics_workspace.law[0].id}"
-#     }
-# SETTINGS
-# }
+resource "azurerm_virtual_machine_extension" "idy" {
+  count                      = length(var.vms)
+  name                       = var.vm_ext.name
+  virtual_machine_id         = azurerm_virtual_machine.vms[count.index].id
+  publisher                  = var.vm_ext.publisher
+  type                       = var.vm_ext.type
+  type_handler_version       = var.vm_ext.type_handler_version
+  auto_upgrade_minor_version = var.vm_ext.auto_upgrade_minor_version
+  automatic_upgrade_enabled  = var.vm_ext.automatic_upgrade_enabled
+  settings                   = <<SETTINGS
+    {
+      "workspaceId": "${azurerm_log_analytics_workspace.law[0].id}"
+    }
+SETTINGS
+}
 
 resource "azurerm_virtual_machine_extension" "nw" {
   count                      = length(var.vms)
