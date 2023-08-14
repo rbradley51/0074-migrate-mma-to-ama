@@ -511,28 +511,6 @@ variable "ama_dcr" {
         name = string
       })
     })
-    # event_hub = object({
-    #   event_hub_id = string
-    # })
-    # storage_blob = object({
-    #   storage_account_id = string
-    #   container_name     = string
-    #   name               = string
-    # })
-    # data_flow_metrics = object({
-    #   streams      = list(string)
-    #   destinations = list(string)
-    # })
-    # data_flow_logs = object({
-    #   streams      = list(string)
-    #   destinations = list(string)
-    # })
-    # data_flow_kql = object({
-    #   streams       = list(string)
-    #   destinations  = list(string)
-    #   output_stream = string
-    #   transform_kql = string
-    # })
     data_flow = object({
       streams = list(string)
     })
@@ -761,5 +739,18 @@ variable "nw_ext" {
     type_handler_version       = "1.4"
     auto_upgrade_minor_version = true
     automatic_upgrade_enabled  = true
+  }
+}
+
+variable "domain" {
+   type        = map(string)
+    description = "forest installation settings"
+  default = {
+    fqdn = "orgid.com"
+    netbios = "orgid"
+    mode = "WinThreshold" # Windows Server 2016 mode
+    database_path = "C:/Windows/NTDS"
+    sysvol_path = "C:/Windows/SYSVOL"
+    log_path = "C:/Windows/NTDS"
   }
 }
