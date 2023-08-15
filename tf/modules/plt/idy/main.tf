@@ -242,6 +242,8 @@ resource "azurerm_virtual_machine_extension" "join" {
 
 # task-item: allow network traffic between subnets
 # Join svr1 to domain
+# https://registry.terraform.io/modules/ghostinthewires/promote-dc/azurerm/latest?tab=inputs
+
 
 resource "azurerm_automation_account" "aaa" {
   count               = local.deploy_aaa ? 1 : 0
