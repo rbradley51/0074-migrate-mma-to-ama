@@ -238,23 +238,6 @@ resource "azurerm_virtual_machine_extension" "join" {
   SETTINGS
 }
 
-resource "azurerm_virtual_machine_extension" "promote" {
-  depends_on=[azurerm_virtual_machine_extension.join]
-  name                       = "pomote-to-dc"
-  virtual_machine_id         = azurerm_virtual_machine.vms[1].id
-  publisher                  = "Microsoft.Compute"
-  type                       = "CustomScriptExtension"
-  type_handler_version       = "1.10"
-  auto_upgrade_minor_version = true
-
-  settings = <<SETTINGS
-    {
-       "commandToExecute": "powershell.exe -Command \"${local.promoteDC}\""
- 
-   }
-  SETTINGS
-}
-
 # https://www.vi-tips.com/2020/10/join-vm-to-active-directory-domain-in.html
 
 # task-item: allow network traffic between subnets
