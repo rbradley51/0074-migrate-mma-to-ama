@@ -89,8 +89,7 @@ jobs:
         ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
         ARM_USE_OIDC: true
- 
-    # Plan
+
     - name: 'Terraform Plan'
       id: plan
       run: terraform plan -lock=false -out=tfplan -var "pw=${{ secrets.VM_PASSWORD }}"
