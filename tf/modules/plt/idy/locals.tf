@@ -16,6 +16,6 @@ locals {
   registerDNS = "Register-DnsClient -Confirm:$false -Force:$true"
   join = "Add-Computer -DomainName ${var.domain.fqdn} -Credential (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList adsadmin@${var.domain.fqdn}, (ConvertTo-SecureString -String ${var.pw} -AsPlainText -Force)) -Restart"
   promote = "Install-ADDSDomainController -DomainName ${var.domain.fqdn} -SafeModeAdministratorPassword (ConvertTo-SecureString ${var.pw} -AsPlainText -Force) -NoGlobalCatalog:$false -InstallDns:$true -Force:$true -NoRebootOnCompletion:$false -Force:$true"
-  joinServer = "${local.updateDNS}; ${clearDNS}; ${registerDNS} ${local.join}"
+  joinServer = "${local.updateDNS}; ${local.clearDNS}; ${local.registerDNS} ${local.join}"
   promoteDC = "${local.promote}"
 }
