@@ -90,6 +90,16 @@ jobs:
         ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
         ARM_USE_OIDC: true
 
+    # Import
+    - name: 'Terraform Import'
+      id: import
+      run: terraform import azurerm_virtual_machine_extension.join "/subscriptions/${{ secrets.AZURE_TENANT_ID }}/resourceGroups/rgp-idy/providers/Microsoft.Compute/virtualMachines/azrads02/extensions/join-server"
+      env:
+        ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        ARM_USE_OIDC: true
+        
     - name: 'Terraform Plan'
       id: plan
       run: terraform plan -lock=false -out=tfplan -var "pw=${{ secrets.VM_PASSWORD }}"
