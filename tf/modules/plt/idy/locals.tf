@@ -13,5 +13,6 @@ locals {
   powershell = "${local.adds_1}; ${local.dns_2}; ${local.mods_3}; ${local.forest_4}"
   join = "Add-Computer -DomainName ${var.domain.fqdn} -Credential (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList adsadmin@${var.domain.fqdn}, (ConvertTo-SecureString -String ${var.pw} -AsPlainText -Force)) -Restart"
   promote = "Install-ADDSDomainController -DomainName ${var.domain.fqdn} -SafeModeAdministratorPassword (ConvertTo-SecureString ${var.pw} -AsPlainText -Force) -NoGlobalCatalog:$false -InstallDns:$true -Force:$true -NoRebootOnCompletion:$false -Force:$true"
-  addDC = "${local.join}; ${local.promote}"
+  joinServer = "${local.join}"
+  promoteDC = "${local.promote}"
 }

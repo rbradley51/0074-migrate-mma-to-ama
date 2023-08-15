@@ -223,7 +223,7 @@ resource "azurerm_virtual_machine_extension" "adds" {
 
 resource "azurerm_virtual_machine_extension" "join" {
   depends_on=[azurerm_virtual_machine_extension.adds]
-  name                       = "join-adds"
+  name                       = "join-server"
   virtual_machine_id         = azurerm_virtual_machine.vms[1].id
   publisher                  = "Microsoft.Compute"
   type                       = "CustomScriptExtension"
@@ -232,7 +232,24 @@ resource "azurerm_virtual_machine_extension" "join" {
 
   settings = <<SETTINGS
     {
-       "commandToExecute": "powershell.exe -Command \"${local.addDC}\""
+       "commandToExecute": "powershell.exe -Command \"${local.joinServer}\""
+ 
+   }
+  SETTINGS
+}
+
+resource "azurerm_virtual_machine_extension" "promote" {
+  depends_on=[azurerm_virtual_machine_extension.join]
+  name                       = "pomote-to-dc"
+  virtual_machine_id         = azurerm_virtual_machine.vms[1].id
+  publisher                  = "Microsoft.Compute"
+  type                       = "CustomScriptExtension"
+  type_handler_version       = "1.10"
+  auto_upgrade_minor_version = true
+
+  settings = <<SETTINGS
+    {
+       "commandToExecute": "powershell.exe -Command \"${local.promoteDC}\""
  
    }
   SETTINGS
