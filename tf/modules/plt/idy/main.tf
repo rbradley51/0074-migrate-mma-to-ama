@@ -221,8 +221,13 @@ resource "azurerm_virtual_machine_extension" "adds" {
   SETTINGS
 }
 
+resource "time_sleep" "wait" {
+  depends_on = [azurerm_virtual_machine_extension.adds]
+  create_duration = "120s" # Wait 2 minutes to allow the VM to reboot and stabilize ADDS services
+}
+
 resource "azurerm_virtual_machine_extension" "join" {
-  depends_on=[azurerm_virtual_machine_extension.adds]
+  depends_on=[time_sleep.wait]
   name                       = "join-server"
   virtual_machine_id         = azurerm_virtual_machine.vms[1].id
   publisher                  = "Microsoft.Compute"
