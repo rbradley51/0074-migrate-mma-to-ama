@@ -125,7 +125,7 @@ jobs:
     - name: 'Terraform Rollback'
       if: ${{ env.rollback == 'true' && env.planOnly == 'false' }}
       id: destroy
-      run: terraform destroy -parallelism=50
+      run: terraform destroy -parallelism=50 -auto-approve -var "pw=${{ secrets.VM_PASSWORD }}"
       env:
         ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
         ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
