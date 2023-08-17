@@ -250,7 +250,8 @@ resource "azurerm_virtual_machine_extension" "join" {
 # https://registry.terraform.io/modules/ghostinthewires/promote-dc/azurerm/latest?tab=inputs
 
 module "promote-dc" {
-  source  = "ghostinthewires/promote-dc/azurerm"
+  # source  = "ghostinthewires/promote-dc/azurerm"
+  source  = "github.com/ghostinthewires/terraform-azurerm-promote-dc"
   version = "1.0.1"
   active_directory_domain = var.domain.fqdn
   active_directory_netbios_name = var.domain.netbios
