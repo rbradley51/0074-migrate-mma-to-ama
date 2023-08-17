@@ -270,6 +270,32 @@ SETTINGS
 SETTINGS
 }
 
+resource "azurerm_virtual_machine_extension" "join" {
+  depends_on = [azurerm_virtual_machine_extension.join]
+  name                 = "join-domain"
+  virtual_machine_id = azurerm_virtual_machine.vms[2].id
+  publisher            = "Microsoft.Compute"
+  type                 = "JsonADDomainExtension"
+  type_handler_version = "1.3"
+
+  # NOTE: the `OUPath` field is intentionally blank, to put it in the Computers OU
+  settings = <<SETTINGS
+    {
+        "Name": "${var.domain.fqdn}",
+        "OUPath": "",
+        "User": "${var.domain.netbios}\\${var.vms[0].os_profile.admin_username}",
+        "Restart": "true",
+        "Options": "3"
+    }
+SETTINGS
+
+  protected_settings = <<SETTINGS
+    {
+        "Password": "${var.pw}"
+    }
+SETTINGS
+}
+
 # https://www.vi-tips.com/2020/10/join-vm-to-active-directory-domain-in.html
 
 # task-item: allow network traffic between subnets
