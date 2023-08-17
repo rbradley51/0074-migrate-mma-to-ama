@@ -281,9 +281,7 @@ resource "time_sleep" "wait-for-ads2" {
 }
 resource "azurerm_virtual_machine_extension" "promote-dc" {
   name                 = "promote-dc"
-  location             = "${azurerm_virtual_machine_extension.join-domain.location}"
-  resource_group_name  = "${var.resource_group_name}"
-  virtual_machine_name = "${azurerm_virtual_machine.domain-controller2.name}"
+  virtual_machine_id = azurerm_virtual_machine.vms[1].id
   publisher            = "Microsoft.Compute"
   type                 = "CustomScriptExtension"
   type_handler_version = "1.10"
