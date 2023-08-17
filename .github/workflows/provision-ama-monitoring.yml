@@ -32,7 +32,7 @@ jobs:
       tfVersion: 1.5.4
       workingdir: tf
       planOnly: false # Set to true to plan only, false to deploy
-      rollback: true # Set to true to rollback, false to deploy
+      rollback: false # Set to true to rollback, false to deploy
       skipUAMI: true # Set to true to skip UAMI creation, false to create UAMI if necessary
 
     runs-on: ubuntu-latest
