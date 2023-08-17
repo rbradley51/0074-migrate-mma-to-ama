@@ -344,6 +344,17 @@ variable "nsg_rules" {
       destination_address_prefix = "VirtualNetwork"
     },
     {
+      name                       = "ingAllowTcpFromVNET"
+      priority                   = 110
+      direction                  = "Inbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_port_range          = "*"
+      destination_port_range     = "*"
+      source_address_prefix      = "VirtualNetwork"
+      destination_address_prefix = "VirtualNetwork"
+    },
+    {
       name                       = "egrAllowTcp443"
       priority                   = 100
       direction                  = "Outbound"
@@ -386,6 +397,17 @@ variable "nsg_rules" {
       destination_port_range     = "53"
       source_address_prefix      = "VirtualNetwork"
       destination_address_prefix = "*"
+    },
+    {
+      name                       = "egrAllowAll"
+      priority                   = 140
+      direction                  = "Outbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_port_range          = "*"
+      destination_port_range     = "*"
+      source_address_prefix      = "VirtualNetwork"
+      destination_address_prefix = "VirtualNetwork"
     }
   ]
 }

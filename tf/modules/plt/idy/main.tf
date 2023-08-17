@@ -226,48 +226,48 @@ resource "time_sleep" "wait-for-ads1" {
   create_duration = "120s" # Wait 2 minutes to allow the VM to reboot and stabilize ADDS services
 }
 
-# resource "azurerm_virtual_machine_extension" "join" {
-#   depends_on=[time_sleep.wait]
-#   name                       = "join-server"
-#   virtual_machine_id         = azurerm_virtual_machine.vms[1].id
-#   publisher                  = "Microsoft.Compute"
-#   type                       = "CustomScriptExtension"
-#   type_handler_version       = "1.10"
-#   auto_upgrade_minor_version = true
-
-#   settings = <<SETTINGS
-#     {
-#        "commandToExecute": "powershell.exe -Command \"${local.joinServer}\""
- 
-#    }
-#   SETTINGS
-# }
-
-# https://github.com/ghostinthewires/Terraform-Templates/blob/master/Azure/2-tier-iis-sql-vm/modules/dc2-vm/3-join-domain.tf
 resource "azurerm_virtual_machine_extension" "join" {
-  name                 = "join-domain"
-  virtual_machine_id = azurerm_virtual_machine.vms[1].id
-  publisher            = "Microsoft.Compute"
-  type                 = "JsonADDomainExtension"
-  type_handler_version = "1.3"
+  depends_on=[time_sleep.wait]
+  name                       = "join-server"
+  virtual_machine_id         = azurerm_virtual_machine.vms[1].id
+  publisher                  = "Microsoft.Compute"
+  type                       = "CustomScriptExtension"
+  type_handler_version       = "1.10"
+  auto_upgrade_minor_version = true
 
-  # NOTE: the `OUPath` field is intentionally blank, to put it in the Computers OU
   settings = <<SETTINGS
     {
-        "Name": "${var.domain.fqdn}",
-        "OUPath": "",
-        "User": "${var.domain.netbios}\\${var.vms[0].os_profile.admin_username}",
-        "Restart": "true",
-        "Options": "3"
-    }
-SETTINGS
-
-  protected_settings = <<SETTINGS
-    {
-        "Password": "${var.pw}"
-    }
-SETTINGS
+       "commandToExecute": "powershell.exe -Command \"${local.joinServer}\""
+ 
+   }
+  SETTINGS
 }
+
+# https://github.com/ghostinthewires/Terraform-Templates/blob/master/Azure/2-tier-iis-sql-vm/modules/dc2-vm/3-join-domain.tf
+# resource "azurerm_virtual_machine_extension" "join" {
+#   name                 = "join-domain"
+#   virtual_machine_id = azurerm_virtual_machine.vms[1].id
+#   publisher            = "Microsoft.Compute"
+#   type                 = "JsonADDomainExtension"
+#   type_handler_version = "1.3"
+
+#   # NOTE: the `OUPath` field is intentionally blank, to put it in the Computers OU
+#   settings = <<SETTINGS
+#     {
+#         "Name": "${var.domain.fqdn}",
+#         "OUPath": "",
+#         "User": "${var.domain.netbios}\\${var.vms[0].os_profile.admin_username}",
+#         "Restart": "true",
+#         "Options": "3"
+#     }
+# SETTINGS
+
+#   protected_settings = <<SETTINGS
+#     {
+#         "Password": "${var.pw}"
+#     }
+# SETTINGS
+# }
 
 # https://www.vi-tips.com/2020/10/join-vm-to-active-directory-domain-in.html
 
