@@ -247,8 +247,9 @@ resource "time_sleep" "wait" {
 resource "azurerm_virtual_machine_extension" "join" {
   name                 = "join-domain"
   location             = "${var.primary_location}"
-  resource_group_name  = "${azurerm_resource_group.idy.name}"
-  virtual_machine_name = "${azurerm_virtual_machine.vms[1].name}"
+  resource_group_name  = azurerm_resource_group.idy.name
+  virtual_machine_name = azurerm_virtual_machine.vms[1].name
+  virtual_machine_id = azurerm_virtual_machine.vms[1].id
   publisher            = "Microsoft.Compute"
   type                 = "JsonADDomainExtension"
   type_handler_version = "1.3"
@@ -258,7 +259,7 @@ resource "azurerm_virtual_machine_extension" "join" {
     {
         "Name": "${var.domain.fqdn}",
         "OUPath": "",
-        "User": "${var.domain.netbios}\\${var.vms.os_profile.admin_username}",
+        "User": "${var.domain.netbios}\\${var.vms[0].os_profile.admin_username}",
         "Restart": "true",
         "Options": "3"
     }
