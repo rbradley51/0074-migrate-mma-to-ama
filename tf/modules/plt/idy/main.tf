@@ -226,39 +226,71 @@ resource "time_sleep" "wait" {
   create_duration = "120s" # Wait 2 minutes to allow the VM to reboot and stabilize ADDS services
 }
 
-resource "azurerm_virtual_machine_extension" "join" {
-  depends_on=[time_sleep.wait]
-  name                       = "join-server"
-  virtual_machine_id         = azurerm_virtual_machine.vms[1].id
-  publisher                  = "Microsoft.Compute"
-  type                       = "CustomScriptExtension"
-  type_handler_version       = "1.10"
-  auto_upgrade_minor_version = true
+# resource "azurerm_virtual_machine_extension" "join" {
+#   depends_on=[time_sleep.wait]
+#   name                       = "join-server"
+#   virtual_machine_id         = azurerm_virtual_machine.vms[1].id
+#   publisher                  = "Microsoft.Compute"
+#   type                       = "CustomScriptExtension"
+#   type_handler_version       = "1.10"
+#   auto_upgrade_minor_version = true
 
+#   settings = <<SETTINGS
+#     {
+#        "commandToExecute": "powershell.exe -Command \"${local.joinServer}\""
+ 
+#    }
+#   SETTINGS
+# }
+
+# https://github.com/ghostinthewires/Terraform-Templates/blob/master/Azure/2-tier-iis-sql-vm/modules/dc2-vm/3-join-domain.tf
+resource "azurerm_virtual_machine_extension" "join" {
+  name                 = "join-domain"
+  location             = "${var.primary_location}"
+  resource_group_name  = "${azurerm_resource_group.idy.name}"
+  virtual_machine_name = "${azurerm_virtual_machine.vms[1].name}"
+  publisher            = "Microsoft.Compute"
+  type                 = "JsonADDomainExtension"
+  type_handler_version = "1.3"
+
+  # NOTE: the `OUPath` field is intentionally blank, to put it in the Computers OU
   settings = <<SETTINGS
     {
-       "commandToExecute": "powershell.exe -Command \"${local.joinServer}\""
- 
-   }
-  SETTINGS
+        "Name": "${var.domain.fqdn}",
+        "OUPath": "",
+        "User": "${var.domain.netbios}\\${var.vms.os_profile.admin_username}",
+        "Restart": "true",
+        "Options": "3"
+    }
+SETTINGS
+
+  protected_settings = <<SETTINGS
+    {
+        "Password": "${var.pw}"
+    }
+SETTINGS
 }
 
 # https://www.vi-tips.com/2020/10/join-vm-to-active-directory-domain-in.html
 
 # task-item: allow network traffic between subnets
 # Join svr1 to domain
-# https://registry.terraform.io/modules/ghostinthewires/promote-dc/azurerm/latest?tab=inputs
+# https://github.com/ghostinthewires/Terraform-Templates/blob/master/Azure/2-tier-iis-sql-vm/modules/dc2-vm/4-promote-dc.tf
 
-module "promote-dc" {
-  # source  = "ghostinthewires/promote-dc/azurerm"
-  source  = "github.com/ghostinthewires/terraform-azurerm-promote-dc"
-  version = "1.0.1"
-  active_directory_domain = var.domain.fqdn
-  active_directory_netbios_name = var.domain.netbios
-  active_directory_site_name = var.domain.site
-  admin_password = var.pw
-  resource_group_name = azurerm_resource_group.idy.name
-  vmname = azurerm_virtual_machine.vms[1].name
+resource "azurerm_virtual_machine_extension" "promote-dc" {
+  name                 = "promote-dc"
+  location             = "${azurerm_virtual_machine_extension.join-domain.location}"
+  resource_group_name  = "${var.resource_group_name}"
+  virtual_machine_name = "${azurerm_virtual_machine.domain-controller2.name}"
+  publisher            = "Microsoft.Compute"
+  type                 = "CustomScriptExtension"
+  type_handler_version = "1.9"
+
+  settings = <<SETTINGS
+    {
+        "commandToExecute": "powershell.exe -Command \"${local.dc2powershell_command}\""
+    }
+SETTINGS
 }
 resource "azurerm_automation_account" "aaa" {
   count               = local.deploy_aaa ? 1 : 0

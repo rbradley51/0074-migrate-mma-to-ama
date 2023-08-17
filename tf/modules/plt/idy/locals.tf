@@ -18,4 +18,13 @@ locals {
   promote = "Install-ADDSDomainController -DomainName ${var.domain.fqdn} -SafeModeAdministratorPassword (ConvertTo-SecureString ${var.pw} -AsPlainText -Force) -NoGlobalCatalog:$false -InstallDns:$true -Force:$true -NoRebootOnCompletion:$false -Force:$true"
   joinServer = "${local.updateDNS}; ${local.clearDNS}; ${local.registerDNS}; ${local.join}"
   promoteDC = "${local.promote}"
+  dc2import_command       = "Import-Module ADDSDeployment"
+  dc2user_command         = "$dc2user = ${var.vms.os_profile.admin_username}" 
+  dc2password_command     = "$password = ConvertTo-SecureString ${var.pw} -AsPlainText -Force"
+  dc2creds_command        = "$mycreds = New-Object System.Management.Automation.PSCredential -ArgumentList $dc2user, $password"
+  dc2install_ad_command   = "Add-WindowsFeature -name ad-domain-services -IncludeManagementTools"
+  dc2configure_ad_command = "Install-ADDSDomainController -Credential $mycreds -CreateDnsDelegation:$false -DomainName ${var.domain.fqdn} -InstallDns:$true -SafeModeAdministratorPassword $password -Force:$true"
+  dc2shutdown_command     = "shutdown -r -t 10"
+  dc2exit_code_hack       = "exit 0"
+  dc2powershell_command   = "${local.dc2import_command}; ${local.dc2user_command}; ${local.dc2password_command}; ${local.dc2creds_command}; ${local.dc2install_ad_command}; ${local.dc2configure_ad_command}; ${local.dc2shutdown_command}; ${local.dc2exit_code_hack}"
 }
