@@ -285,8 +285,6 @@ resource "azurerm_virtual_machine_extension" "promote-dc" {
   publisher            = "Microsoft.Compute"
   type                 = "CustomScriptExtension"
   type_handler_version = "1.10"
-  updgrade_minor_version = true
-
   settings = <<SETTINGS
     {
         "commandToExecute": "powershell.exe -Command \"${local.dc2powershell_command}\""
