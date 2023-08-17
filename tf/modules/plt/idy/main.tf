@@ -221,7 +221,7 @@ resource "azurerm_virtual_machine_extension" "adds" {
   SETTINGS
 }
 
-resource "time_sleep" "wait" {
+resource "time_sleep" "wait-for-ads1" {
   depends_on = [azurerm_virtual_machine_extension.adds]
   create_duration = "120s" # Wait 2 minutes to allow the VM to reboot and stabilize ADDS services
 }
@@ -246,9 +246,6 @@ resource "time_sleep" "wait" {
 # https://github.com/ghostinthewires/Terraform-Templates/blob/master/Azure/2-tier-iis-sql-vm/modules/dc2-vm/3-join-domain.tf
 resource "azurerm_virtual_machine_extension" "join" {
   name                 = "join-domain"
-  location             = "${var.primary_location}"
-  resource_group_name  = azurerm_resource_group.idy.name
-  virtual_machine_name = azurerm_virtual_machine.vms[1].name
   virtual_machine_id = azurerm_virtual_machine.vms[1].id
   publisher            = "Microsoft.Compute"
   type                 = "JsonADDomainExtension"
@@ -278,6 +275,10 @@ SETTINGS
 # Join svr1 to domain
 # https://github.com/ghostinthewires/Terraform-Templates/blob/master/Azure/2-tier-iis-sql-vm/modules/dc2-vm/4-promote-dc.tf
 
+resource "time_sleep" "wait-for-ads2" {
+  depends_on = [azurerm_virtual_machine_extension.adds]
+  create_duration = "120s" # Wait 2 minutes to allow the VM to reboot and stabilize services
+}
 resource "azurerm_virtual_machine_extension" "promote-dc" {
   name                 = "promote-dc"
   location             = "${azurerm_virtual_machine_extension.join-domain.location}"
@@ -285,7 +286,8 @@ resource "azurerm_virtual_machine_extension" "promote-dc" {
   virtual_machine_name = "${azurerm_virtual_machine.domain-controller2.name}"
   publisher            = "Microsoft.Compute"
   type                 = "CustomScriptExtension"
-  type_handler_version = "1.9"
+  type_handler_version = "1.10"
+  updgrade_minor_version = true
 
   settings = <<SETTINGS
     {

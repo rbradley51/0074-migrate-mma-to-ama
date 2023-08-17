@@ -19,7 +19,7 @@ locals {
   joinServer = "${local.updateDNS}; ${local.clearDNS}; ${local.registerDNS}; ${local.join}"
   promoteDC = "${local.promote}"
   dc2import_command       = "Import-Module ADDSDeployment"
-  dc2user_command         = "$dc2user = ${var.vms.os_profile.admin_username}" 
+  dc2user_command         = "$dc2user = ${var.vms[0].os_profile.admin_username}" 
   dc2password_command     = "$password = ConvertTo-SecureString ${var.pw} -AsPlainText -Force"
   dc2creds_command        = "$mycreds = New-Object System.Management.Automation.PSCredential -ArgumentList $dc2user, $password"
   dc2install_ad_command   = "Add-WindowsFeature -name ad-domain-services -IncludeManagementTools"
