@@ -249,7 +249,16 @@ resource "azurerm_virtual_machine_extension" "join" {
 # Join svr1 to domain
 # https://registry.terraform.io/modules/ghostinthewires/promote-dc/azurerm/latest?tab=inputs
 
-
+module "promote-dc" {
+  source  = "ghostinthewires/promote-dc/azurerm"
+  version = "1.0.1"
+  active_directory_domain = var.domain.fqdn
+  active_directory_netbios_name = var.domain.netbios
+  active_directory_site_name = var.domain.site
+  admin_password = var.pw
+  resource_group_name = azurerm_resource_group.idy.name
+  vmname = azurerm_virtual_machine.vms[1].name
+}
 resource "azurerm_automation_account" "aaa" {
   count               = local.deploy_aaa ? 1 : 0
   name                = var.aaa.name
