@@ -247,7 +247,7 @@ resource "time_sleep" "wait-for-ads1" {
 resource "azurerm_virtual_machine_extension" "join" {
   depends_on = [time_sleep.wait-for-ads1]
   name                 = "join-domain"
-  virtual_machine_id = azurerm_virtual_machine.vms[1].id
+  virtual_machine_id = azurerm_virtual_machine.vms[1].id # azrads2
   publisher            = "Microsoft.Compute"
   type                 = "JsonADDomainExtension"
   type_handler_version = "1.3"
@@ -270,7 +270,7 @@ SETTINGS
 SETTINGS
 }
 
-resource "azurerm_virtual_machine_extension" "join" {
+resource "azurerm_virtual_machine_extension" "join-srv1" {
   depends_on = [azurerm_virtual_machine_extension.join]
   name                 = "join-domain"
   virtual_machine_id = azurerm_virtual_machine.vms[2].id
