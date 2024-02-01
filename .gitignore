@@ -53,4 +53,4 @@ Temporary Items
 *.vsdx
 
 # Terraform exceptions of reference files
-tf/references/**/*
+tf/refs/**/*

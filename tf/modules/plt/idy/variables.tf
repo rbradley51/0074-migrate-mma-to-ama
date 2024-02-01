@@ -319,7 +319,7 @@ variable "nsg_name" {
   ]
 }
 
-variable "nsg_rule_sets" {
+variable "nsg_rules" {
   type = list(object({
     name                       = string
     priority                   = number
@@ -331,19 +331,9 @@ variable "nsg_rule_sets" {
     source_address_prefix      = string
     destination_address_prefix = string
   }))
-  default = [{
-    name                       = "adds-place-holder"
-    priority                   = 100
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-    },
+  default = [
     {
-      name                       = "svrs-place-holder"
+      name                       = "ingAllowTcpAll"
       priority                   = 100
       direction                  = "Inbound"
       access                     = "Allow"
@@ -351,8 +341,75 @@ variable "nsg_rule_sets" {
       source_port_range          = "*"
       destination_port_range     = "*"
       source_address_prefix      = "*"
+      destination_address_prefix = "VirtualNetwork"
+    },
+    {
+      name                       = "ingAllowTcpFromVNET"
+      priority                   = 110
+      direction                  = "Inbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_port_range          = "*"
+      destination_port_range     = "*"
+      source_address_prefix      = "VirtualNetwork"
+      destination_address_prefix = "VirtualNetwork"
+    },
+    {
+      name                       = "egrAllowTcp443"
+      priority                   = 100
+      direction                  = "Outbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_port_range          = "*"
+      destination_port_range     = "443"
+      source_address_prefix      = "*"
       destination_address_prefix = "*"
-  }]
+    },
+    {
+      name                       = "egrAllowAzureMonitor"
+      priority                   = 110
+      direction                  = "Outbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_port_range          = "*"
+      destination_port_range     = "443"
+      source_address_prefix      = "VirtualNetwork"
+      destination_address_prefix = "AzureMonitor"
+    },
+    {
+      name                       = "egrAllowAzureResourceManager"
+      priority                   = 120
+      direction                  = "Outbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_port_range          = "*"
+      destination_port_range     = "443"
+      source_address_prefix      = "VirtualNetwork"
+      destination_address_prefix = "AzureResourceManager"
+    },
+    {
+      name                       = "egrAllowDNS"
+      priority                   = 130
+      direction                  = "Outbound"
+      access                     = "Allow"
+      protocol                   = "Udp"
+      source_port_range          = "*"
+      destination_port_range     = "53"
+      source_address_prefix      = "VirtualNetwork"
+      destination_address_prefix = "*"
+    },
+    {
+      name                       = "egrAllowAll"
+      priority                   = 140
+      direction                  = "Outbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_port_range          = "*"
+      destination_port_range     = "*"
+      source_address_prefix      = "VirtualNetwork"
+      destination_address_prefix = "VirtualNetwork"
+    }
+  ]
 }
 variable "vntName" {
   type        = string
@@ -476,28 +533,6 @@ variable "ama_dcr" {
         name = string
       })
     })
-    # event_hub = object({
-    #   event_hub_id = string
-    # })
-    # storage_blob = object({
-    #   storage_account_id = string
-    #   container_name     = string
-    #   name               = string
-    # })
-    # data_flow_metrics = object({
-    #   streams      = list(string)
-    #   destinations = list(string)
-    # })
-    # data_flow_logs = object({
-    #   streams      = list(string)
-    #   destinations = list(string)
-    # })
-    # data_flow_kql = object({
-    #   streams       = list(string)
-    #   destinations  = list(string)
-    #   output_stream = string
-    #   transform_kql = string
-    # })
     data_flow = object({
       streams = list(string)
     })
@@ -643,53 +678,101 @@ variable "ehb" {
 }
 
 variable "umi_policy" {
-type = map(string)
+  type        = map(string)
   description = "values for user managed identity policy"
   default = {
-    name = "azr-umi-policy"
+    name          = "azr-umi-policy"
     policy_def_id = "/providers/Microsoft.Authorization/policySetDefinitions/0d1b56c6-6d1f-4a5d-8695-b15efbea6b49"
+  }
+}
+
+variable "mde_policy" {
+  type        = map(string)
+  description = "values for mde policy"
+  default = {
+    name                                                    = "azr-mde-policy"
+    policy_def_id                                           = "/providers/Microsoft.Authorization/policySetDefinitions/e20d08c5-6d64-656d-6465-ce9e37fd0ebc"
+    microsoftDefenderForEndpointWindowsVmAgentDeployEffect  = "DeployIfNotExists"
+    microsoftDefenderForEndpointLinuxVmAgentDeployEffect    = "DeployIfNotExists"
+    microsoftDefenderForEndpointWindowsArcAgentDeployEffect = "DeployIfNotExists"
+    microsoftDefenderForEndpointLinuxArcAgentDeployEffect   = "DeployIfNotExists"
   }
 }
 
 variable "vm_ext" {
   type = object({
-    name                  = string
-    publisher             = string
-    type                  = string
-    type_handler_version  = string
+    name                       = string
+    publisher                  = string
+    type                       = string
+    type_handler_version       = string
     auto_upgrade_minor_version = bool
+    automatic_upgrade_enabled  = bool
   })
   description = "values for virtual machine extension"
   default = {
-    name = "AzureMonitorWindowsAgent"
-    publisher = "Microsoft.Azure.Monitor"
-    type = "AzureMonitorWindowsAgent"
-    type_handler_version = "1.0"
+    name                       = "AzureMonitorWindowsAgent"
+    publisher                  = "Microsoft.Azure.Monitor"
+    type                       = "AzureMonitorWindowsAgent"
+    type_handler_version       = "1.0"
     auto_upgrade_minor_version = true
+    automatic_upgrade_enabled  = true
   }
 }
 
 variable "dcr_assoc" {
-  type = map(string)
+  type        = map(string)
   description = "values for dcr settings association"
   default = {
-    name = "azr-idy-dca"
+    name        = "azr-idy-dca"
     description = "Data collection rule association to VMs within the scope of this resource group"
   }
 }
 
 variable "dcra_policy" {
   type = object({
-    name = string
+    name                = string
     user_given_dcr_name = string
-    enable_pad = bool
-    policy_def_id = string 
+    enable_pad          = bool
+    policy_def_id       = string
   })
   description = "values for dcr settings association policy"
   default = {
-    name = "VMInsights-Dcr-Association"
+    name                = "VMInsights-Dcr-Association"
     user_given_dcr_name = "azr-idy-dca-policy"
-    enable_pad = true
-    policy_def_id = "/providers/Microsoft.Authorization/policyDefinitions/a0f27bdc-5b15-4810-b81d-7c4df9df1a37"
+    enable_pad          = true
+    policy_def_id       = "/providers/Microsoft.Authorization/policyDefinitions/a0f27bdc-5b15-4810-b81d-7c4df9df1a37"
+  }
+}
+
+variable "nw_ext" {
+  type = object({
+    name                       = string
+    publisher                  = string
+    type                       = string
+    type_handler_version       = string
+    auto_upgrade_minor_version = bool
+    automatic_upgrade_enabled  = bool
+  })
+  description = "values for virtual machine extension"
+  default = {
+    name                       = "NetworkWatcher"
+    publisher                  = "Microsoft.Azure.NetworkWatcher"
+    type                       = "NetworkWatcherAgentWindows"
+    type_handler_version       = "1.4"
+    auto_upgrade_minor_version = true
+    automatic_upgrade_enabled  = true
+  }
+}
+
+variable "domain" {
+   type        = map(string)
+    description = "forest installation settings"
+  default = {
+    fqdn = "orgid.com"
+    netbios = "orgid"
+    mode = "WinThreshold" # Windows Server 2016 mode
+    database_path = "C:/Windows/NTDS"
+    sysvol_path = "C:/Windows/SYSVOL"
+    log_path = "C:/Windows/NTDS"
   }
 }
