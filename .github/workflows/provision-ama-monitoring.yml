@@ -1,7 +1,8 @@
 # Use OpenID Connect to authenticate to Azure
 # https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-portal%2Cwindows#use-the-azure-login-action-with-openid-connect
 # *** https://colinsalmcorner.com/using-oidc-with-terraform-in-github-actions/
-# change simulation
+# https://azure.github.io/azure-workload-identity/docs/topics/federated-identity-credential.html#federated-identity-credential-for-a-user-assigned-managed-identity
+
 name: Provision Azure Monitoring Agent
 on:
   push:
@@ -20,20 +21,18 @@ jobs:
       AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
       AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-      uamiName: ama-uami-01
-      uamiResourceGroup: ama-rg-01
+      uamiName: umi-ama-mig-001
+      uamiResourceGroup: rgp-iac
       rgpName: rgp-idy
       rgpLocation: centralus
       uamiLocation: eastus2
       uamiRoleAssignmentVmContrib: "Virtual Machine Contributor"
       uamiRoleAssignmentLogAnalyticsContrib: "Log Analytics Contributor"
       uamiRoleAssignmentArcContrib: "Azure Arc Connected Resource Administrator"
-      azCliVer: 2.56.0
-      tfVersion: 1.7.1
-      workingdir: tf
-      planOnly: true # Set to true to plan only, false to deploy
-      rollback: false # Set to true to rollback, false to deploy
-      skipUAMI: true # Set to true to skip UAMI creation, false to create UAMI if necessary
+      azCliVer: 2.58.0
+      bicepVer: 0.26.54
+      operation: plan # Allowable values: plan, apply, rollback
+      skipUAMI: false # Set to true to skip UAMI creation, false to create UAMI if necessary
 
     runs-on: ubuntu-latest
 
@@ -41,14 +40,13 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ${{ env.workingdir }}
 
     steps:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v3
     
-    # Authenticate to Azure tenant using the Azure login action (OIDC)
+    # Authenticate to Azure tenant using the Azure login action (OIDC). Based on umi: ama-umi-002
     - name: Authenticate to Azure with OIDC
       uses: Azure/login@v1
       with:
@@ -65,69 +63,10 @@ jobs:
           chmod +x $GITHUB_WORKSPACE/az-scripts/createAndAssignUAMI.sh
           $GITHUB_WORKSPACE/az-scripts/createAndAssignUAMI.sh
     
-    # Setup Terraform
-    - name: 'Setup Terraform'
-      uses: hashicorp/setup-terraform@v2
+    - name: 'get_drive_space'
+      uses: azure/powershell@v1
       with:
-        terraform_version: ${{ env.tfVersion }}
-        terraform_wrapper: true
-        
-
-    # Check version
-    - name: 'Terraform Version'
-      run: terraform version
-
-    # Format
-    - name: 'Terraform Format'
-      run: terraform fmt -recursive
-
-    - name: Terraform Init
-      id: init
-      run: terraform init
-      env:
-        ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-        ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-        ARM_USE_OIDC: true
-
-    # Plan   
-    - name: 'Terraform Plan'
-      id: plan
-      run: terraform plan -lock=false -out=tfplan -var "pw=${{ secrets.VM_PASSWORD }}"
-      timeout-minutes: 20
-      env:
-        ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-        ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-        ARM_USE_OIDC: true
-
-    # Deploy
-    - name: 'Terraform Deploy'
-      if: ${{ env.planOnly == 'false' && env.rollback == 'false' }}
-      id: apply
-      run: terraform apply -auto-approve -var "pw=${{ secrets.VM_PASSWORD }}"
-      env:
-        ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-        ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-        ARM_USE_OIDC: true
-
-    # Trigger Policy Scan
-    - name: 'Trigger Policy Scan'
-      if: ${{ env.planOnly == 'false' && env.rollback == 'false' }}
-      uses: Azure/CLI@v1
-      with: 
-        azcliversion: ${{ env.azCliVer }}
         inlineScript: |
-          az policy state trigger-scan --no-wait --verbose
-    
-    # Rollback
-    - name: 'Terraform Rollback'
-      if: ${{ env.rollback == 'true' && env.planOnly == 'false' }}
-      id: destroy
-      run: terraform destroy -parallelism=50 -auto-approve -var "pw=${{ secrets.VM_PASSWORD }}"
-      env:
-        ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-        ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-        ARM_USE_OIDC: true
+          chmod +x $GITHUB_WORKSPACE/az-scripts/Get-DriveSpace.ps1
+          $GITHUB_WORKSPACE/az-scripts/Get-DriveSpace.ps1
+        azPSVersion: "latest"
