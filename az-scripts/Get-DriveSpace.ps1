@@ -1,4 +1,3 @@
-Select-AzSubscription -SubscriptionId $env:idySubscription -Verbose
 $vmList = (Get-AzVM -ResourceGroupName $env:rgpName).Name
 ForEach ($vmName in $vmList) 
 {
