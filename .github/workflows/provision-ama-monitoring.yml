@@ -68,10 +68,12 @@ jobs:
     
     # Get drive space on each VM to ensure there is enough space (at least 10GB) to install the Azure Monitoring Agent
     - name: 'get_drive_space'
-      run: |
-        chmod +x $GITHUB_WORKSPACE/az-scripts/Get-DriveSpace.ps1
-        Connect-AzAccount
-        az-scripts/Get-DriveSpace.ps1
+      uses: azure/powershell@v1
+      with:
+        inlineScript: |
+          chmod +x $GITHUB_WORKSPACE/az-scripts/Get-DriveSpace.ps1
+          Connect-AzAccount
+          az-scripts/Get-DriveSpace.ps1
 
     # Check NSG rules to ensure the required ports are open
     # - name: 'check_nsg_rules'
