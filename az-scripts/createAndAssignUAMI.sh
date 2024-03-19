@@ -1,11 +1,7 @@
 #!/bin/bash
 # This script creates a new user-assigned managed identity and assignes it to a set of roles on a given scope.
 
-# uamiRoleAssignmentVmContrib: "Virtual Machine Contributor"
-# uamiRoleAssignmentLogAnalyticsContrib: "Log Analytics Contributor"
-# uamiRoleAssignmentArcContrib: "Azure Connected Machine Resource Administrator"
-# roles=("Virtual Machine Contributor" "Log Analytics Contributor" "Azure Connected Machine Resource Administrator")
-roles=($uamiRoleAssignmentVmContrib $uamiRoleAssignmentLogAnalyticsContrib $uamiRoleAssignmentArcContrib)
+roles=("Virtual Machine Contributor" "Log Analytics Contributor" "Azure Connected Machine Resource Administrator")
 # if resource group exists, skip creation
 existingRgp=$(az group list --query [].name -o tsv)
 if [[ $existingRgp == *$uamiResourceGroup* ]]; then
