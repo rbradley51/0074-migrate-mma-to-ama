@@ -71,8 +71,8 @@ jobs:
       uses: azure/powershell@v1
       with:
         inlineScript: |
-          chmod +x $GITHUB_WORKSPACE/az-scripts/Get-DriveSpace.ps1
-          Connect-AzAccount
+          chmod +x az-scripts/Get-DriveSpace.ps1
+          Select-AzSubscription -SubscriptionId ${{ env.idySubscription }}
           az-scripts/Get-DriveSpace.ps1
         azPSVersion: "latest"
 
