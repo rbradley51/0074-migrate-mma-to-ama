@@ -74,6 +74,7 @@ jobs:
           chmod +x $GITHUB_WORKSPACE/az-scripts/Get-DriveSpace.ps1
           Connect-AzAccount
           az-scripts/Get-DriveSpace.ps1
+        azPSVersion: "latest"
 
     # Check NSG rules to ensure the required ports are open
     # - name: 'check_nsg_rules'
