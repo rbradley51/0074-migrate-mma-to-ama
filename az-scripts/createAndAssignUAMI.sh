@@ -3,9 +3,9 @@
 
 # uamiRoleAssignmentVmContrib: "Virtual Machine Contributor"
 # uamiRoleAssignmentLogAnalyticsContrib: "Log Analytics Contributor"
-# uamiRoleAssignmentArcContrib: "Azure Arc Connected Resource Administrator"
+# uamiRoleAssignmentArcContrib: "Azure Connected Machine Resource Administrator"
 
-roles=($uamiRoleAssignementVmContrib $uamiRoleAssignmentLogAnalyticsContrib $uamiRoleAssignmentArcContrib)
+roles=("Virtual Machine Contributor" "Log Analytics Contributor" "Azure Connected Machine Resource Administrator")
 # if resource group exists, skip creation
 existingRgp=$(az group list --query [].name -o tsv)
 if [[ $existingRgp == *$uamiResourceGroup* ]]; then
