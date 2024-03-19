@@ -24,7 +24,7 @@ else
 fi
 
 rgId=$(az group show --name $uamiResourceGroup --query "id" -o tsv)
-uamiId=$(az identity list -g $uamiResourceGroup --query [].principalId -o tsv)
+uamiId=$(az identity show -g $uamiResourceGroup -n $uamiName --query principalId -o tsv)
 
 for role in "${roles[@]}";
    do echo $role;
