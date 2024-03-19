@@ -3,7 +3,7 @@
 # *** https://colinsalmcorner.com/using-oidc-with-terraform-in-github-actions/
 # https://azure.github.io/azure-workload-identity/docs/topics/federated-identity-credential.html#federated-identity-credential-for-a-user-assigned-managed-identity
 
-name: Provision Azure Monitoring Agent
+name: Migrate To Azure Monitoring Agent
 on:
   push:
     branches:
