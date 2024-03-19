@@ -11,6 +11,7 @@ ForEach ($vmName in $vmList)
         $SystemFreeSpaceInGB = "((Get-PSDrive -PSProvider FileSystem -Name '/').Free/1GB)"
     }
     $output = Invoke-AzVMRunCommand -ResourceGroupName $env:rgpName -Name $vmName -CommandId 'RunPowerShellScript' -ScriptString $SystemFreeSpaceInGB
-    $output.Value[0].Message
+    [int]$freeSpace = $output.Value[0].Message.Split(".")[0]
+    Write-Host "VM: $vmName, Free Space: $freeSpace GB, Meets AMA Agent Requirement: $($freeSpace -ge 10)"
 }
 
