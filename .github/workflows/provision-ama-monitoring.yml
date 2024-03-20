@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   pre-requisites:
-    name: 'Setup'
+    name: 'setup_worfklow'
     env:
       AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
       AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
@@ -24,6 +24,7 @@ jobs:
       uamiName: umi-ama-mig-001
       uamiResourceGroup: rgp-iac
       idySubscription: "1d790e78-7852-498d-8087-f5d48686a50e"
+      lawId: "11de000e-9725-45e5-9530-3e291e1654b1"
       rgpName: rgp-idy
       rgpLocation: centralus
       uamiLocation: eastus2
@@ -48,7 +49,7 @@ jobs:
       uses: actions/checkout@v3
     
     # Authenticate to Azure tenant using the Azure login action (OIDC). Based on umi: ama-umi-002
-    - name: Authenticate to Azure with OIDC
+    - name: authenticate_to_azure_with_oidc
       uses: Azure/login@v1
       with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
@@ -57,7 +58,7 @@ jobs:
           enable-AzPSSession: true
     
     # Create user-assigned managed identity (UAMI) and assign roles
-    - name: Create and assign UAMI
+    - name: create_umi_and_assign_roles
       if: ${{ env.skipUAMI == 'false' }}
       uses: Azure/CLI@v1
       with: 
@@ -76,13 +77,15 @@ jobs:
           az-scripts/Get-DriveSpace.ps1
         azPSVersion: "latest"
 
-    # Check NSG rules to ensure the required ports are open
-    # - name: 'check_nsg_rules'
-    #   uses: azure/powershell@v1
-    #   with:
-    #     inlineScript: |
-    #       chmod +x $GITHUB_WORKSPACE/az-scripts/Get-NSGRules.ps1
-    #       az-scripts/Get-NSGRules.ps1
-    #     azPSVersion: "latest"
+    # Test connectivity to required endpoints from each VM
+    - name: 'check_connection_results'
+      uses: azure/powershell@v1
+      with:
+        inlineScript: |
+          chmod +x az-scripts/Get-EndpointConnectionResult.ps1
+          az-scripts/Get-EndpointConnectionResult.ps1
+        azPSVersion: "latest"
+
+
     
         
