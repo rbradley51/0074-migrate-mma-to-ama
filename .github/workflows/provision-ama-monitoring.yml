@@ -122,12 +122,13 @@ jobs:
         azPSVersion: "latest"
 
     # Get Azure Monitor Agent installation status on each VM
-    - name: 'download_dcr_generator_script'
+    - name: 'download_execute_dcr_generator_script'
       if: ${{ env.skipDCRDownload == 'false' }}
       uses: azure/powershell@v1
       with:
         inlineScript: |
-          Invoke-WebRequest -Uri ${{ env.dcrUrl }} -OutFile ${{ env.dcrOutputPath }} -Verbose
+          try { Invoke-WebRequest -Uri ${{ env.dcrUrl }} -OutFile ${{ env.dcrOutputPath }} -Verbose }
+          catch { Write-Host "Failed to download DCR generator script" }
           chmod +x az-scripts/Get-EndpointConnectionResult.ps1
-          az-scripts/WorkspaceConfigToDCRMigrationTool.ps1 -SubscriptionId ${{ mgtSubscription }} -ResourceGroupName ${{ mgtResourceGroup }} -WorkspaceName ${{ mgtLogAnalyticsWorkspace }} -DCRName $dcrName -OutputFolder ${{ dcrExportPath }}
+          az-scripts/WorkspaceConfigToDCRMigrationTool.ps1 -SubscriptionId ${{ env.mgtSubscription }} -ResourceGroupName ${{ env.mgtResourceGroup }} -WorkspaceName ${{ env.mgtLogAnalyticsWorkspace }} -DCRName $dcrName -OutputFolder ${{ env.dcrExportPath }}
         azPSVersion: "latest"
