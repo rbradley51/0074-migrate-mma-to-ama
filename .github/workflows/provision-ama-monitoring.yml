@@ -35,6 +35,9 @@ jobs:
       bicepVer: 0.26.54
       operation: plan # Allowable values: plan, apply, rollback
       skipUAMI: false # Set to true to skip UAMI creation, false to create UAMI if necessary
+      skipDriveSpace: true # Set to true to skip drive space check, false to check drive space
+      skipEndpointCheck: true # Set to true to skip endpoint check, false to check endpoint connectivity
+      skipMMAStatus: false # Set to true to skip MMA status check, false to check MMA status
 
     runs-on: ubuntu-latest
 
@@ -69,6 +72,7 @@ jobs:
     
     # Get drive space on each VM to ensure there is enough space (at least 10GB) to install the Azure Monitoring Agent
     - name: 'get_drive_space'
+      if: ${{ env.skipDriveSpace == 'false' }}
       uses: azure/powershell@v1
       with:
         inlineScript: |
@@ -79,6 +83,7 @@ jobs:
 
     # Test connectivity to required endpoints from each VM
     - name: 'check_connection_results'
+      if: ${{ env.skipEndpointCheck == 'false' }}
       uses: azure/powershell@v1
       with:
         inlineScript: |
@@ -87,7 +92,7 @@ jobs:
         azPSVersion: "latest"
 
     # Get Azure Monitor Agent installation status on each VM
-    - name: 'get_ama_installation_status'
+    - name: 'get_mma_extension_status'
       uses: azure/powershell@v1
       with:
         inlineScript: |
