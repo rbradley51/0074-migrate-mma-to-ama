@@ -105,7 +105,7 @@ jobs:
             if ($vmExtensions -contains 'MicrosoftMonitoringAgent') 
             {
               Write-Host "VM: $vmName, Legacy MMA extension IS installed"
-              if (${{ env.removeMMA }} == 'true') 
+              if (${{ env.removeMMA }}) 
               {
                 Write-Host "Removing MMA extension from VM: $vmName"
                 Remove-AzVMExtension -ResourceGroupName ${{ env.rgpName }} -VMName $vmName -Name "MicrosoftMonitoringAgent" -WhatIf -Verbose
