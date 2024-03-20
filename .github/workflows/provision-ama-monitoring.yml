@@ -38,7 +38,6 @@ jobs:
       skipDriveSpace: true # Set to true to skip drive space check, false to check drive space
       skipEndpointCheck: true # Set to true to skip endpoint check, false to check endpoint connectivity
       skipMMAStatus: false # Set to true to skip MMA status check, false to check MMA status
-      removeMMA: true # Set to true to remove MMA, false to keep MMA
 
     runs-on: ubuntu-latest
 
@@ -105,11 +104,8 @@ jobs:
             if ($vmExtensions -contains 'MicrosoftMonitoringAgent') 
             {
               Write-Host "VM: $vmName, Legacy MMA extension IS installed"
-              if (${{ env.removeMMA }} == true) 
-              {
-                Write-Host "Removing MMA extension from VM: $vmName"
-                Remove-AzVMExtension -ResourceGroupName ${{ env.rgpName }} -VMName $vmName -Name "MicrosoftMonitoringAgent" -WhatIf -Verbose
-              } 
+              Write-Host "Removing MMA extension from VM: $vmName"
+              Remove-AzVMExtension -ResourceGroupName ${{ env.rgpName }} -VMName $vmName -Name "MicrosoftMonitoringAgent" -WhatIf -Verbose
             }
             else
             {
