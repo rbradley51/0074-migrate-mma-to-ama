@@ -38,7 +38,7 @@ jobs:
       skipDriveSpace: true # Set to true to skip drive space check, false to check drive space
       skipEndpointCheck: true # Set to true to skip endpoint check, false to check endpoint connectivity
       skipMMAStatus: false # Set to true to skip MMA status check, false to check MMA status
-      removeMMA: false # Set to true to remove MMA, false to keep MMA
+      removeMMA: true # Set to true to remove MMA, false to keep MMA
 
     runs-on: ubuntu-latest
 
@@ -101,8 +101,7 @@ jobs:
           $vmList = (Get-AzVM -ResourceGroupName ${{ env.rgpName }}).Name
           foreach ($vmName in $vmList) 
           {
-            Write-Host ("=*150")
-            $vmExtensions = (Get-AzVMExtension -ResourceGroupName ${{ env.rgpName }} -VMName $vmName).Name
+             $vmExtensions = (Get-AzVMExtension -ResourceGroupName ${{ env.rgpName }} -VMName $vmName).Name
             if ($vmExtensions -contains 'MicrosoftMonitoringAgent') 
             {
               Write-Host "VM: $vmName, Legacy MMA extension IS installed"
