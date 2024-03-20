@@ -100,15 +100,15 @@ jobs:
           $vmList = (Get-AzVM -ResourceGroupName ${{ env.rgpName }}).Name
           foreach ($vmName in $vmList) 
           {
-            Write-Output "=*150"
+            Write-Host ("=*150")
             $vmExtensions = (Get-AzVMExtension -ResourceGroupName ${{ env.rgpName }} -VMName $vmName).Name
             if ($vmExtensions -contains 'MicrosoftMonitoringAgent') 
             {
-              Write-Host "VM: $vmName, Legacy MMA Extension IS Installed" 
+              Write-Host "VM: $vmName, Legacy MMA extension IS installed" 
             }
             else
             {
-              Write-Host "VM: $vmName, Legacy MMA Extension NOT Installed" 
+              Write-Host "VM: $vmName, Legacy MMA extension NOT installed" 
             }
           }
         azPSVersion: "latest"
