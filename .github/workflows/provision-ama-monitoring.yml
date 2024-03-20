@@ -44,6 +44,7 @@ jobs:
       skipDCRDownload: false # Set to true to skip DCR download, false to download DCR
       dcrUrl: 'https://raw.githubusercontent.com/microsoft/AzureMonitorCommunity/master/Azure%20Services/Azure%20Monitor/Agents/Migration%20Tools/DCR%20Config%20Generator/WorkspaceConfigToDCRMigrationTool.ps1'
       dcrOutputPath: az-scripts/WorkspaceConfigToDCRMigrationTool.ps1
+      dcrExportPath: dcr-export
  
     runs-on: ubuntu-latest
 
@@ -126,7 +127,10 @@ jobs:
       uses: azure/powershell@v1
       with:
         inlineScript: |
-          Invoke-WebRequest -Uri ${{ env.dcrUrl }} -OutFile ${{ env.dcrOutputPath }} -Verbose
+          try { Invoke-WebRequest -Uri ${{ env.dcrUrl }} -OutFile ${{ env.dcrOutputPath }} -Verbose }
+          catch { Write-Host "Failed to download DCR generator script" }
+          chmod +x az-scripts/Get-EndpointConnectionResult.ps1
+          az-scripts/WorkspaceConfigToDCRMigrationTool.ps1 -SubscriptionId ${{ mgtSubscription }} -ResourceGroupName ${{ mgtResourceGroup }} -WorkspaceName ${{ mgtLogAnalyticsWorkspace }} -DCRName $dcrName -OutputFolder ${{ dcrExportPath }}
         azPSVersion: "latest"
 
 
