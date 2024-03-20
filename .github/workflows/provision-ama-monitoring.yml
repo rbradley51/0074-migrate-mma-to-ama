@@ -86,6 +86,27 @@ jobs:
           az-scripts/Get-EndpointConnectionResult.ps1
         azPSVersion: "latest"
 
+    # Get Azure Monitor Agent installation status on each VM
+    - name: 'get_ama_installation_status'
+      uses: azure/powershell@v1
+      with:
+        inlineScript: |
+          Select-AzSubscription -SubscriptionId ${{ env.idySubscription }}
+          $vmList = (Get-AzVM -ResourceGroupName ${{ env.rgpName }}).Name
+          foreach ($vmName in $vmList) 
+          {
+            $vm = Get-AzVM -ResourceGroupName ${{ env.rgpName }} -Name $vmName
+            if ($vm.Extensions | Where-Object { $_.Type -eq 'MicrosoftMonitoringAgent' }) 
+            {
+              Write-Host "VM: $vmName, Legacy MMA Extension Installed" 
+            }
+            else
+            {
+              Write-Host "VM: $vmName, Legacy MMA Extension Not Installed" 
+            }
+          }
+        azPSVersion: "latest"
+
 
     
         
