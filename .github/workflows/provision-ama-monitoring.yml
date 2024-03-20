@@ -127,12 +127,7 @@ jobs:
       uses: azure/powershell@v1
       with:
         inlineScript: |
-          try { Invoke-WebRequest -Uri ${{ env.dcrUrl }} -OutFile ${{ env.dcrOutputPath }} -Verbose }
-          catch { Write-Host "Failed to download DCR generator script" }
+          Invoke-WebRequest -Uri ${{ env.dcrUrl }} -OutFile ${{ env.dcrOutputPath }} -Verbose
           chmod +x az-scripts/Get-EndpointConnectionResult.ps1
           az-scripts/WorkspaceConfigToDCRMigrationTool.ps1 -SubscriptionId ${{ mgtSubscription }} -ResourceGroupName ${{ mgtResourceGroup }} -WorkspaceName ${{ mgtLogAnalyticsWorkspace }} -DCRName $dcrName -OutputFolder ${{ dcrExportPath }}
         azPSVersion: "latest"
-
-
-    
-        
