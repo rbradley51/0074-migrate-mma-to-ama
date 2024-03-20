@@ -136,7 +136,7 @@ jobs:
           $outputFiles = (Get-ChildItem -Path ${{ env.dcrExportPath }}).FullName
           foreach ($file in $outputFiles) 
           {
-            Write-Host (-*100)
+            Write-Host ('-'*100)
             Get-Content -Path $file
           }
         azPSVersion: "latest"
