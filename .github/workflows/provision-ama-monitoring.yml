@@ -133,5 +133,10 @@ jobs:
           (Get-Content -Path ${{ env.dcrOutputPath }}) -replace '^Set-DeployOutputOnAzure', '# Set-DeployOutputOnAzure' | Set-Content -Path ${{ env.dcrOutputPath }}
           chmod +x az-scripts/Get-EndpointConnectionResult.ps1
           az-scripts/WorkspaceConfigToDCRMigrationTool.ps1 -SubscriptionId ${{ env.mgtSubscription }} -ResourceGroupName ${{ env.mgtResourceGroup }} -WorkspaceName ${{ env.mgtLogAnalyticsWorkspace }} -DCRName ${{ env.dcrNamePrefix }} -OutputFolder ${{ env.dcrExportPath }} -Verbose 
-          Get-ChildItem -Path ${{ env.dcrExportPath }} -Recurse -Verbose
+          $outputFiles = (Get-ChildItem -Path ${{ env.dcrExportPath }}).FullName
+          foreach ($file in $outputFiles) 
+          {
+            Write-Host (-*100)
+            Get-Content -Path $file
+          }
         azPSVersion: "latest"
