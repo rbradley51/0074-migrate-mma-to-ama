@@ -42,7 +42,7 @@ jobs:
       skipEndpointCheck: true # Set to true to skip endpoint check, false to check endpoint connectivity
       skipMMAStatus: false # Set to true to skip MMA status check, false to check MMA status
       skipDCRDownload: false # Set to true to skip DCR download, false to download DCR
-      dcrUrl: "https://raw.githubusercontent.com/username/repository/master/script.ps1"
+      dcrUrl: "https://raw.githubusercontent.com/microsoft/AzureMonitorCommunity/master/Azure Services/Azure Monitor/Agents/Migration Tools/DCR Config Generator/WorkspaceConfigToDCRMigrationTool.ps1"
       dcrOutputPath: /az-scripts/WorkspaceConfigToDCRMigrationTool.ps1
  
     runs-on: ubuntu-latest
