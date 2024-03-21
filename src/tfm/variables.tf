@@ -30,6 +30,11 @@ variable "managementSubscriptionId" {
   default = "019181ad-6356-46c6-b584-444846096085"
 }
 
+variable "iacSubscriptionId" {
+  type    = string
+  default = "e25024e7-c4a5-4883-80af-9e81b2f8f689"
+}
+
 variable "connectivitySubscriptionId" {
   type    = string
   default = "e4aad2d8-e670-4807-bf53-63b4a36e0d4a"

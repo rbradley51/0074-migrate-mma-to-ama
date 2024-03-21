@@ -4,6 +4,13 @@ variable "rgpName" {
   default     = "rgp-idy"
 }
 
+variable "rgpIac" {
+  type        = string
+  description = "values for resource group name"
+  default     = "rgp-iac"
+  
+}
+
 variable "idy_nics" {
   type        = list(map(string))
   description = "values for network interface"
@@ -498,10 +505,10 @@ variable "boot_diag" {
   description = "enable boot diagnostics for virtual machines"
   default     = true
 }
-variable "umi_prefix" {
+variable "umi_name" {
   type        = string
   description = "prefix for user managed identity"
-  default     = "azr-umi"
+  default     = "umi-ama-mig-001"
 }
 
 variable "ama_dce" {
@@ -672,16 +679,8 @@ variable "ehb" {
   }
 }
 
-variable "umi_policy" {
-  type        = map(string)
-  description = "values for user managed identity policy"
-  default = {
-    name          = "azr-umi-policy"
-    policy_def_id = "/providers/Microsoft.Authorization/policySetDefinitions/0d1b56c6-6d1f-4a5d-8695-b15efbea6b49"
-  }
-}
 
-variable "ama_policy" {
+variable "ama_initiative" {
   type = map(string)
   description = "Enable Azure Monitor Initiatives for VMS, Hybrid and VMSS for AMA agent"
   default = {
@@ -820,7 +819,7 @@ variable "hub_vnt" {
 variable "hvn" {
   type        = list(string)
   description = "address spaces for hub virtual network"
-  default = ["10.160.0.0/22"]
+  default = ["10.0.0.0/16"]
 }
 
 variable "managementSubscriptionId" {

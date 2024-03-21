@@ -5,7 +5,8 @@ terraform {
       version = ">=3.96.0"
       configuration_aliases = [
         azurerm.connectivity,
-        azurerm.management
+        azurerm.management,
+        azurerm.iac
       ]
     }
   }
@@ -43,6 +44,17 @@ provider "azurerm" {
   }
 }
 
+provider "azurerm" {
+  alias = "iac"
+  use_oidc = true
+  subscription_id = var.iacSubscriptionId
+  features {
+    template_deployment {
+      delete_nested_items_during_deletion = true
+    }
+  }
+}
+
 module "idy" {
   source = "./modules/plt/idy"
 
@@ -50,6 +62,7 @@ module "idy" {
     azurerm = azurerm
     azurerm.connectivity = azurerm.connectivity
     azurerm.management = azurerm.management
+    azurerm.iac = azurerm.iac
   }
 
   primary_location = var.primary_location

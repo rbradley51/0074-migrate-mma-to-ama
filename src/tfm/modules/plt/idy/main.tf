@@ -20,6 +20,17 @@ data "azurerm_management_group" "org" {
   display_name = var.root_name
 }
 
+data "azurerm_resource_group" "iac" {
+  name = var.rgpIac
+  location = var.primary_location
+}
+
+data "azurerm_user_assigned_identity" "umid" {
+  name                = var.umi_name
+  resource_group_name = azurerm_resource_group.iac.name
+}
+
+
 resource "random_uuid" "rnd" {
 }
 
@@ -28,406 +39,11 @@ resource "azurerm_resource_group" "idy" {
   location = var.primary_location
 }
 
-resource "azurerm_user_assigned_identity" "idy" {
-  resource_group_name = azurerm_resource_group.idy.name
-  location            = var.primary_location
-  name                = "${var.umi_prefix}-${local.rndPrefix}"
-}
-
-resource "azurerm_recovery_services_vault" "rsv" {
-  name                = "${var.resource_codes.recovery_vault}-${local.rndPrefix}"
-  location            = var.primary_location
-  resource_group_name = azurerm_resource_group.idy.name
-  sku                 = var.rsv_sku
-}
-
-resource "azurerm_key_vault" "kvt" {
-  name                            = "${var.resource_codes.key_vault}-${local.rndPrefix}"
-  location                        = var.primary_location
-  resource_group_name             = azurerm_resource_group.idy.name
-  sku_name                        = var.kvt_sku
-  tenant_id                       = data.azurerm_client_config.current.tenant_id
-  purge_protection_enabled        = false
-  enabled_for_disk_encryption     = false
-  enabled_for_deployment          = true
-  enabled_for_template_deployment = true
-  soft_delete_retention_days      = var.retention_days
-}
-
-resource "azurerm_storage_account" "idy" {
-  name                     = "1${var.resource_codes.storage}${local.rndPrefix}"
-  location                 = var.primary_location
-  account_kind             = var.sta.kind
-  account_tier             = var.sta.tier
-  account_replication_type = var.sta.replication_type
-  resource_group_name      = azurerm_resource_group.idy.name
-}
-resource "azurerm_storage_container" "ama" {
-  name                  = var.sta.container_name
-  storage_account_name  = azurerm_storage_account.idy.name
-  container_access_type = var.sta.container_access_type
-}
-resource "azurerm_network_security_group" "idy" {
-  count               = length(var.nsg_name)
-  name                = var.nsg_name[count.index]
-  location            = var.primary_location
-  resource_group_name = azurerm_resource_group.idy.name
-}
-
-resource "azurerm_network_security_rule" "ads" {
-  count                       = length(var.nsg_rules)
-  name                        = "ads-${var.nsg_rules[count.index].name}"
-  priority                    = var.nsg_rules[count.index].priority
-  direction                   = var.nsg_rules[count.index].direction
-  access                      = var.nsg_rules[count.index].access
-  protocol                    = var.nsg_rules[count.index].protocol
-  source_port_range           = var.nsg_rules[count.index].source_port_range
-  destination_port_range      = var.nsg_rules[count.index].destination_port_range
-  source_address_prefix       = var.nsg_rules[count.index].source_address_prefix
-  destination_address_prefix  = var.nsg_rules[count.index].destination_address_prefix
-  resource_group_name         = azurerm_resource_group.idy.name
-  network_security_group_name = azurerm_network_security_group.idy[0].name
-}
-
-resource "azurerm_network_security_rule" "srv" {
-  count                       = length(var.nsg_rules)
-  name                        = "svr-${var.nsg_rules[count.index].name}"
-  priority                    = var.nsg_rules[count.index].priority
-  direction                   = var.nsg_rules[count.index].direction
-  access                      = var.nsg_rules[count.index].access
-  protocol                    = var.nsg_rules[count.index].protocol
-  source_port_range           = var.nsg_rules[count.index].source_port_range
-  destination_port_range      = var.nsg_rules[count.index].destination_port_range
-  source_address_prefix       = var.nsg_rules[count.index].source_address_prefix
-  destination_address_prefix  = var.nsg_rules[count.index].destination_address_prefix
-  resource_group_name         = azurerm_resource_group.idy.name
-  network_security_group_name = azurerm_network_security_group.idy[1].name
-}
-
-resource "azurerm_virtual_network" "idy" {
-  name                = var.vntName
-  location            = var.primary_location
-  resource_group_name = azurerm_resource_group.idy.name
-  address_space       = var.vntAddressPrefixes
-  dns_servers         = ["10.0.0.4", "10.0.0.5"]
-  subnet {
-    name           = var.subnets[0].name
-    address_prefix = var.subnets[0].address_prefix
-    security_group = azurerm_network_security_group.idy.*.id[0]
-  }
-  subnet {
-    name           = var.subnets[1].name
-    address_prefix = var.subnets[1].address_prefix
-    security_group = azurerm_network_security_group.idy.*.id[1]
-  }
-  subnet {
-    name           = var.subnets[2].name
-    address_prefix = var.subnets[2].address_prefix
-  }
-}
-
-# enable global peering between the two virtual network
-resource "azurerm_virtual_network_peering" "idy2hub" {
-  name                         = var.hub_idy_hub_peering.nameSpokeToHub
-  resource_group_name          = azurerm_resource_group.idy.name
-  virtual_network_name         = azurerm_virtual_network.idy.name
-  remote_virtual_network_id    = data.azurerm_virtual_network.con.id
-  allow_virtual_network_access = var.hub_idy_hub_peering.allow_virtual_network_access
-  allow_forwarded_traffic      = var.hub_idy_hub_peering.allow_forwarded_traffic
-  allow_gateway_transit        = var.hub_idy_hub_peering.allow_gateway_transit
-}
-
-# NOTE: Hub to spoke peering must be performed manually
-
-# resource "azurerm_virtual_network_peering" "hub2idy" {
-#   name                      = var.hub_idy_hub_peering.nameHubToSpoke
-#   resource_group_name       = data.azurerm_virtual_network.con.resource_group_name
-#   virtual_network_name      = data.azurerm_virtual_network.con.name
-#   remote_virtual_network_id = azurerm_virtual_network.idy.id
-# }
-
-resource "azurerm_network_interface" "idy" {
-  count               = length(var.idy_nics)
-  name                = var.idy_nics[count.index].name
-  location            = var.primary_location
-  resource_group_name = azurerm_resource_group.idy.name
-  ip_configuration {
-    name      = var.idy_nics[count.index].ipconfig
-    subnet_id = (var.idy_nics[count.index].name == "svr01-nic" ? azurerm_virtual_network.idy.subnet.*.id[2] : azurerm_virtual_network.idy.subnet.*.id[0])
-    # https://stackoverflow.com/questions/56861532/how-to-reference-objects-in-terraform
-    private_ip_address_allocation = var.idy_nics[count.index].prvIpAlloc
-    private_ip_address            = var.idy_nics[count.index].prvIpAddr
-  }
-}
-
-resource "azurerm_public_ip" "bas" {
-  count               = local.deploy_bastion ? 1 : 0
-  name                = var.bastion.public_ip.name
-  location            = var.primary_location
-  resource_group_name = azurerm_resource_group.idy.name
-  allocation_method   = var.bastion.public_ip.allocation_method
-  sku                 = var.bastion.public_ip.sku
-}
-resource "azurerm_bastion_host" "bas" {
-  count               = local.deploy_bastion ? 1 : 0
-  name                = var.bastion.name
-  location            = var.primary_location
-  resource_group_name = azurerm_resource_group.idy.name
-  ip_configuration {
-    name                 = var.bastion.ipconfig.name
-    subnet_id            = azurerm_virtual_network.idy.subnet.*.id[1]
-    public_ip_address_id = azurerm_public_ip.bas[0].id
-  }
-}
-resource "azurerm_availability_set" "avs_idy" {
-  count                        = length(var.avs_idy)
-  name                         = var.avs_idy[count.index].name
-  location                     = var.primary_location
-  resource_group_name          = azurerm_resource_group.idy.name
-  platform_update_domain_count = var.avs_idy[count.index].update_domain
-  platform_fault_domain_count  = var.avs_idy[count.index].fault_domain
-  managed                      = var.avs_idy[count.index].managed
-}
-
-resource "azurerm_virtual_machine" "vms" {
-  count                 = length(var.vms)
-  name                  = var.vms[count.index].vmName
-  location              = var.primary_location
-  resource_group_name   = azurerm_resource_group.idy.name
-  network_interface_ids = ("${count.index}" == 2 ? azurerm_network_interface.idy[2].*.id : azurerm_network_interface.idy[count.index].*.id)
-  vm_size               = var.vms[count.index].vmSize
-  availability_set_id   = ("${count.index}" == 1 ? azurerm_availability_set.avs_idy[1].id : azurerm_availability_set.avs_idy[0].id)
-
-  # Uncomment this line to delete the OS disk automatically when deleting the VM.
-  delete_os_disk_on_termination = true
-  # Uncomment this line to delete the data disks automatically when deleting the VM
-  delete_data_disks_on_termination = true
-  storage_image_reference {
-    publisher = var.vms[count.index].image.publisher
-    offer     = var.vms[count.index].image.offer
-    sku       = var.vms[count.index].image.sku
-    version   = var.vms[count.index].image.version
-  }
-
-  storage_os_disk {
-    name              = "${var.vms[count.index].vmName}-syst"
-    caching           = var.vms[count.index].disk_os.caching
-    create_option     = var.vms[count.index].disk_os.createOption
-    managed_disk_type = var.vms[count.index].disk_os.diskType
-    disk_size_gb      = var.vms[count.index].disk_os.diskSizeGB
-  }
-
-  storage_data_disk {
-    name              = "${var.vms[count.index].vmName}-data"
-    managed_disk_type = var.vms[count.index].disk_data.diskType
-    create_option     = var.vms[count.index].disk_data.createOption
-    caching           = var.vms[count.index].disk_data.caching
-    disk_size_gb      = var.vms[count.index].disk_data.diskSizeGB
-    lun               = var.vms[count.index].disk_data.lun
-  }
-  os_profile {
-    computer_name  = var.vms[count.index].vmName
-    admin_username = var.vms[count.index].os_profile.admin_username
-    admin_password = var.pw
-  }
-  identity {
-    type         = "UserAssigned"
-    identity_ids = [azurerm_user_assigned_identity.idy.id]
-  }
-  os_profile_windows_config {
-    provision_vm_agent        = var.vms[count.index].windows_config.provision_vm_agent
-    enable_automatic_upgrades = var.vms[count.index].windows_config.enable_automatic_upgrades
-  }
-  boot_diagnostics {
-    enabled     = var.boot_diag
-    storage_uri = azurerm_storage_account.idy.primary_blob_endpoint
-  }
-  # https://www.terraform.io/docs/providers/azurerm/r/virtual_machine.html
-  # https://stackoverflow.com/questions/60265902/terraform-azurerm-virtual-machine-extension-run-local-powershell-script-using-c/60276573#60276573
-}
-
-resource "azurerm_virtual_machine_extension" "adds" {
-  depends_on                 = [azurerm_virtual_machine.vms]
-  name                       = "install-adds"
-  virtual_machine_id         = azurerm_virtual_machine.vms[0].id
-  publisher                  = "Microsoft.Compute"
-  type                       = "CustomScriptExtension"
-  type_handler_version       = "1.10"
-  auto_upgrade_minor_version = true
-
-  settings = <<SETTINGS
-    {
-       "commandToExecute": "powershell.exe -Command \"${local.powershell}\""
-   }
-  SETTINGS
-}
-
 resource "time_sleep" "wait-for-ads1" {
   depends_on      = [azurerm_virtual_machine_extension.adds]
   create_duration = "120s" # Wait 2 minutes to allow the VM to reboot and stabilize ADDS services
 }
 
-# https://github.com/ghostinthewires/Terraform-Templates/blob/master/Azure/2-tier-iis-sql-vm/modules/dc2-vm/3-join-domain.tf
-resource "azurerm_virtual_machine_extension" "join" {
-  depends_on           = [time_sleep.wait-for-ads1]
-  name                 = "join-domain"
-  virtual_machine_id   = azurerm_virtual_machine.vms[1].id # azrads2
-  publisher            = "Microsoft.Compute"
-  type                 = "JsonADDomainExtension"
-  type_handler_version = "1.3"
-
-  # NOTE: the `OUPath` field is intentionally blank, to put it in the Computers OU
-  settings = <<SETTINGS
-    {
-        "Name": "${var.domain.fqdn}",
-        "OUPath": "",
-        "User": "${var.domain.netbios}\\${var.vms[0].os_profile.admin_username}",
-        "Restart": "true",
-        "Options": "3"
-    }
-SETTINGS
-
-  protected_settings = <<SETTINGS
-    {
-        "Password": "${var.pw}"
-    }
-SETTINGS
-}
-
-# "registrationKeyPrivate": "FNn4fqruzXZH1BBmpbloB+CXvySZ8RAnyFo4hp/mhhcQ6UqVbrrd7v2aw/IGKOXER9M1i0Zd6KDw2H4Pw8VzIw=="
-# resource "azurerm_virtual_machine_extension" "dsc_node" {
-#   depends_on                 = [azurerm_virtual_machine_extension.join]
-#   name                       = "${azurerm_virtual_machine.vms[1].name}-Microsoft.Powershell.DSC"
-#   virtual_machine_id         = azurerm_virtual_machine.vms[1].id # azrads2
-#   publisher                  = "Microsoft.Powershell"
-#   type                       = "DSC"
-#   type_handler_version       = "2.77"
-#   auto_upgrade_minor_version = true
-#   # https://docs.microsoft.com/en-us/azure/automation/automation-dsc-onboarding#onboarding-azure-virtual-machines-to-azure-automation-dsc
-#   # "registrationKeyPrivate": "FNn4fqruzXZH1BBmpbloB+CXvySZ8RAnyFo4hp/mhhcQ6UqVbrrd7v2aw/IGKOXER9M1i0Zd6KDw2H4Pw8VzIw=="
-#   settings = <<SETTINGS
-#     {
-#       "Properties": [
-#         {
-#           "Name": "RegistrationKey",
-#           "Value": {
-#             "UserName": "PLACEHOLDER_DONOTUSE",
-#             "Password": "FNn4fqruzXZH1BBmpbloB+CXvySZ8RAnyFo4hp/mhhcQ6UqVbrrd7v2aw/IGKOXER9M1i0Zd6KDw2H4Pw8VzIw=="
-#           },
-#           "TypeName": "System.Management.Automation.PSCredential"
-#         },
-#         {
-#           "Name": "RegistrationUrl",
-#           "Value": "https://5c623cec-f1da-45a1-92c9-99e839d1d13b.agentsvc.cus.azure-automation.net/accounts/5c623cec-f1da-45a1-92c9-99e839d1d13b",
-#           "TypeName": "System.String"
-#         },
-#         {
-#           "Name": "NodeConfigurationName",
-#           "Value": "ConfigureDC2.localhost",
-#           "TypeName": "System.String"
-#         }
-#       ]
-#     }
-# SETTINGS
-# }
-
-# Placing credentials in the automation account instead of keyvault to support retrieving it within the DSC configuration during compliation
-# todo: Store credentials in keyvault instead of automation account
-resource "azurerm_automation_credential" "cred" {
-  provider                = azurerm.management
-  depends_on              = [data.azurerm_automation_account.aaa]
-  name                    = var.vms[0].os_profile.admin_username
-  resource_group_name     = data.azurerm_automation_account.aaa.resource_group_name
-  automation_account_name = data.azurerm_automation_account.aaa.name
-  username                = var.vms[0].os_profile.admin_username
-  password                = var.vms[0].os_profile.admin_password
-}
-resource "azurerm_automation_module" "ad_dsc" {
-  provider                = azurerm.management
-  depends_on              = [data.azurerm_automation_account.aaa]
-  count                   = length(var.dsc_modules)
-  name                    = var.dsc_modules[count.index].name
-  automation_account_name = data.azurerm_automation_account.aaa.name
-  resource_group_name     = data.azurerm_automation_account.aaa.resource_group_name
-  module_link {
-    uri = var.dsc_modules[count.index].uri
-  }
-}
-resource "time_sleep" "wait-for-modules" {
-  depends_on = [
-    azurerm_automation_module.ad_dsc
-  ]
-  create_duration = "120s" # Wait 5 minutes to allow all the automation account module assets to complete installation
-}
-
-resource "azurerm_virtual_machine_extension" "join-srv1" {
-  depends_on           = [azurerm_virtual_machine_extension.join]
-  name                 = "join-domain"
-  virtual_machine_id   = azurerm_virtual_machine.vms[2].id
-  publisher            = "Microsoft.Compute"
-  type                 = "JsonADDomainExtension"
-  type_handler_version = "1.3"
-
-  # NOTE: the `OUPath` field is intentionally blank, to put it in the Computers OU
-  settings = <<SETTINGS
-    {
-        "Name": "${var.domain.fqdn}",
-        "OUPath": "",
-        "User": "${var.domain.netbios}\\${var.vms[0].os_profile.admin_username}",
-        "Restart": "true",
-        "Options": "3"
-    }
-SETTINGS
-
-  protected_settings = <<SETTINGS
-    {
-        "Password": "${var.pw}"
-    }
-SETTINGS
-}
-
-# https://www.vi-tips.com/2020/10/join-vm-to-active-directory-domain-in.html
-
-# task-item: allow network traffic between subnets
-# Join svr1 to domain
-# https://github.com/ghostinthewires/Terraform-Templates/blob/master/Azure/2-tier-iis-sql-vm/modules/dc2-vm/4-promote-dc.tf
-
-resource "time_sleep" "wait-for-ads2" {
-  depends_on      = [azurerm_virtual_machine_extension.adds]
-  create_duration = "120s" # Wait 2 minutes to allow the VM to reboot and stabilize services
-}
-resource "azurerm_virtual_machine_extension" "promote-dc" {
-  depends_on           = [time_sleep.wait-for-ads2]
-  name                 = "promote-dc"
-  virtual_machine_id   = azurerm_virtual_machine.vms[1].id
-  publisher            = "Microsoft.Compute"
-  type                 = "CustomScriptExtension"
-  type_handler_version = "1.10"
-  settings             = <<SETTINGS
-    {
-        "commandToExecute": "powershell.exe -Command \"${local.dc2powershell_command}\""
-    }
-SETTINGS
-}
-
-# Create an event hub namespace resource
-resource "azurerm_eventhub_namespace" "idy" {
-  name                = var.ehb.namespace
-  location            = var.primary_location
-  resource_group_name = azurerm_resource_group.idy.name
-  sku                 = var.ehb.sku
-  capacity            = var.ehb.capacity
-}
-
-# Create an event hub resource
-resource "azurerm_eventhub" "idy" {
-  name                = var.ehb.name
-  namespace_name      = var.ehb.namespace
-  resource_group_name = azurerm_resource_group.idy.name
-  partition_count     = var.ehb.partition_count
-  message_retention   = var.ehb.message_retention
-  depends_on          = [azurerm_eventhub_namespace.idy]
-}
 resource "azurerm_monitor_data_collection_endpoint" "idy" {
   name                = var.ama_dce.name
   resource_group_name = azurerm_resource_group.idy.name
@@ -474,6 +90,37 @@ resource "azurerm_monitor_data_collection_rule" "idy" {
     type         = var.ama_dcr.identity.type
     identity_ids = [azurerm_user_assigned_identity.idy.id]
   }
+}
+
+# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/policy_set_definition
+
+resource "azurerm_management_group_policy_assignment" "umi" {
+  name                 = var.umi_policy.name
+  location             = var.primary_location
+  management_group_id  = data.azurerm_management_group.org.id
+  policy_definition_id = var.umi_policy.policy_def_id
+  identity {
+    type = "SystemAssigned"
+  }
+  parameters = <<PARAMS
+    {
+      "dcrResourceId": {
+        "value": "${azurerm_monitor_data_collection_rule.idy.id}"
+      },
+      "bringYourOwnUserAssignedManagedIdentity": {
+        "value": true
+      },
+      "userAssignedManagedIdentityName": {
+        "value": "${azurerm_user_assigned_identity.idy.name}"
+      },
+      "userAssignedManagedIdentityResourceGroup": {
+        "value": "${azurerm_resource_group.idy.name}"
+      },
+      "builtInIdentityResourceGroupLocation": {
+        "value": "${var.primary_location}"
+      }
+    }
+PARAMS
 }
 
 # Add a policy assignment to this resource group scope to assign the user assigned identity to virtual machines
@@ -565,183 +212,4 @@ resource "azurerm_management_group_policy_assignment" "ama_vmss" {
       }
     }
 PARAMS
-}
-
-resource "azurerm_management_group_policy_assignment" "ama_hybrid" {
-  name                 = var.ama_policy.nameHybrid
-  display_name         = "${var.ama_policy.nameHybrid}-assignment"
-  location             = var.primary_location
-  management_group_id  = data.azurerm_management_group.org.id
-  policy_definition_id = var.ama_policy.hybrid_policy_def_id
-  identity {
-    type = "SystemAssigned"
-  }
-  parameters = <<PARAMS
-    {
-      "dcrResourceId": {
-        "value": "${azurerm_monitor_data_collection_rule.idy.id}"
-      },
-      "enableProcessesAndDependencies": {
-        "value": true
-      }
-    }
-PARAMS
-}
-
-resource "azurerm_virtual_machine_extension" "idy" {
-  count                      = length(var.vms)
-  name                       = var.vm_ext.name
-  virtual_machine_id         = azurerm_virtual_machine.vms[count.index].id
-  publisher                  = var.vm_ext.publisher
-  type                       = var.vm_ext.type
-  type_handler_version       = var.vm_ext.type_handler_version
-  auto_upgrade_minor_version = var.vm_ext.auto_upgrade_minor_version
-  automatic_upgrade_enabled  = var.vm_ext.automatic_upgrade_enabled
-  settings                   = <<SETTINGS
-    {
-      "workspaceId": "${data.azurerm_log_analytics_workspace.mgt.id}"
-    }
-SETTINGS
-}
-
-resource "azurerm_virtual_machine_extension" "nw" {
-  count                      = length(var.vms)
-  name                       = var.nw_ext.name
-  virtual_machine_id         = azurerm_virtual_machine.vms[count.index].id
-  publisher                  = var.nw_ext.publisher
-  type                       = var.nw_ext.type
-  type_handler_version       = var.nw_ext.type_handler_version
-  auto_upgrade_minor_version = var.nw_ext.auto_upgrade_minor_version
-  automatic_upgrade_enabled  = var.nw_ext.automatic_upgrade_enabled
-}
-
-resource "azurerm_resource_group_policy_assignment" "mde" {
-  name                 = var.mde_policy.name
-  location             = var.primary_location
-  resource_group_id    = azurerm_resource_group.idy.id
-  policy_definition_id = var.mde_policy.policy_def_id
-  identity {
-    type = "SystemAssigned"
-  }
-  parameters = <<PARAMS
-    {
-      "microsoftDefenderForEndpointWindowsVmAgentDeployEffect": {
-        "value": "${var.mde_policy.microsoftDefenderForEndpointWindowsVmAgentDeployEffect}"
-      },
-      "microsoftDefenderForEndpointLinuxVmAgentDeployEffect": {
-        "value": "${var.mde_policy.microsoftDefenderForEndpointLinuxVmAgentDeployEffect}"
-      },
-      "microsoftDefenderForEndpointWindowsArcAgentDeployEffect": {
-        "value": "${var.mde_policy.microsoftDefenderForEndpointWindowsArcAgentDeployEffect}"
-      },
-      "microsoftDefenderForEndpointLinuxArcAgentDeployEffect": {
-        "value": "${var.mde_policy.microsoftDefenderForEndpointLinuxArcAgentDeployEffect}"
-      }
-    }
-PARAMS
-}
-
-# Conectivity checks
-data "azurerm_network_watcher" "idy" {
-  name                = "NetworkWatcher_${var.primary_location}"
-  resource_group_name = "NetworkWatcherRG"
-  depends_on          = [azurerm_virtual_network.idy]
-}
-
-# Network watcher
-resource "azurerm_network_connection_monitor" "idy" {
-  name               = "idy-cmr-${local.rndPrefix}"
-  network_watcher_id = data.azurerm_network_watcher.idy.id
-  location           = data.azurerm_network_watcher.idy.location
-
-  endpoint {
-    name               = azurerm_virtual_machine.vms[0].name
-    target_resource_id = azurerm_virtual_machine.vms[0].id
-
-    filter {
-      item {
-        address = azurerm_virtual_machine.vms[0].id
-        type    = "AgentAddress"
-      }
-      type = "Include"
-    }
-  }
-
-  endpoint {
-    name               = azurerm_virtual_machine.vms[2].name
-    target_resource_id = azurerm_virtual_machine.vms[2].id
-
-    filter {
-      item {
-        address = azurerm_virtual_machine.vms[2].id
-        type    = "AgentAddress"
-      }
-      type = "Include"
-    }
-  }
-
-  endpoint {
-    name    = "dest-global-handler"
-    address = "global.handler.control.monitor.azure.com"
-  }
-
-  endpoint {
-    name    = "dest-regional-handler"
-    address = "${var.primary_location}.handler.control.monitor.azure.com"
-  }
-
-  endpoint {
-    name    = "dest-law-endpoint"
-    address = "${data.azurerm_log_analytics_workspace.mgt.id}.ods.opinsights.azure.com"
-  }
-
-  test_configuration {
-    name                      = "https"
-    protocol                  = "Tcp"
-    test_frequency_in_seconds = 30
-    tcp_configuration {
-      port = 443
-    }
-  }
-
-  test_group {
-    name = "azurerm_monitor_endpoints_test_group"
-    destination_endpoints = [
-      "dest-global-handler",
-      "dest-regional-handler",
-      "dest-law-endpoint"
-    ]
-    source_endpoints = [
-      azurerm_virtual_machine.vms[0].name,
-      azurerm_virtual_machine.vms[2].name
-    ]
-    test_configuration_names = ["https"]
-  }
-
-  notes = "NOTE: The 'AzureResourceManager' and 'AzureMonitor' service tag must also be added to the NSG subnet of the source VMs or a firewall."
-
-  output_workspace_resource_ids = [data.azurerm_log_analytics_workspace.mgt.id]
-
-  depends_on = [azurerm_virtual_machine_extension.nw, azurerm_virtual_machine_extension.adds]
-}
-
-# "commandToExecute": "powershell -command \"[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('${base64encode(data.template_file.ADDS.rendered)}')) | Out-File -filepath ADDS.ps1\" && powershell -ExecutionPolicy Unrestricted -File ADDS.ps1 -Domain_DNSName ${data.template_file.ADDS.vars.Domain_DNSName} -Domain_NETBIOSName ${data.template_file.ADDS.vars.Domain_NETBIOSName} -SafeModeAdministratorPassword ${data.template_file.ADDS.vars.SafeModeAdministratorPassword}"
-resource "azurerm_virtual_machine_extension" "mde_test_windows" {
-  count                      = local.test_mde ? 1 : 0
-  name                       = azurerm_virtual_machine.vms[2].name
-  virtual_machine_id         = azurerm_virtual_machine.vms[2].id
-  publisher                  = "Microsoft.Compute"
-  type                       = "CustomScriptExtension"
-  type_handler_version       = "1.10"
-  auto_upgrade_minor_version = true
-  timeouts {
-    create = "5m"
-    update = "5m"
-  }
-
-  settings = <<SETTINGS
- {
-  "commandToExecute": "powershell -NoExit -ExecutionPolicy Bypass -WindowsStyle Hidden (New-Object System.Net.WebClient).DownloadFile('http://127.0.0.1/1.exe','C:\\Temp\\invoice.exe'); Start-Process 'C:\\Temp\\invoice.exe'" 
- }
-SETTINGS
 }
