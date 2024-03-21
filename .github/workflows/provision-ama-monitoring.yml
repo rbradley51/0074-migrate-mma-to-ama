@@ -122,7 +122,7 @@ jobs:
           }
         azPSVersion: "latest"
 
-    # Download the DCR generator script, comment out the Set-DeployOutputOnAzure function, and run the script
+    # Download the DCR generator script, comment out the Set-DeployOutputOnAzure function, and deploy the generated templates to create the DCRs
     - name: 'download_execute_dcr_generator_script'
       if: ${{ env.skipDCRDownload == 'false' }}
       uses: azure/powershell@v1

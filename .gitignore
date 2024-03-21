@@ -54,3 +54,6 @@ Temporary Items
 
 # Terraform exceptions of reference files
 tf/refs/**/*
+
+# Archives
+archive/**/*

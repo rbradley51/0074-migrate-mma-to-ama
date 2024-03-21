@@ -1,4 +1,4 @@
-targetScope = 'subscription'
+targetScope = 'managementGroup'
 
 /*
 1. az stack group create --name ds02 --description 'testing-no-prompt-with-az-cli' -g rgp-idy --delete-all -f ./main-plt-idy.bicep -p ./main-plt-idy.parameters.json --deny-settings-mode none --yes --verbose
