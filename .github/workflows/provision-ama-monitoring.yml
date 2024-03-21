@@ -134,9 +134,12 @@ jobs:
           chmod +x az-scripts/Get-EndpointConnectionResult.ps1
           az-scripts/WorkspaceConfigToDCRMigrationTool.ps1 -SubscriptionId ${{ env.mgtSubscription }} -ResourceGroupName ${{ env.mgtResourceGroup }} -WorkspaceName ${{ env.mgtLogAnalyticsWorkspace }} -DCRName ${{ env.dcrNamePrefix }} -OutputFolder ${{ env.dcrExportPath }} -Verbose 
           $outputFiles = (Get-ChildItem -Path ${{ env.dcrExportPath }}).FullName
-          foreach ($file in $outputFiles) 
+          $templateFiles = $outputFiles | Where-Object { $_ -like "*template.json" }
+          foreach ($templateFile in $templateFiles) 
           {
             Write-Host ('-'*100)
-            Get-Content -Path $file
+            Get-Content -Path $templateFile
+            Write-Host ('-'*100)
+            New-AzResourceGroupDeployment -ResourceGroupName ${{ env.mgtResourceGroup }} -TemplateFile $templateFile -Verbose
           }
         azPSVersion: "latest"
