@@ -19,6 +19,11 @@ data "azurerm_resource_group" "iac" {
   name = var.rgp_iac
 }
 
+data "azurerm_resource_group" "idy" {
+  provider = azurerm.identity
+  name = var.rgp_idy
+}
+
 data "azurerm_user_assigned_identity" "umid" {
   provider = azurerm.iac
   name                = var.umi_name
@@ -38,11 +43,6 @@ data "azurerm_monitor_data_collection_rule" "dcr-ext" {
 }
 
 resource "random_uuid" "rnd" {
-}
-
-resource "azurerm_resource_group" "idy" {
-  name     = var.rgpName
-  location = var.primary_location
 }
 
 # resource "azurerm_monitor_data_collection_endpoint" "ama_dce" {

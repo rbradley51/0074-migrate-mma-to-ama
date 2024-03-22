@@ -1,4 +1,4 @@
-variable "rgpName" {
+variable "rgp_idy" {
   type        = string
   description = "values for resource group name"
   default     = "rgp-idy"
