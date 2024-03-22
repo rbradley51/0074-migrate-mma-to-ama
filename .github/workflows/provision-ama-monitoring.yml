@@ -48,13 +48,14 @@ jobs:
       dcrExportPath: dcr-export
       dcrNamePrefix: dcr # For DCR migration tool generated templates
       operation: plan # Allowable values: plan, apply, rollback
-       
+
     runs-on: ubuntu-latest
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
       run:
         shell: bash
+        working-directory: ${{ env.tfWorkingdir }}
 
     steps:
     # Checkout the repository to the GitHub Actions runner
