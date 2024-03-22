@@ -20,7 +20,6 @@ data "azurerm_resource_group" "iac" {
 }
 
 data "azurerm_resource_group" "idy" {
-  provider = azurerm.identity
   name = var.rgp_idy
 }
 
