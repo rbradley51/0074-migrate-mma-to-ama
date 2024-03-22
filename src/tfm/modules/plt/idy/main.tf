@@ -32,6 +32,7 @@ data "azurerm_monitor_data_collection_rule" "dcr" {
 }
 
 data "azurerm_monitor_data_collection_rule" "dcr-ext" {
+  provider = azurerm.management
   name                = var.dcr_type.dcr-ext
   resource_group_name = var.mgt_law.rgp
 }
