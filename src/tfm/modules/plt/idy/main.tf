@@ -16,13 +16,13 @@ data "azurerm_management_group" "tgt" {
 
 data "azurerm_resource_group" "iac" {
   provider = azurerm.iac
-  name = var.rgp_iac.name
+  name = var.rgp_iac
 }
 
 data "azurerm_user_assigned_identity" "umid" {
   provider = azurerm.iac
   name                = var.umi_name
-  resource_group_name = var.rgp_iac.name
+  resource_group_name = var.rgp_iac
 }
 
 data "azurerm_monitor_data_collection_rule" "dcr" {
