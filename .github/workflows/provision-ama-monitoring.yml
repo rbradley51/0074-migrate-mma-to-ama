@@ -47,7 +47,7 @@ jobs:
       dcrOutputPath: az-scripts/WorkspaceConfigToDCRMigrationTool.ps1
       dcrExportPath: dcr-export
       dcrNamePrefix: dcr # For DCR migration tool generated templates
-      operation: plan # Allowable values: plan, apply, rollback
+      operation: apply # Allowable values: plan, apply, rollback
 
     runs-on: ubuntu-latest
 
