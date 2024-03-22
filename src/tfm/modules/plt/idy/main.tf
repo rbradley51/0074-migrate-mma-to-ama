@@ -65,10 +65,10 @@ resource "azurerm_management_group_policy_assignment" "ama_initiative_dcr" {
   parameters = <<PARAMS
     {
       "enableProcessesAndDependencies": {
-        "value": "${var.ama_init_bool.enableProcessesAndDependencies}"
+        "value": ${var.ama_init_bool.enableProcessesAndDependencies}
       },
       "bringYourOwnUserAssignedManagedIdentity": {
-        "value": "${var.ama_init_bool.bringYourOwnUserAssignedManagedIdentity}"
+        "value": ${var.ama_init_bool.bringYourOwnUserAssignedManagedIdentity}
       },
       "userAssignedManagedIdentityName": {
         "value": "${data.azurerm_user_assigned_identity.umid.name}"
@@ -77,7 +77,7 @@ resource "azurerm_management_group_policy_assignment" "ama_initiative_dcr" {
         "value": "${data.azurerm_user_assigned_identity.umid.resource_group_name}"
       },
       "scopeToSupportedImages": {
-        "value": "${var.ama_init_bool.scopeToSupportedImages}"
+        "value": ${var.ama_init_bool.scopeToSupportedImages}
       },
       "dcrResourceId": {
         "value": "${var.ama_initiative.dcrResourceId}"
@@ -90,16 +90,17 @@ resource "azurerm_management_group_policy_assignment" "ama_initiative_dcr_ext" {
   name                 = var.ama_initiative.name
   policy_definition_id = var.ama_initiative.policy_set_def_id
   management_group_id  = data.azurerm_management_group.tgt.id
+  location = var.primary_location
   identity {
     type = "SystemAssigned"
   }
   parameters = <<PARAMS
     {
       "enableProcessesAndDependencies": {
-        "value": "${var.ama_init_bool.enableProcessesAndDependencies}"
+        "value": ${var.ama_init_bool.enableProcessesAndDependencies}
       },
       "bringYourOwnUserAssignedManagedIdentity": {
-        "value": "${var.ama_init_bool.bringYourOwnUserAssignedManagedIdentity}"
+        "value": ${var.ama_init_bool.bringYourOwnUserAssignedManagedIdentity}
       },
       "userAssignedManagedIdentityName": {
         "value": "${data.azurerm_user_assigned_identity.umid.name}"
@@ -108,7 +109,7 @@ resource "azurerm_management_group_policy_assignment" "ama_initiative_dcr_ext" {
         "value": "${data.azurerm_user_assigned_identity.umid.resource_group_name}"
       },
       "scopeToSupportedImages": {
-        "value": "${var.ama_init_bool.scopeToSupportedImages}"
+        "value": ${var.ama_init_bool.scopeToSupportedImages}
       },
       "dcrResourceId": {
         "value": "${var.ama_initiative.dcrExtResourceId}"
