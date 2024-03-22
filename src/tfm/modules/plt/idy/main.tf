@@ -10,14 +10,12 @@ data "azurerm_log_analytics_workspace" "mgt" {
   resource_group_name = var.mgt_law.rgp
 }
 
-data "azurerm_automation_account" "aaa" {
-  provider            = azurerm.management
-  name                = var.mgt_aaa.name
-  resource_group_name = var.mgt_aaa.rgp
-}
-
 data "azurerm_management_group" "org" {
   display_name = var.root_name
+}
+
+data "azurerm_management_group" "tgt" {
+  display_name = var.target_mg_name
 }
 
 data "azurerm_resource_group" "iac" {
@@ -30,6 +28,15 @@ data "azurerm_user_assigned_identity" "umid" {
   resource_group_name = azurerm_resource_group.iac.name
 }
 
+data "azurerm_monitor_data_collection_rule" "dcr" {
+  name                = var.dcr_type.dcr
+  resource_group_name = azurerm_resource_group.idy.name
+}
+
+data "azurerm_monitor_data_collection_rule" "dcr-ext" {
+  name                = var.dcr_type.dcr-ext
+  resource_group_name = azurerm_resource_group.idy.name
+}
 
 resource "random_uuid" "rnd" {
 }
@@ -39,21 +46,15 @@ resource "azurerm_resource_group" "idy" {
   location = var.primary_location
 }
 
-resource "time_sleep" "wait-for-ads1" {
-  depends_on      = [azurerm_virtual_machine_extension.adds]
-  create_duration = "120s" # Wait 2 minutes to allow the VM to reboot and stabilize ADDS services
-}
+# resource "azurerm_monitor_data_collection_endpoint" "ama_dce" {
+#   name                = var.ama_dce.name
+#   resource_group_name = azurerm_resource_group.mgt.name
+#   location            = var.primary_location
 
-resource "azurerm_monitor_data_collection_endpoint" "idy" {
-  name                = var.ama_dce.name
-  resource_group_name = azurerm_resource_group.idy.name
-  location            = var.primary_location
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
+#   lifecycle {
+#     create_before_destroy = true
+#   }
+# }
 # Create a data collection rule resource
 resource "azurerm_monitor_data_collection_rule" "idy" {
   name                        = var.ama_dcr.name
@@ -92,123 +93,63 @@ resource "azurerm_monitor_data_collection_rule" "idy" {
   }
 }
 
-# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/policy_set_definition
-
-resource "azurerm_management_group_policy_assignment" "umi" {
-  name                 = var.umi_policy.name
-  location             = var.primary_location
-  management_group_id  = data.azurerm_management_group.org.id
-  policy_definition_id = var.umi_policy.policy_def_id
+resource "azurerm_management_group_policy_assignment" "ama_initiative_dcr" {
+  name                 = var.ama_initiative.name
+  policy_definition_id = var.ama_initiative.policy_set_def_id
+  management_group_id  = data.azurerm_management_group.tgt.id
   identity {
     type = "SystemAssigned"
   }
   parameters = <<PARAMS
     {
-      "dcrResourceId": {
-        "value": "${azurerm_monitor_data_collection_rule.idy.id}"
-      },
-      "bringYourOwnUserAssignedManagedIdentity": {
-        "value": true
-      },
-      "userAssignedManagedIdentityName": {
-        "value": "${azurerm_user_assigned_identity.idy.name}"
-      },
-      "userAssignedManagedIdentityResourceGroup": {
-        "value": "${azurerm_resource_group.idy.name}"
-      },
-      "builtInIdentityResourceGroupLocation": {
-        "value": "${var.primary_location}"
-      }
-    }
-PARAMS
-}
-
-# Add a policy assignment to this resource group scope to assign the user assigned identity to virtual machines
-resource "azurerm_management_group_policy_assignment" "umi" {
-  name                 = var.umi_policy.name
-  location             = var.primary_location
-  management_group_id  = data.azurerm_management_group.org.id
-  policy_definition_id = var.umi_policy.policy_def_id
-  identity {
-    type = "SystemAssigned"
-  }
-  parameters = <<PARAMS
-    {
-      "dcrResourceId": {
-        "value": "${azurerm_monitor_data_collection_rule.idy.id}"
-      },
-      "bringYourOwnUserAssignedManagedIdentity": {
-        "value": true
-      },
-      "userAssignedManagedIdentityName": {
-        "value": "${azurerm_user_assigned_identity.idy.name}"
-      },
-      "userAssignedManagedIdentityResourceGroup": {
-        "value": "${azurerm_resource_group.idy.name}"
-      },
-      "builtInIdentityResourceGroupLocation": {
-        "value": "${var.primary_location}"
-      }
-    }
-PARAMS
-}
-
-resource "azurerm_management_group_policy_assignment" "ama_vm" {
-  name                 = var.ama_policy.nameVM
-  display_name         = "${var.ama_policy.nameVM}-assignment"
-  location             = var.primary_location
-  management_group_id  = data.azurerm_management_group.org.id
-  policy_definition_id = var.ama_policy.vm_policy_def_id
-
-  identity {
-    type = "SystemAssigned"
-  }
-  parameters = <<PARAMS
-    {
-      "dcrResourceId": {
-        "value": "${azurerm_monitor_data_collection_rule.idy.id}"
-      },
-      "bringYourOwnUserAssignedManagedIdentity": {
-        "value": true
-      },
-      "userAssignedManagedIdentityName": {
-        "value": "${azurerm_user_assigned_identity.idy.name}"
-      },
-      "userAssignedManagedIdentityResourceGroup": {
-        "value": "${azurerm_resource_group.idy.name}"
-      },
       "enableProcessesAndDependencies": {
-        "value": true
+        "value": "${var.ama_init_bool.enableProcessesAndDependencies}"
+      },
+      "bringYourOwnUserAssignedManagedIdentity": {
+        "value": "${var.ama_init_bool.bringYourOwnUserAssignedManagedIdentity}"
+      },
+      "userAssignedManagedIdentityName": {
+        "value": "${data.azurerm_user_assigned_identity.umid.name}"
+      },
+      "userAssignedManagedIdentityResourceGroup": {
+        "value": "${data.azurerm_user_assigned_identity.umid.resource_group_name}"
+      },
+      "scopeToSupportedImages": {
+        "value": "${var.ama_init_bool.scopeToSupportedImages}"
+      },
+      "dcrResourceId": {
+        "value": "${var.ama_initiative.dcrResourceId}"
       }
     }
 PARAMS
 }
 
-resource "azurerm_management_group_policy_assignment" "ama_vmss" {
-  name                 = var.ama_policy.nameVMSS
-  display_name         = "${var.ama_policy.nameVMSS}-assignment"
-  location             = var.primary_location
-  management_group_id  = data.azurerm_management_group.org.id
-  policy_definition_id = var.ama_policy.vmss_policy_def_id
+resource "azurerm_management_group_policy_assignment" "ama_initiative_dcr_ext" {
+  name                 = var.ama_initiative.name
+  policy_definition_id = var.ama_initiative.policy_set_def_id
+  management_group_id  = data.azurerm_management_group.tgt.id
   identity {
     type = "SystemAssigned"
   }
   parameters = <<PARAMS
     {
-      "dcrResourceId": {
-        "value": "${azurerm_monitor_data_collection_rule.idy.id}"
+      "enableProcessesAndDependencies": {
+        "value": "${var.ama_init_bool.enableProcessesAndDependencies}"
       },
       "bringYourOwnUserAssignedManagedIdentity": {
-        "value": true
+        "value": "${var.ama_init_bool.bringYourOwnUserAssignedManagedIdentity}"
       },
       "userAssignedManagedIdentityName": {
-        "value": "${azurerm_user_assigned_identity.idy.name}"
+        "value": "${data.azurerm_user_assigned_identity.umid.name}"
       },
       "userAssignedManagedIdentityResourceGroup": {
-        "value": "${azurerm_resource_group.idy.name}"
+        "value": "${data.azurerm_user_assigned_identity.umid.resource_group_name}"
       },
-      "enableProcessesAndDependencies": {
-        "value": true
+      "scopeToSupportedImages": {
+        "value": "${var.ama_init_bool.scopeToSupportedImages}"
+      },
+      "dcrResourceId": {
+        "value": "${var.ama_initiative.dcrExtResourceId}"
       }
     }
 PARAMS

@@ -2,7 +2,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = ">=3.96.0"
+      version = ">=3.97.1"
       configuration_aliases = [
         azurerm.connectivity,
         azurerm.management,
@@ -64,11 +64,11 @@ module "idy" {
     azurerm.management = azurerm.management
     azurerm.iac = azurerm.iac
   }
-
   primary_location = var.primary_location
   secondary_location = var.secondary_location
   root_id = var.root_id
   root_name = var.root_name
+  target_mg_id = var.target_mg_id
+  target_mg_name = var.target_mg_name
   identitySubscriptionId = var.identitySubscriptionId
-  pw = var.pw
 }

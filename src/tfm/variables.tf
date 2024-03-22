@@ -7,6 +7,17 @@ variable "root_name" {
   type    = string
   default = "org-name"
 }
+variable "target_mg_id" {
+  type        = string
+  description = "target management group id"
+  default = "org-id-platform"
+}
+
+variable "target_mg_name" {
+  type        = string
+  description = "target management group name"
+  default = "Platform"
+}
 
 variable "primary_location" {
   type    = string
@@ -21,10 +32,6 @@ variable "identitySubscriptionId" {
   type    = string
   default = "1d790e78-7852-498d-8087-f5d48686a50e"
 }
-variable "pw" {
-  type = string
-}
-
 variable "managementSubscriptionId" {
   type    = string
   default = "019181ad-6356-46c6-b584-444846096085"

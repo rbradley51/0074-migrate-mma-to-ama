@@ -35,8 +35,9 @@ jobs:
       uamiRoleAssignmentLogAnalyticsContrib: "Log Analytics Contributor"
       uamiRoleAssignmentArcContrib: "Azure Arc Connected Resource Administrator"
       azCliVer: 2.58.0
+      tfVersion: 1.7.5
       bicepVer: 0.26.54
-      operation: plan # Allowable values: plan, apply, rollback
+      tfWorkingdir: src/tfm
       skipUAMI: false # Set to true to skip UAMI creation, false to create UAMI if necessary
       skipDriveSpace: true # Set to true to skip drive space check, false to check drive space
       skipEndpointCheck: true # Set to true to skip endpoint check, false to check endpoint connectivity
@@ -46,7 +47,8 @@ jobs:
       dcrOutputPath: az-scripts/WorkspaceConfigToDCRMigrationTool.ps1
       dcrExportPath: dcr-export
       dcrNamePrefix: dcr # For DCR migration tool generated templates
- 
+      operation: plan # Allowable values: plan, apply, rollback
+       
     runs-on: ubuntu-latest
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
@@ -143,3 +145,68 @@ jobs:
             New-AzResourceGroupDeployment -ResourceGroupName ${{ env.mgtResourceGroup }} -TemplateFile $templateFile -Verbose
           }
         azPSVersion: "latest"
+
+    # Setup Terraform (requires unzip on Ubuntu. Run 'sudo apt-get install unzip' on self-hosted runner)
+    - name: 'terraform_setup'
+      if: ${{ env.operation == 'plan' || env.operation == 'apply' || env.operation == 'rollback' }}
+      id: setup  
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: ${{ env.tfVersion }}
+        terraform_wrapper: true   
+
+    # Check version
+    - name: 'terraform_version_check'
+      if: ${{ env.operation == 'plan' || env.operation == 'apply' || env.operation == 'rollback' }}
+      id: version
+      run: terraform version
+
+    # Format
+    - name: 'terraform_format'
+      if: ${{ env.operation == 'plan' || env.operation == 'apply' || env.operation == 'rollback' }}
+      id: format
+      run: terraform fmt -recursive
+
+    - name: 'terraform_init'
+      if: ${{ env.operation == 'plan' || env.operation == 'apply' }}
+      id: init
+      run: terraform init
+      env:
+        ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        ARM_USE_OIDC: true
+
+    # Plan   
+    - name: 'terraform_plan'
+      if: ${{ env.operation == 'plan' || env.operation == 'apply' || env.operation == 'rollback' }}
+      id: plan
+      run: terraform plan -lock=false -out=tfplan
+      timeout-minutes: 20
+      env:
+        ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        ARM_USE_OIDC: true
+
+    # Deploy
+    - name: 'terraform_apply'
+      if: ${{ env.operation == 'apply' }}
+      id: apply
+      run: terraform apply -auto-approve
+      env:
+        ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        ARM_USE_OIDC: true
+
+    # Rollback
+    - name: 'terraform_rollback'
+      if: ${{ env.operation == 'rollback' }}
+      id: rollback
+      run: terraform apply -auto-approve
+      env:
+        ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        ARM_USE_OIDC: true
