@@ -70,9 +70,9 @@ variable "ama_dce" {
 }
 variable "ama_initiative" {
   type = map(string)
-  description = "Enable Azure Monitor for VMs with Azure Monitoring Agent(AMA)"
+  description = "Enable Azure Monitor for VMs AMA"
   default = {
-    name = "924bfe3a-762f-40e7-86dd-5c8b95eb09e6"
+    name = "enable-az-monitor-ama"
     display_name = "Enable Azure Monitor for VMs with Azure Monitoring Agent(AMA)"
     policy_set_def_id = "/providers/Microsoft.Authorization/policySetDefinitions/924bfe3a-762f-40e7-86dd-5c8b95eb09e6"
     effect = "DeployIfNotExists"
