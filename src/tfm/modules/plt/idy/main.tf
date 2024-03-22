@@ -10,24 +10,23 @@ data "azurerm_log_analytics_workspace" "mgt" {
   resource_group_name = var.mgt_law.rgp
 }
 
-data "azurerm_management_group" "org" {
-  display_name = var.root_name
-}
-
 data "azurerm_management_group" "tgt" {
   display_name = var.target_mg_name
 }
 
 data "azurerm_resource_group" "iac" {
-  name = var.rgpIac
+  provider = azurerm.iac
+  name = var.rgp_iac.name
 }
 
 data "azurerm_user_assigned_identity" "umid" {
+  provider = azurerm.iac
   name                = var.umi_name
-  resource_group_name = data.azurerm_resource_group.iac.name
+  resource_group_name = var.rgp_iac.name
 }
 
 data "azurerm_monitor_data_collection_rule" "dcr" {
+  provider = azurerm.management
   name                = var.dcr_type.dcr
   resource_group_name = var.mgt_law.rgp
 }

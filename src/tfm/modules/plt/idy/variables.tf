@@ -4,7 +4,7 @@ variable "rgpName" {
   default     = "rgp-idy"
 }
 
-variable "rgpIac" {
+variable "rgp_iac" {
   type        = string
   description = "values for resource group name"
   default     = "rgp-iac"
