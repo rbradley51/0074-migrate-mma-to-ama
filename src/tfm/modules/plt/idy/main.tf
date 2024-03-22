@@ -1,3 +1,35 @@
+
+provider "azurerm" {
+  use_oidc = true
+  subscription_id = var.identitySubscriptionId
+  features {
+    template_deployment {
+      delete_nested_items_during_deletion = true
+    }
+  }
+}
+
+provider "azurerm" {
+  alias = "connectivity"
+  use_oidc = true
+  subscription_id = var.connectivitySubscriptionId
+  features {
+    template_deployment {
+      delete_nested_items_during_deletion = true
+    }
+  }
+}
+
+provider "azurerm" {
+  alias = "management"
+  use_oidc = true
+  subscription_id = var.managementSubscriptionId
+  features {
+    template_deployment {
+      delete_nested_items_during_deletion = true
+    }
+  }
+}
 data "azurerm_virtual_network" "con" {
   provider            = azurerm.connectivity
   name                = var.hub_vnt.name
