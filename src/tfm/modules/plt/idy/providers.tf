@@ -5,7 +5,8 @@ terraform {
       version = ">=3.97.1"
       configuration_aliases = [
         azurerm.connectivity,
-        azurerm.management
+        azurerm.management,
+        azurerm.iac
       ]
     }
   }
