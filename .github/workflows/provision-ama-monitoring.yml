@@ -52,11 +52,11 @@ env:
   dcr-ref-id: '/providers/microsoft.authorization/policysetdefinitions/924bfe3a-762f-40e7-86dd-5c8b95eb09e6'
   operation: apply # Allowable values: plan, apply, rollback
 
-# Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
-defaults:
-  run:
-    shell: bash
-    working-directory: ${{ env.tfWorkingdir }}
+  # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+  defaults:
+    run:
+      shell: bash
+      working-directory: ${{ env.tfWorkingdir }}
   
 runs-on: ubuntu-latest  
 
