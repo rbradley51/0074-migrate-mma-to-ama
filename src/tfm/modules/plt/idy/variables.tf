@@ -68,16 +68,23 @@ variable "ama_dce" {
   }
 
 }
-variable "ama_initiative" {
+variable "ama_initiative_assignment" {
   type = map(string)
   description = "Enable Azure Monitor for VMs AMA"
   default = {
-    name = "enable-az-monitor-ama"
+    name_dcr = "enable-az-monitor-ama-dcr"
+    name_dcr_ext = "enable-az-monitor-ama-dcr-ext"
     display_name = "Enable Azure Monitor for VMs with Azure Monitoring Agent(AMA)"
     policy_set_def_id = "/providers/Microsoft.Authorization/policySetDefinitions/924bfe3a-762f-40e7-86dd-5c8b95eb09e6"
     effect = "DeployIfNotExists"
     dcrResourceId = "/subscriptions/019181ad-6356-46c6-b584-444846096085/resourceGroups/rgp-idy/providers/Microsoft.Insights/dataCollectionRules/dcr"
     dcrExtResourceId = "/subscriptions/019181ad-6356-46c6-b584-444846096085/resourceGroups/rgp-idy/providers/Microsoft.Insights/dataCollectionRules/dcr-extensions"
+    assignment_name_dcr = "enable-az-monitor-ama-assignment_dcr"
+    assignment_name_dcr_ext = "enable-az-monitor-ama-assignment_dcr-ext"
+    assignment_id_dcr = "/providers/microsoft.management/managementgroups/org-id-platform/providers/microsoft.authorization/policyassignments/enable-az-monitor-ama-dcr"
+    assignment_id_dcr_ext = "/providers/microsoft.management/managementgroups/org-id-platform/providers/microsoft.authorization/policyassignments/enable-az-monitor-ama-dcr-ext"
+    remediation_name_dcr = "remediate-az-monitor-ama-dcr"
+    remediation_name_dcr_ext = "remediate-az-monitor-ama-dcr-ext"
   }
 }
 
@@ -85,7 +92,7 @@ variable "ama_init_bool" {
   type        = map(bool)
   description = "Boolean values for Azure Monitor for VMs with Azure Monitoring Agent(AMA)"
   default     = {
-    enableProcessesAndDependencies = true
+    enableProcessesAndDependencies = false
     bringYourOwnUserAssignedManagedIdentity = true
     scopeToSupportedImages = true
   }  
@@ -134,3 +141,5 @@ variable "dcr_type" {
     dcr-ext  = "dcr-extensions"
   }
 }
+
+# az policy remediation create -n myRemediation --policy-assignment eeb18edc813c42d0ad5a9eab --definition-reference-id auditVMPolicyReference

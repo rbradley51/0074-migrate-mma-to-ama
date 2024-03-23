@@ -54,8 +54,43 @@ resource "random_uuid" "rnd" {
 #   }
 # }
 
-resource "azurerm_management_group_policy_assignment" "ama_initiative_dcr" {
-  name                 = var.ama_initiative.name
+resource "azurerm_management_group_policy_assignment" "ama_initiative_assignment_dcr" {
+  name                 = var.ama_initiative_assignment.name_dcr
+  policy_definition_id = var.ama_initiative_assignment.policy_set_def_id
+  management_group_id  = data.azurerm_management_group.tgt.id
+  location = var.primary_location
+  identity {
+    type = "SystemAssigned"
+  }
+  parameters = <<PARAMS
+    {
+      "enableProcessesAndDependencies": {
+        "value": ${var.ama_init_bool.enableProcessesAndDependencies}
+      },
+      "bringYourOwnUserAssignedManagedIdentity": {
+        "value": ${var.ama_init_bool.bringYourOwnUserAssignedManagedIdentity}
+      },
+      "userAssignedManagedIdentityName": {
+        "value": "${data.azurerm_user_assigned_identity.umid.name}"
+      },
+      "userAssignedManagedIdentityResourceGroup": {
+        "value": "${data.azurerm_user_assigned_identity.umid.resource_group_name}"
+      },
+      "scopeToSupportedImages": {
+        "value": ${var.ama_init_bool.scopeToSupportedImages}
+      },
+      "dcrResourceId": {
+        "value": "${var.ama_initiative.dcrResourceId}"
+      }
+    }
+PARAMS
+  provisioner "local-exec" {
+    command = "az policy state trigger-scan -g ${data.azurerm_resource_group.idy.name} --verbose"
+  }
+}
+
+resource "azurerm_management_group_policy_assignment" "ama_initiative_assignment_dcr_ext" {
+  name                 = var.ama_initiative_assignment.name_dcr_ext
   policy_definition_id = var.ama_initiative.policy_set_def_id
   management_group_id  = data.azurerm_management_group.tgt.id
   location = var.primary_location
@@ -84,36 +119,25 @@ resource "azurerm_management_group_policy_assignment" "ama_initiative_dcr" {
       }
     }
 PARAMS
+  provisioner "local-exec" {
+    command = "az policy state trigger-scan -g ${data.azurerm_resource_group.idy.name} --verbose"
+  }
 }
 
-resource "azurerm_management_group_policy_assignment" "ama_initiative_dcr_ext" {
-  name                 = var.ama_initiative.name
-  policy_definition_id = var.ama_initiative.policy_set_def_id
+
+
+resource "azurerm_management_group_policy_remediation" "dcr_remediation" {
+  name                 = var.ama_initiative_assignment.remediation_name_dcr
   management_group_id  = data.azurerm_management_group.tgt.id
-  location = var.primary_location
-  identity {
-    type = "SystemAssigned"
-  }
-  parameters = <<PARAMS
-    {
-      "enableProcessesAndDependencies": {
-        "value": ${var.ama_init_bool.enableProcessesAndDependencies}
-      },
-      "bringYourOwnUserAssignedManagedIdentity": {
-        "value": ${var.ama_init_bool.bringYourOwnUserAssignedManagedIdentity}
-      },
-      "userAssignedManagedIdentityName": {
-        "value": "${data.azurerm_user_assigned_identity.umid.name}"
-      },
-      "userAssignedManagedIdentityResourceGroup": {
-        "value": "${data.azurerm_user_assigned_identity.umid.resource_group_name}"
-      },
-      "scopeToSupportedImages": {
-        "value": ${var.ama_init_bool.scopeToSupportedImages}
-      },
-      "dcrResourceId": {
-        "value": "${var.ama_initiative.dcrExtResourceId}"
-      }
-    }
-PARAMS
+  policy_assignment_id = var.ama_initiative_assignment.assignment_id_dcr
+  location_filters = [ var.primary_location ]
 }
+
+resource "azurerm_management_group_policy_remediation" "dcr_ext_remediation" {
+  name                 = var.ama_initiative_assignment.remediation_name_dcr_ext
+  management_group_id  = data.azurerm_management_group.tgt.id
+  policy_assignment_id = var.ama_initiative_assignment.assignment_id_dcr_ext
+  location_filters = [ var.primary_location ]
+}
+
+
