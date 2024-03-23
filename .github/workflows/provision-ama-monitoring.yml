@@ -208,7 +208,7 @@ jobs:
     name: 'provision-deprovision'
     runs-on: ubuntu-latest
     environment: prd
-    needs: pre-requisites
+    needs: prepare
     steps:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
