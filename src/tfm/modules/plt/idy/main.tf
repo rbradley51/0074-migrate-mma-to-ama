@@ -125,19 +125,3 @@ PARAMS
 }
 
 
-
-resource "azurerm_management_group_policy_remediation" "dcr_remediation" {
-  name                 = var.ama_initiative_assignment.remediation_name_dcr
-  management_group_id  = data.azurerm_management_group.tgt.id
-  policy_assignment_id = var.ama_initiative_assignment.assignment_id_dcr
-  location_filters = [ var.primary_location ]
-}
-
-resource "azurerm_management_group_policy_remediation" "dcr_ext_remediation" {
-  name                 = var.ama_initiative_assignment.remediation_name_dcr_ext
-  management_group_id  = data.azurerm_management_group.tgt.id
-  policy_assignment_id = var.ama_initiative_assignment.assignment_id_dcr_ext
-  location_filters = [ var.primary_location ]
-}
-
-

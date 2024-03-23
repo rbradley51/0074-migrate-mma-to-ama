@@ -47,6 +47,14 @@ jobs:
       dcrOutputPath: az-scripts/WorkspaceConfigToDCRMigrationTool.ps1
       dcrExportPath: dcr-export
       dcrNamePrefix: dcr # For DCR migration tool generated templates
+      remediation: { 
+        "remediate-dcr": "rem-dcr", 
+        "remediate-dcr-ext": "rem-dcr-ext" 
+        }
+      policy-assignments: { 
+        "ama-assign-dcr": "ama-assign-dcr", 
+        "ama-assign-dcr-ext": "ama-assign-dcr-ext" 
+        }
       operation: apply # Allowable values: plan, apply, rollback
 
     runs-on: ubuntu-latest
@@ -200,6 +208,17 @@ jobs:
         ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
         ARM_USE_OIDC: true
+
+    - name: "remediate_policy_set"
+      if: ${{ env.operation == 'apply' }}
+      uses: azure/cli@v2
+      with:
+        inlineScript: |
+          az account set --subscription ${{ env.idySubscription }}
+          az policy state trigger-scan --verbose
+          az policy remediation create -g ${{ env.rgpName }} -n ${{ env.remediation.remediate-dcr }} --policy-assignment ${{ env.policy-assignments.ama-assign-dcr }} --verbose
+          az policy remediation create -g ${{ env.rgpName }} -n ${{ env.remediation.remediate-dcr-ext }} --policy-assignment ${{ env.policy-assignments.ama-assign-dcr-ext }} --verbose
+        azcliversion: ${{ env.azCliVer }}
 
     # Rollback
     - name: 'terraform_rollback'
