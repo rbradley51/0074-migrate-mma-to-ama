@@ -57,8 +57,6 @@ env:
     run:
       shell: bash
       working-directory: ${{ env.tfWorkingdir }}
-  
-runs-on: ubuntu-latest  
 
 jobs:
   prepare:
