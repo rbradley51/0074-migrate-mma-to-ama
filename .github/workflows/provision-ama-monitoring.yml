@@ -48,9 +48,9 @@ jobs:
       dcrExportPath: dcr-export
       dcrNamePrefix: dcr # For DCR migration tool generated templates
       remediate-dcr: rem-dcr 
-      remediate-dcr-ext: rem-dcr-ext 
-      policy-asm-dcr: ama-assign-dcr
-      policy-asm-dcr-ext: ama-assign-dcr-ext
+      remediate-dcr-ext: rem-dcr-ext
+      policy-asm-dcr: enable-ama-dcr
+      policy-asm-dcr-ext: enable-ama-dcr-ext
       operation: apply # Allowable values: plan, apply, rollback
 
     runs-on: ubuntu-latest

@@ -79,8 +79,6 @@ variable "ama_initiative_assignment" {
     effect = "DeployIfNotExists"
     dcrResourceId = "/subscriptions/019181ad-6356-46c6-b584-444846096085/resourceGroups/rgp-idy/providers/Microsoft.Insights/dataCollectionRules/dcr"
     dcrExtResourceId = "/subscriptions/019181ad-6356-46c6-b584-444846096085/resourceGroups/rgp-idy/providers/Microsoft.Insights/dataCollectionRules/dcr-extensions"
-    assignment_name_dcr = "ama-assign-dcr"
-    assignment_name_dcr_ext = "ama-assign-dcr-ext"
     assignment_id_dcr = "/providers/microsoft.management/managementgroups/org-id-platform/providers/microsoft.authorization/policyassignments/enable-az-monitor-ama-dcr"
     assignment_id_dcr_ext = "/providers/microsoft.management/managementgroups/org-id-platform/providers/microsoft.authorization/policyassignments/enable-az-monitor-ama-dcr-ext"
     remediation_name_dcr = "remediate-az-monitor-ama-dcr"
