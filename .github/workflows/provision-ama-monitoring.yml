@@ -51,7 +51,7 @@ jobs:
       remediate-dcr-ext: rem-dcr-ext
       policy-asm-dcr: enable-ama-dcr
       policy-asm-dcr-ext: enable-ama-dcr-ext
-      dcr-ref-id: '/providers/Microsoft.Authorization/policyDefinitions/d367bd60-64ca-4364-98ea-276775bddd94'
+      dcr-ref-id: '/providers/microsoft.authorization/policysetdefinitions/924bfe3a-762f-40e7-86dd-5c8b95eb09e6'
       operation: apply # Allowable values: plan, apply, rollback
 
     runs-on: ubuntu-latest
