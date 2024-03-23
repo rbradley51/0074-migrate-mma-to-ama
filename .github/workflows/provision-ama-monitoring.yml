@@ -56,7 +56,7 @@ env:
 defaults:
   run:
     shell: bash
-    working-directory: ${{ env.tfWorkingdir }}
+    working-directory: src/tfm
 
 jobs:
   prepare:
