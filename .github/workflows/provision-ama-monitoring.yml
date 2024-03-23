@@ -51,6 +51,7 @@ jobs:
       remediate-dcr-ext: rem-dcr-ext
       policy-asm-dcr: enable-ama-dcr
       policy-asm-dcr-ext: enable-ama-dcr-ext
+      dcr-ref-id: '/providers/Microsoft.Authorization/policyDefinitions/d367bd60-64ca-4364-98ea-276775bddd94'
       operation: apply # Allowable values: plan, apply, rollback
 
     runs-on: ubuntu-latest
@@ -212,8 +213,10 @@ jobs:
         inlineScript: |
           az account set --subscription ${{ env.idySubscription }}
           az policy state trigger-scan --verbose
-          az policy remediation create -g ${{ env.rgpName }} -n ${{ env.remediate-dcr }} --policy-assignment ${{ env.policy-asm-dcr }} --verbose
-          az policy remediation create -g ${{ env.rgpName }} -n ${{ env.remediate-dcr-ext }} --policy-assignment ${{ env.policy-asm-dcr-ext }} --verbose
+          az policy remediation create -g ${{ env.rgpName }} -n ${{ env.remediate-dcr }} --policy-assignment ${{ env.policy-asm-dcr }} \
+          --definition-reference-id ${{ env.dcr-ref-id }} --verbose
+          az policy remediation create -g ${{ env.rgpName }} -n ${{ env.remediate-dcr-ext }} --policy-assignment ${{ env.policy-asm-dcr-ext }} \
+          --definition-reference-id ${{ env.dcr-ref-id }} --verbose
         azcliversion: ${{ env.azCliVer }}
 
     # Rollback

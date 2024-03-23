@@ -84,9 +84,6 @@ resource "azurerm_management_group_policy_assignment" "ama_initiative_assignment
       }
     }
 PARAMS
-  provisioner "local-exec" {
-    command = "az policy state trigger-scan -g ${data.azurerm_resource_group.idy.name} --verbose"
-  }
 }
 
 resource "azurerm_management_group_policy_assignment" "ama_initiative_assignment_dcr_ext" {
@@ -119,9 +116,6 @@ resource "azurerm_management_group_policy_assignment" "ama_initiative_assignment
       }
     }
 PARAMS
-  provisioner "local-exec" {
-    command = "az policy state trigger-scan -g ${data.azurerm_resource_group.idy.name} --verbose"
-  }
 }
 
 
