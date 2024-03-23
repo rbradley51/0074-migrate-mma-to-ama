@@ -14,49 +14,49 @@ permissions:
   id-token: write
   contents: read
 
-  env:
-    AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-    AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-    AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-    uamiName: umi-ama-mig-001
-    uamiResourceGroup: rgp-iac
-    idySubscription: "1d790e78-7852-498d-8087-f5d48686a50e"
-    mgtSubscription: "019181ad-6356-46c6-b584-444846096085"
-    mgtResourceGroup: rg-management
-    mgtLogAnalyticsWorkspace: log-management
-    lawId: "11de000e-9725-45e5-9530-3e291e1654b1"
-    rgpName: rgp-idy
-    rgpLocation: centralus
-    uamiLocation: eastus2
-    uamiRoleAssignmentVmContrib: "Virtual Machine Contributor"
-    uamiRoleAssignmentLogAnalyticsContrib: "Log Analytics Contributor"
-    uamiRoleAssignmentArcContrib: "Azure Arc Connected Resource Administrator"
-    azCliVer: 2.58.0
-    tfVersion: 1.7.5
-    bicepVer: 0.26.54
-    tfWorkingdir: src/tfm
-    skipUAMI: false # Set to true to skip UAMI creation, false to create UAMI if necessary
-    skipDriveSpace: true # Set to true to skip drive space check, false to check drive space
-    skipEndpointCheck: true # Set to true to skip endpoint check, false to check endpoint connectivity
-    skipMMAStatus: false # Set to true to skip MMA status check, false to check MMA status
-    skipDCRDownload: false # Set to true to skip DCR download, false to download DCR
-    skipRemediate: true # Set to true to skip remediation, false to remediate
-    dcrUrl: 'https://raw.githubusercontent.com/microsoft/AzureMonitorCommunity/master/Azure%20Services/Azure%20Monitor/Agents/Migration%20Tools/DCR%20Config%20Generator/WorkspaceConfigToDCRMigrationTool.ps1'
-    dcrOutputPath: az-scripts/WorkspaceConfigToDCRMigrationTool.ps1
-    dcrExportPath: dcr-export
-    dcrNamePrefix: dcr # For DCR migration tool generated templates
-    remediate-dcr: rem-dcr 
-    remediate-dcr-ext: rem-dcr-ext
-    policy-asm-dcr: enable-ama-dcr
-    policy-asm-dcr-ext: enable-ama-dcr-ext
-    dcr-ref-id: '/providers/microsoft.authorization/policysetdefinitions/924bfe3a-762f-40e7-86dd-5c8b95eb09e6'
-    operation: apply # Allowable values: plan, apply, rollback
+env:
+  AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  uamiName: umi-ama-mig-001
+  uamiResourceGroup: rgp-iac
+  idySubscription: "1d790e78-7852-498d-8087-f5d48686a50e"
+  mgtSubscription: "019181ad-6356-46c6-b584-444846096085"
+  mgtResourceGroup: rg-management
+  mgtLogAnalyticsWorkspace: log-management
+  lawId: "11de000e-9725-45e5-9530-3e291e1654b1"
+  rgpName: rgp-idy
+  rgpLocation: centralus
+  uamiLocation: eastus2
+  uamiRoleAssignmentVmContrib: "Virtual Machine Contributor"
+  uamiRoleAssignmentLogAnalyticsContrib: "Log Analytics Contributor"
+  uamiRoleAssignmentArcContrib: "Azure Arc Connected Resource Administrator"
+  azCliVer: 2.58.0
+  tfVersion: 1.7.5
+  bicepVer: 0.26.54
+  tfWorkingdir: src/tfm
+  skipUAMI: false # Set to true to skip UAMI creation, false to create UAMI if necessary
+  skipDriveSpace: true # Set to true to skip drive space check, false to check drive space
+  skipEndpointCheck: true # Set to true to skip endpoint check, false to check endpoint connectivity
+  skipMMAStatus: false # Set to true to skip MMA status check, false to check MMA status
+  skipDCRDownload: false # Set to true to skip DCR download, false to download DCR
+  skipRemediate: true # Set to true to skip remediation, false to remediate
+  dcrUrl: 'https://raw.githubusercontent.com/microsoft/AzureMonitorCommunity/master/Azure%20Services/Azure%20Monitor/Agents/Migration%20Tools/DCR%20Config%20Generator/WorkspaceConfigToDCRMigrationTool.ps1'
+  dcrOutputPath: az-scripts/WorkspaceConfigToDCRMigrationTool.ps1
+  dcrExportPath: dcr-export
+  dcrNamePrefix: dcr # For DCR migration tool generated templates
+  remediate-dcr: rem-dcr 
+  remediate-dcr-ext: rem-dcr-ext
+  policy-asm-dcr: enable-ama-dcr
+  policy-asm-dcr-ext: enable-ama-dcr-ext
+  dcr-ref-id: '/providers/microsoft.authorization/policysetdefinitions/924bfe3a-762f-40e7-86dd-5c8b95eb09e6'
+  operation: apply # Allowable values: plan, apply, rollback
 
-  # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
-  defaults:
-    run:
-      shell: bash
-      working-directory: ${{ env.tfWorkingdir }}
+# Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+defaults:
+  run:
+    shell: bash
+    working-directory: ${{ env.tfWorkingdir }}
 
 jobs:
   prepare:
