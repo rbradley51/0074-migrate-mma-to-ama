@@ -43,6 +43,7 @@ jobs:
       skipEndpointCheck: true # Set to true to skip endpoint check, false to check endpoint connectivity
       skipMMAStatus: false # Set to true to skip MMA status check, false to check MMA status
       skipDCRDownload: false # Set to true to skip DCR download, false to download DCR
+      skipRemediate: true # Set to true to skip remediation, false to remediate
       dcrUrl: 'https://raw.githubusercontent.com/microsoft/AzureMonitorCommunity/master/Azure%20Services/Azure%20Monitor/Agents/Migration%20Tools/DCR%20Config%20Generator/WorkspaceConfigToDCRMigrationTool.ps1'
       dcrOutputPath: az-scripts/WorkspaceConfigToDCRMigrationTool.ps1
       dcrExportPath: dcr-export
@@ -221,7 +222,7 @@ jobs:
 
     # Rollback
     - name: 'terraform_rollback'
-      if: ${{ env.operation == 'rollback' }}
+      if: ${{ env.operation == 'rollback' || env.skipRemediate == false }}
       id: rollback
       run: terraform apply -auto-approve
       env:
