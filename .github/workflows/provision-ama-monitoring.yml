@@ -14,55 +14,57 @@ permissions:
   id-token: write
   contents: read
 
+  env:
+    AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+    AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+    uamiName: umi-ama-mig-001
+    uamiResourceGroup: rgp-iac
+    idySubscription: "1d790e78-7852-498d-8087-f5d48686a50e"
+    mgtSubscription: "019181ad-6356-46c6-b584-444846096085"
+    mgtResourceGroup: rg-management
+    mgtLogAnalyticsWorkspace: log-management
+    lawId: "11de000e-9725-45e5-9530-3e291e1654b1"
+    rgpName: rgp-idy
+    rgpLocation: centralus
+    uamiLocation: eastus2
+    uamiRoleAssignmentVmContrib: "Virtual Machine Contributor"
+    uamiRoleAssignmentLogAnalyticsContrib: "Log Analytics Contributor"
+    uamiRoleAssignmentArcContrib: "Azure Arc Connected Resource Administrator"
+    azCliVer: 2.58.0
+    tfVersion: 1.7.5
+    bicepVer: 0.26.54
+    tfWorkingdir: src/tfm
+    skipUAMI: false # Set to true to skip UAMI creation, false to create UAMI if necessary
+    skipDriveSpace: true # Set to true to skip drive space check, false to check drive space
+    skipEndpointCheck: true # Set to true to skip endpoint check, false to check endpoint connectivity
+    skipMMAStatus: false # Set to true to skip MMA status check, false to check MMA status
+    skipDCRDownload: false # Set to true to skip DCR download, false to download DCR
+    skipRemediate: true # Set to true to skip remediation, false to remediate
+    dcrUrl: 'https://raw.githubusercontent.com/microsoft/AzureMonitorCommunity/master/Azure%20Services/Azure%20Monitor/Agents/Migration%20Tools/DCR%20Config%20Generator/WorkspaceConfigToDCRMigrationTool.ps1'
+    dcrOutputPath: az-scripts/WorkspaceConfigToDCRMigrationTool.ps1
+    dcrExportPath: dcr-export
+    dcrNamePrefix: dcr # For DCR migration tool generated templates
+    remediate-dcr: rem-dcr 
+    remediate-dcr-ext: rem-dcr-ext
+    policy-asm-dcr: enable-ama-dcr
+    policy-asm-dcr-ext: enable-ama-dcr-ext
+    dcr-ref-id: '/providers/microsoft.authorization/policysetdefinitions/924bfe3a-762f-40e7-86dd-5c8b95eb09e6'
+    operation: apply # Allowable values: plan, apply, rollback
+
+# Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+defaults:
+  run:
+    shell: bash
+    working-directory: ${{ env.tfWorkingdir }}
+  
+runs-on: ubuntu-latest  
+
 jobs:
-  pre-requisites:
-    name: 'setup_worfklow'
-    env:
-      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-      uamiName: umi-ama-mig-001
-      uamiResourceGroup: rgp-iac
-      idySubscription: "1d790e78-7852-498d-8087-f5d48686a50e"
-      mgtSubscription: "019181ad-6356-46c6-b584-444846096085"
-      mgtResourceGroup: rg-management
-      mgtLogAnalyticsWorkspace: log-management
-      lawId: "11de000e-9725-45e5-9530-3e291e1654b1"
-      rgpName: rgp-idy
-      rgpLocation: centralus
-      uamiLocation: eastus2
-      uamiRoleAssignmentVmContrib: "Virtual Machine Contributor"
-      uamiRoleAssignmentLogAnalyticsContrib: "Log Analytics Contributor"
-      uamiRoleAssignmentArcContrib: "Azure Arc Connected Resource Administrator"
-      azCliVer: 2.58.0
-      tfVersion: 1.7.5
-      bicepVer: 0.26.54
-      tfWorkingdir: src/tfm
-      skipUAMI: false # Set to true to skip UAMI creation, false to create UAMI if necessary
-      skipDriveSpace: true # Set to true to skip drive space check, false to check drive space
-      skipEndpointCheck: true # Set to true to skip endpoint check, false to check endpoint connectivity
-      skipMMAStatus: false # Set to true to skip MMA status check, false to check MMA status
-      skipDCRDownload: false # Set to true to skip DCR download, false to download DCR
-      skipRemediate: true # Set to true to skip remediation, false to remediate
-      dcrUrl: 'https://raw.githubusercontent.com/microsoft/AzureMonitorCommunity/master/Azure%20Services/Azure%20Monitor/Agents/Migration%20Tools/DCR%20Config%20Generator/WorkspaceConfigToDCRMigrationTool.ps1'
-      dcrOutputPath: az-scripts/WorkspaceConfigToDCRMigrationTool.ps1
-      dcrExportPath: dcr-export
-      dcrNamePrefix: dcr # For DCR migration tool generated templates
-      remediate-dcr: rem-dcr 
-      remediate-dcr-ext: rem-dcr-ext
-      policy-asm-dcr: enable-ama-dcr
-      policy-asm-dcr-ext: enable-ama-dcr-ext
-      dcr-ref-id: '/providers/microsoft.authorization/policysetdefinitions/924bfe3a-762f-40e7-86dd-5c8b95eb09e6'
-      operation: apply # Allowable values: plan, apply, rollback
-
+  prepare:
+    name: 'prepare'
     runs-on: ubuntu-latest
-
-    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
-    defaults:
-      run:
-        shell: bash
-        working-directory: ${{ env.tfWorkingdir }}
-
+    environment: tst
     steps:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
@@ -196,35 +198,81 @@ jobs:
         ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
         ARM_USE_OIDC: true
 
+    # Upload
+    - name: 'upload_tfplan'
+      if: ${{ env.operation == 'apply' || env.operation == 'rollback' }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: tfplan
+        path: tfplan
+
+  provision:
+    name: 'provision-deprovision'
+    runs-on: ubuntu-latest
+    environment: prd
+    needs: pre-requisites
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v3
+    
+    # Authenticate to Azure tenant using the Azure login action (OIDC). Based on umi: ama-umi-002
+    - name: authenticate_to_azure_with_oidc
+      uses: Azure/login@v1
+      with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          enable-AzPSSession: true
+    
+    # Setup Terraform (requires unzip on Ubuntu. Run 'sudo apt-get install unzip' on self-hosted runner)
+    - name: 'terraform_setup'
+      if: ${{ env.operation == 'apply' || env.operation == 'rollback' }}
+      id: setup  
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: ${{ env.tfVersion }}
+        terraform_wrapper: true   
+  
+    # Check version
+    - name: 'terraform_version_check'
+      if: ${{ env.operation == 'apply' || env.operation == 'rollback' }}
+      id: version
+      run: terraform version
+
+    # Download 
+    - name: 'download_plan'
+      if: ${{ env.operation == 'apply' || env.operation == 'rollback' }}
+      uses: actions/download-artifact@v2
+      with:
+        name: plan  
+
     # Deploy
     - name: 'terraform_apply'
       if: ${{ env.operation == 'apply' }}
       id: apply
-      run: terraform apply -auto-approve
+      run: terraform apply "plan" -auto-approve
       env:
         ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
         ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
         ARM_USE_OIDC: true
-
-    - name: "remediate_policy_set"
+    
+    # Trigger policy state scan
+    - name: "trigger_policy_state_scan"
       if: ${{ env.operation == 'apply' }}
       uses: azure/cli@v2
       with:
         inlineScript: |
           az account set --subscription ${{ env.idySubscription }}
-          az policy state trigger-scan --verbose
-          az policy remediation create -g ${{ env.rgpName }} -n ${{ env.remediate-dcr }} --policy-assignment ${{ env.policy-asm-dcr }} \
-          --definition-reference-id ${{ env.dcr-ref-id }} --verbose
-          az policy remediation create -g ${{ env.rgpName }} -n ${{ env.remediate-dcr-ext }} --policy-assignment ${{ env.policy-asm-dcr-ext }} \
-          --definition-reference-id ${{ env.dcr-ref-id }} --verbose
+          az policy state trigger-scan -g ${{ env.rgpName }}
         azcliversion: ${{ env.azCliVer }}
 
     # Rollback
     - name: 'terraform_rollback'
-      if: ${{ env.operation == 'rollback' || env.skipRemediate == false }}
+      if: ${{ env.operation == 'rollback' }}
       id: rollback
-      run: terraform apply -auto-approve
+      run: terraform destroy "plan" -auto-approve
       env:
         ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
         ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
