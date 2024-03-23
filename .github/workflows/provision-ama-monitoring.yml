@@ -47,14 +47,10 @@ jobs:
       dcrOutputPath: az-scripts/WorkspaceConfigToDCRMigrationTool.ps1
       dcrExportPath: dcr-export
       dcrNamePrefix: dcr # For DCR migration tool generated templates
-      remediation: { 
-        "remediate-dcr": "rem-dcr", 
-        "remediate-dcr-ext": "rem-dcr-ext" 
-        }
-      policy-assignments: { 
-        "ama-assign-dcr": "ama-assign-dcr", 
-        "ama-assign-dcr-ext": "ama-assign-dcr-ext" 
-        }
+      remediate-dcr: rem-dcr 
+      remediate-dcr-ext: rem-dcr-ext 
+      policy-asm-dcr: ama-assign-dcr
+      policy-asm-dcr-ext: ama-assign-dcr-ext
       operation: apply # Allowable values: plan, apply, rollback
 
     runs-on: ubuntu-latest
@@ -216,8 +212,8 @@ jobs:
         inlineScript: |
           az account set --subscription ${{ env.idySubscription }}
           az policy state trigger-scan --verbose
-          az policy remediation create -g ${{ env.rgpName }} -n ${{ env.remediation.remediate-dcr }} --policy-assignment ${{ env.policy-assignments.ama-assign-dcr }} --verbose
-          az policy remediation create -g ${{ env.rgpName }} -n ${{ env.remediation.remediate-dcr-ext }} --policy-assignment ${{ env.policy-assignments.ama-assign-dcr-ext }} --verbose
+          az policy remediation create -g ${{ env.rgpName }} -n ${{ env.remediate-dcr }} --policy-assignment ${{ env.policy-asm-dcr }} --verbose
+          az policy remediation create -g ${{ env.rgpName }} -n ${{ env.remediate-dcr-ext }} --policy-assignment ${{ env.policy-asm-dcr-ext }} --verbose
         azcliversion: ${{ env.azCliVer }}
 
     # Rollback
