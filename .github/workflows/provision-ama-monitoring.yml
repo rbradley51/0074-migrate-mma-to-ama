@@ -155,17 +155,12 @@ jobs:
         azPSVersion: "latest"
 
   prepare-tfm:
-    env:
-      operation: ${{ env.operation }}
-      azCliVer: ${{ env.azCliVer }}
-      tfVersion: ${{ env.tfVersion }}
-      tfWorkingdir: ${{ env.tfWorkingdir }}
     uses: ./.github/workflows/prepare-tfm.yml
     with: 
-      operation: ${{ env.operation }}
-      azCliVer: ${{ env.azCliVer }}
-      tfVersion: ${{ env.tfVersion }}
-      tfWorkingdir: ${{ env.tfWorkingdir }}
+      operation: plan
+      azCliVer: 2.58.0
+      tfVersion: 1.7.5
+      tfWorkingdir: src/tfm
     secrets:
       AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
       AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
