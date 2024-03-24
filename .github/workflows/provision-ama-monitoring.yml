@@ -177,7 +177,7 @@ jobs:
     - name: 'terraform_init'
       if: ${{ env.operation == 'plan' || env.operation == 'apply' }}
       id: init
-      run: terraform init upgrade
+      run: terraform init upgrade=true
       timeout-minutes: 2
       env:
         ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
