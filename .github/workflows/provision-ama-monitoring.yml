@@ -155,6 +155,11 @@ jobs:
         azPSVersion: "latest"
 
   prepare-tfm:
+    env:
+      operation: ${{ env.operation }}
+      azCliVer: ${{ env.azCliVer }}
+      tfVersion: ${{ env.tfVersion }}
+      tfWorkingdir: ${{ env.tfWorkingdir }}
     uses: ./.github/workflows/prepare-tfm.yml
     with: 
       operation: ${{ env.operation }}
