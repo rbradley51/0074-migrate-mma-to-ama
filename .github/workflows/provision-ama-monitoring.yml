@@ -203,7 +203,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: tfplan
-        path: tfplan
+        path: src/tfm/tfplan
 
   provision:
     name: 'provision-deprovision'
