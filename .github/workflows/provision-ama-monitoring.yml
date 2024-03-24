@@ -62,7 +62,7 @@ defaults:
 jobs:
   
   prepare-dcr:
-    name: 'prepare'
+    name: 'prepare-dcr'
     runs-on: ubuntu-latest
     environment: tst
     steps:

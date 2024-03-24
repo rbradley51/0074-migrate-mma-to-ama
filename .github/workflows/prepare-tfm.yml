@@ -30,8 +30,14 @@ on:
         description: 'The Azure subscription ID'
         required: true
 
+defaults:
+  run:
+    shell: bash
+    working-directory: ${{ inputs.tfWorkingdir }}
+
 jobs:
   prepare-tfm:
+    name: 'prepare-tfm'
     runs-on: ubuntu-latest
     steps:
     # Checkout the repository to the GitHub Actions runner
@@ -46,6 +52,19 @@ jobs:
       with:
         terraform_version: ${{ inputs.tfVersion }}
         terraform_wrapper: true   
+
+            # Init
+    - name: 'terraform_init'
+      if: ${{ inputs.operation == 'plan' || inputs.operation == 'apply' }}
+      id: init
+      run: terraform init
+      timeout-minutes: 2
+      env:
+        ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        ARM_USE_OIDC: true
+    
       
     # Check version
     - name: 'terraform_version_check'
@@ -59,18 +78,6 @@ jobs:
       id: format
       run: terraform fmt -recursive
     
-    # Init
-    - name: 'terraform_init'
-      if: ${{ inputs.operation == 'plan' || inputs.operation == 'apply' }}
-      id: init
-      run: terraform init
-      timeout-minutes: 2
-      env:
-        ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-        ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-        ARM_USE_OIDC: true
-      
     # Plan   
     - name: 'terraform_plan'
       working-directory: src/tfm
