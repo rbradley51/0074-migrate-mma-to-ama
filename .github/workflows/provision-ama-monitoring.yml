@@ -245,7 +245,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: tfplan
-        path: tfplan
+        path: src/tfm/tfplan
 
     # Deploy
     - name: 'terraform_apply'
