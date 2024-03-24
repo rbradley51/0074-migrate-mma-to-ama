@@ -41,9 +41,6 @@ data "azurerm_monitor_data_collection_rule" "dcr-ext" {
   resource_group_name = var.mgt_law.rgp
 }
 
-resource "random_uuid" "rnd" {
-}
-
 # resource "azurerm_monitor_data_collection_endpoint" "ama_dce" {
 #   name                = var.ama_dce.name
 #   resource_group_name = azurerm_resource_group.mgt.name
