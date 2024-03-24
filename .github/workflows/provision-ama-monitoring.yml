@@ -198,6 +198,24 @@ jobs:
         ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
         ARM_USE_OIDC: true
 
+    - name: 'terraform_import_dcr'
+      if: ${{ env.operation == 'apply' }}
+      run: terraform import azurerm_management_group_policy_assignment.ama_initiative_assignment_dcr "/providers/Microsoft.Management/managementGroups/org-id-platform/providers/Microsoft.Authorization/policyAssignments/enable-ama-dcr"
+      env:
+        ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        ARM_USE_OIDC: true
+    
+    - name: 'terraform_import_dcr_ext'
+      if: ${{ env.operation == 'apply' }}
+      run: terraform import azurerm_management_group_policy_assignment.ama_initiative_assignment_dcr_ext "/providers/Microsoft.Management/managementGroups/org-id-platform/providers/Microsoft.Authorization/policyAssignments/enable-ama-dcr-ext"
+      env:
+        ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        ARM_USE_OIDC: true
+
     # Format
     - name: 'terraform_format'
       if: ${{ env.operation == 'plan' || env.operation == 'apply' || env.operation == 'rollback' }}
