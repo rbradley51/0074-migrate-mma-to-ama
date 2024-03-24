@@ -1,7 +1,0 @@
-content
-
-WorkspaceConfigToDCRMigrationTool.ps1
-
-function Set-DeployOutputOnAzure
-
-# Set-DeployOutputOnAzure
