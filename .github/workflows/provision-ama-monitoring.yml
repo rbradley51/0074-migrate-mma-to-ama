@@ -177,7 +177,7 @@ jobs:
     - name: 'terraform_init'
       if: ${{ env.operation == 'plan' || env.operation == 'apply' }}
       id: init
-      run: terraform init
+      run: terraform init upgrade=true -reconfigure
       env:
         ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
         ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
