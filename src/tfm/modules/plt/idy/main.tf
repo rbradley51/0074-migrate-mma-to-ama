@@ -77,7 +77,7 @@ resource "azurerm_management_group_policy_assignment" "ama_initiative_assignment
         "value": ${var.ama_init_bool.scopeToSupportedImages}
       },
       "dcrResourceId": {
-        "value": "${var.ama_initiative_assignment.dcrResourceId}"
+        "value": "${data.azurerm_monitor_data_collection_rule.dcr.id}"
       }
     }
 PARAMS
@@ -109,7 +109,7 @@ resource "azurerm_management_group_policy_assignment" "ama_initiative_assignment
         "value": ${var.ama_init_bool.scopeToSupportedImages}
       },
       "dcrResourceId": {
-        "value": "${var.ama_initiative_assignment.dcrResourceId}"
+        "value": "${data.azurerm_monitor_data_collection_rule.dcr-ext.id}"
       }
     }
 PARAMS
