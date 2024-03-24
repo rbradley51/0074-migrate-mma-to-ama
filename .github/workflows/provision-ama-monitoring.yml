@@ -188,7 +188,7 @@ jobs:
     - name: 'terraform_plan'
       if: ${{ env.operation == 'plan' || env.operation == 'apply' || env.operation == 'rollback' }}
       id: plan
-      run: terraform plan -lock=false -out=src/tfm/tfplan
+      run: terraform plan -lock=false -out=tfplan
       timeout-minutes: 20
       env:
         ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
@@ -202,7 +202,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: tfplan
-        path: src/tfm/tfplan
+        path: tfplan
 
   provision:
     name: 'provision-deprovision'
@@ -244,12 +244,13 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: tfplan
+        path: tfplan
 
     # Deploy
     - name: 'terraform_apply'
       if: ${{ env.operation == 'apply' }}
       id: apply
-      run: terraform apply "plan" -auto-approve
+      run: terraform apply tfplan -auto-approve
       env:
         ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
         ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
