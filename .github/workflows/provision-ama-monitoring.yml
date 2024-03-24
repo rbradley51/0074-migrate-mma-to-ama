@@ -243,7 +243,7 @@ jobs:
       if: ${{ env.operation == 'apply' || env.operation == 'rollback' }}
       uses: actions/download-artifact@v2
       with:
-        name: plan  
+        name: tfplan
 
     # Deploy
     - name: 'terraform_apply'
