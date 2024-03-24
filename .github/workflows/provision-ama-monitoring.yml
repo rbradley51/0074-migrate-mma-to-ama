@@ -249,7 +249,7 @@ jobs:
 
     # Deploy
     - name: 'terraform_apply'
-      working-directory: src/tfm
+      working-directory: src/tfm/tfplan
       if: ${{ env.operation == 'apply' }}
       id: apply
       run: terraform apply tfplan
