@@ -60,7 +60,6 @@ defaults:
     working-directory: src/tfm
 
 jobs:
-  
   prepare-dcr:
     name: 'prepare-dcr'
     runs-on: ubuntu-latest
@@ -153,24 +152,11 @@ jobs:
             New-AzResourceGroupDeployment -ResourceGroupName ${{ env.mgtResourceGroup }} -TemplateFile $templateFile -Verbose
           }
         azPSVersion: "latest"
-
-  prepare-tfm:
-    uses: ./.github/workflows/prepare-tfm.yml
-    with: 
-      operation: plan
-      azCliVer: 2.58.0
-      tfVersion: 1.7.5
-      tfWorkingdir: src/tfm
-    secrets:
-      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-  provision:
+  provision-deprovision:
     name: 'provision-deprovision'
     runs-on: ubuntu-latest
     environment: prd
-    needs: prepare-tfm
+    needs: prepare-dcr
     steps:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
@@ -199,6 +185,18 @@ jobs:
       if: ${{ env.operation == 'apply' || env.operation == 'rollback' }}
       id: version
       run: terraform version
+
+    # Init
+    - name: 'terraform_init'
+      if: ${{ env.operation == 'plan' || env.operation == 'apply' }}
+      id: init
+      run: terraform init
+      timeout-minutes: 2
+      env:
+        ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        ARM_USE_OIDC: true
 
     # Format
     - name: 'terraform_format'
@@ -231,7 +229,7 @@ jobs:
     - name: 'terraform_rollback'
       if: ${{ env.operation == 'rollback' }}
       id: rollback
-      run: terraform destroy "plan" -auto-approve
+      run: terraform destroy -auto-approve
       env:
         ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
         ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}

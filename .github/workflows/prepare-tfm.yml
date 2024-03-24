@@ -53,7 +53,7 @@ jobs:
         terraform_version: ${{ inputs.tfVersion }}
         terraform_wrapper: true   
 
-            # Init
+    # Init
     - name: 'terraform_init'
       if: ${{ inputs.operation == 'plan' || inputs.operation == 'apply' }}
       id: init
