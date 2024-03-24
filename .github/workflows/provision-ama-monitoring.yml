@@ -190,7 +190,7 @@ jobs:
       working-directory: src/tfm
       if: ${{ env.operation == 'plan' || env.operation == 'apply' || env.operation == 'rollback' }}
       id: plan
-      run: terraform plan -compact-warnings -detailed-exitcode -out=tfplan
+      run: terraform plan -compact-warnings -detailed-exitcode -lock=false -out=tfplan
       timeout-minutes: 20
       env:
         ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
