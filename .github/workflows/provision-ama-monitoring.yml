@@ -202,9 +202,9 @@ jobs:
 
     # Format
     - name: 'terraform_format'
-    if: ${{ env.operation == 'plan' || env.operation == 'apply' || env.operation == 'rollback' }}
-    id: format
-    run: terraform fmt -recursive
+      if: ${{ env.operation == 'plan' || env.operation == 'apply' || env.operation == 'rollback' }}
+      id: format
+      run: terraform fmt -recursive
 
     # Deploy
     - name: 'terraform_apply'
