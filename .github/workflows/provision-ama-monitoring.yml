@@ -186,6 +186,7 @@ jobs:
 
     # Plan   
     - name: 'terraform_plan'
+      working-directory: src/tfm
       if: ${{ env.operation == 'plan' || env.operation == 'apply' || env.operation == 'rollback' }}
       id: plan
       run: terraform plan -compact-warnings -detailed-exitcode -lock=false -out=tfplan
@@ -248,6 +249,7 @@ jobs:
 
     # Deploy
     - name: 'terraform_apply'
+      working-directory: src/tfm
       if: ${{ env.operation == 'apply' }}
       id: apply
       run: terraform apply tfplan -auto-approve
