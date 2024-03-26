@@ -23,6 +23,7 @@ env:
   uamiResourceGroup: rgp-iac
   idySubscription: "1d790e78-7852-498d-8087-f5d48686a50e"
   mgtSubscription: "019181ad-6356-46c6-b584-444846096085"
+  iacSubscription: "e25024e7-c4a5-4883-80af-9e81b2f8f689"
   mgtResourceGroup: rg-management
   mgtLogAnalyticsWorkspace: log-management
   lawId: "11de000e-9725-45e5-9530-3e291e1654b1"

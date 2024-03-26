@@ -29,7 +29,7 @@ data "azurerm_user_assigned_identity" "umid" {
   resource_group_name = var.rgp_iac
 }
 data "azurerm_user_assigned_identity" "pol" {
-  provider = azurerm.management
+  provider = azurerm.iac
   name                = var.umi_pol_name
   resource_group_name = var.rgp_iac
 }
