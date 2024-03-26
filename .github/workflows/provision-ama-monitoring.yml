@@ -51,6 +51,7 @@ env:
   policy-asm-dcr: enable-ama-dcr
   policy-asm-dcr-ext: enable-ama-dcr-ext
   dcr-ref-id: '/providers/microsoft.authorization/policysetdefinitions/924bfe3a-762f-40e7-86dd-5c8b95eb09e6'
+  target-mg-id: 'org-id-platform'
   operation: apply # Allowable values: [plan, apply, rollback]
 
 # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
@@ -223,6 +224,15 @@ jobs:
         inlineScript: |
           az account set --subscription ${{ env.idySubscription }}
           az policy state trigger-scan -g ${{ env.rgpName }}
+        azcliversion: ${{ env.azCliVer }}
+
+    - name: "remediate_initiative_assignments"
+      if: ${{ env.operation == 'apply' }}
+      uses: azure/cli@v2
+      with:
+        inlineScript: |
+          az policy remediation create -m ${{ env.target-mg-id }} -n ${{ env.remediate-dcr }} --policy-assignment ${{ env.policy-asm-dcr }} --policy-definition-reference-id ${{ env.dcr-ref-id }} --verbose
+          az policy remediation create -m ${{ env.target-mg-id }} -n ${{ env.remediate-dcr-ext }} --policy-assignment ${{ env.policy-asm-dcr-ext }} --policy-definition-reference-id ${{ env.dcr-ref-id }} --verbose
         azcliversion: ${{ env.azCliVer }}
 
     # Rollback

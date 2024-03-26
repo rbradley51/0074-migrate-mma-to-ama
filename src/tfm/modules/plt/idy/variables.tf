@@ -52,6 +52,12 @@ variable "umi_name" {
   default     = "umi-ama-mig-001"
 }
 
+variable "umi_pol_name" {
+  type        = string
+  description = "prefix for user managed identity policy"
+  default     = "umi-ama-pol-001"
+}
+
 variable "ama_dce" {
   type = object({
     name = string

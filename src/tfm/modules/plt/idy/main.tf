@@ -28,7 +28,11 @@ data "azurerm_user_assigned_identity" "umid" {
   name                = var.umi_name
   resource_group_name = var.rgp_iac
 }
-
+data "azurerm_user_assigned_identity" "pol" {
+  provider = azurerm.management
+  name                = var.umi_pol_name
+  resource_group_name = var.rgp_iac
+}
 data "azurerm_monitor_data_collection_rule" "dcr" {
   provider = azurerm.management
   name                = var.dcr_type.dcr
@@ -57,7 +61,8 @@ resource "azurerm_management_group_policy_assignment" "ama_initiative_assignment
   management_group_id  = data.azurerm_management_group.tgt.id
   location = var.primary_location
   identity {
-    type = "SystemAssigned"
+    type = "UserAssigned"
+    identity_ids = [data.azurerm_user_assigned_identity.pol.id]
   }
   parameters = <<PARAMS
     {
@@ -89,7 +94,8 @@ resource "azurerm_management_group_policy_assignment" "ama_initiative_assignment
   management_group_id  = data.azurerm_management_group.tgt.id
   location = var.primary_location
   identity {
-    type = "SystemAssigned"
+    type = "UserAssigned"
+    identity_ids = [data.azurerm_user_assigned_identity.pol.id]
   }
   parameters = <<PARAMS
     {
