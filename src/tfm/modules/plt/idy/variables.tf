@@ -58,6 +58,12 @@ variable "umi_pol_name" {
   default     = "umi-ama-pol-001"
 }
 
+variable "umi_pol_id" {
+  type        = string
+  description = "user managed identity policy id"
+  default = "/subscriptions/e25024e7-c4a5-4883-80af-9e81b2f8f689/resourcegroups/rgp-iac/providers/Microsoft.ManagedIdentity/userAssignedIdentities/umi-ama-pol-001"
+}
+
 variable "ama_dce" {
   type = object({
     name = string
