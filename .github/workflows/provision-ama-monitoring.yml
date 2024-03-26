@@ -232,8 +232,8 @@ jobs:
       uses: azure/cli@v2
       with:
         inlineScript: |
-          az policy remediation create -m ${{ env.target-mg-id }} -n ${{ env.remediate-dcr }} --policy-assignment ${{ env.policy-asm-dcr }} --policy-definition-reference-id ${{ env.dcr-ref-id }} --verbose
-          az policy remediation create -m ${{ env.target-mg-id }} -n ${{ env.remediate-dcr-ext }} --policy-assignment ${{ env.policy-asm-dcr-ext }} --policy-definition-reference-id ${{ env.dcr-ref-id }} --verbose
+          az policy remediation create -m ${{ env.target-mg-id }} -n ${{ env.remediate-dcr }} --policy-assignment ${{ env.policy-asm-dcr }} --definition-reference-id ${{ env.dcr-ref-id }} --verbose
+          az policy remediation create -m ${{ env.target-mg-id }} -n ${{ env.remediate-dcr-ext }} --policy-assignment ${{ env.policy-asm-dcr-ext }} --definition-reference-id ${{ env.dcr-ref-id }} --verbose
         azcliversion: ${{ env.azCliVer }}
 
     # Rollback
