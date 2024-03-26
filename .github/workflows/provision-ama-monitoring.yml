@@ -51,7 +51,6 @@ env:
   remediate-dcr-ext: rem-dcr-ext
   policy-asm-dcr: enable-ama-dcr
   policy-asm-dcr-ext: enable-ama-dcr-ext
-  dcr-ref-id: 'd367bd60-64ca-4364-98ea-276775bddd94'
   target-mg-id: 'org-id-platform'
   operation: apply # Allowable values: [plan, apply, rollback]
 
@@ -227,14 +226,14 @@ jobs:
           az policy state trigger-scan -g ${{ env.rgpName }}
         azcliversion: ${{ env.azCliVer }}
 
-    - name: "remediate_initiative_assignments"
-      if: ${{ env.operation == 'apply' }}
-      uses: azure/cli@v2
-      with:
-        inlineScript: |
-          az policy remediation create -m ${{ env.target-mg-id }} -n ${{ env.remediate-dcr }} --policy-assignment ${{ env.policy-asm-dcr }} --definition-reference-id ${{ env.dcr-ref-id }} --verbose
-          az policy remediation create -m ${{ env.target-mg-id }} -n ${{ env.remediate-dcr-ext }} --policy-assignment ${{ env.policy-asm-dcr-ext }} --definition-reference-id ${{ env.dcr-ref-id }} --verbose
-        azcliversion: ${{ env.azCliVer }}
+    # - name: "remediate_initiative_assignments"
+    #   if: ${{ env.operation == 'apply' }}
+    #   uses: azure/cli@v2
+    #   with:
+    #     inlineScript: |
+    #       az policy remediation create -m ${{ env.target-mg-id }} -n ${{ env.remediate-dcr }} --policy-assignment ${{ env.policy-asm-dcr }} --definition-reference-id ${{ env.dcr-ref-id }} --verbose
+    #       az policy remediation create -m ${{ env.target-mg-id }} -n ${{ env.remediate-dcr-ext }} --policy-assignment ${{ env.policy-asm-dcr-ext }} --definition-reference-id ${{ env.dcr-ref-id }} --verbose
+    #     azcliversion: ${{ env.azCliVer }}
 
     # Rollback
     - name: 'terraform_rollback'
