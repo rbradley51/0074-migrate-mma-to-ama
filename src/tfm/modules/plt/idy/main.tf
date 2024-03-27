@@ -61,7 +61,8 @@ resource "azurerm_management_group_policy_assignment" "ama_initiative_assignment
   management_group_id  = data.azurerm_management_group.tgt.id
   location = var.primary_location
   identity {
-    type = "SystemAssigned"
+    type = "UserAssigned"
+    identity_ids = [var.umi_pol_id]
   }
   parameters = <<PARAMS
     {
@@ -93,7 +94,8 @@ resource "azurerm_management_group_policy_assignment" "ama_initiative_assignment
   management_group_id  = data.azurerm_management_group.tgt.id
   location = var.primary_location
   identity {
-    type = "SystemAssigned"
+    type = "UserAssigned"
+    identity_ids = [var.umi_pol_id]
   }
   parameters = <<PARAMS
     {

@@ -54,7 +54,8 @@ env:
   policy-asm-dcr: enable-ama-dcr
   policy-asm-dcr-ext: enable-ama-dcr-ext
   target-mg-id: 'org-id-platform'
-  operation: apply # Allowable values: [plan, apply, rollback]
+  def-ref-id: 'd367bd60-64ca-4364-98ea-276775bddd94'
+  operation: apply # Allowable values: [plan, apply, rollback
 
 # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
 defaults:
@@ -111,29 +112,6 @@ jobs:
           az-scripts/Get-EndpointConnectionResult.ps1
         azPSVersion: "latest"
 
-    # Get Azure Monitor Agent installation status on each VM
-    # - name: 'get_mma_extension_status'
-    #   uses: azure/powershell@v1
-    #   with:
-    #     inlineScript: |
-    #       Select-AzSubscription -SubscriptionId ${{ env.idySubscription }}
-    #       $vmList = (Get-AzVM -ResourceGroupName ${{ env.rgpName }}).Name
-    #       foreach ($vmName in $vmList) 
-    #       {
-    #          $vmExtensions = (Get-AzVMExtension -ResourceGroupName ${{ env.rgpName }} -VMName $vmName).Name
-    #         if ($vmExtensions -contains 'MicrosoftMonitoringAgent') 
-    #         {
-    #           Write-Host "VM: $vmName, Legacy MMA extension IS installed"
-    #           Write-Host "Removing MMA extension from VM: $vmName"
-    #           Remove-AzVMExtension -ResourceGroupName ${{ env.rgpName }} -VMName $vmName -Name "MicrosoftMonitoringAgent" -WhatIf -Verbose
-    #         }
-    #         else
-    #         {
-    #           Write-Host "VM: $vmName, Legacy MMA extension NOT installed" 
-    #         }
-    #       }
-    #     azPSVersion: "latest"
-
     # Download the DCR generator script, comment out the Set-DeployOutputOnAzure function, and deploy the generated templates to create the DCRs
     - name: 'download_execute_dcr_generator_script'
       if: ${{ env.skipDCRDownload == 'false' }}
@@ -155,6 +133,7 @@ jobs:
             New-AzResourceGroupDeployment -ResourceGroupName ${{ env.mgtResourceGroup }} -TemplateFile $templateFile -Verbose
           }
         azPSVersion: "latest"
+
   provision-deprovision:
     name: 'provision-deprovision'
     runs-on: ubuntu-latest
@@ -227,6 +206,17 @@ jobs:
           az account set --subscription ${{ env.idySubscription }}
           az policy state trigger-scan -g ${{ env.rgpName }} --no-wait --verbose
         azcliversion: ${{ env.azCliVer }}
+
+        # Remediate DCRs  
+      - name: "remediate_dcr_policy_set_assignments"
+        if: ${{ env.skipRemediate == 'false' }}
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            az account set --subscription ${{ env.idySubscription }}
+            az policy remediation create -m ${{ env.target-mg-id }} -n ${{ env.remediate-dcr }} --policy-assignment ${{ env.policy-asm-dcr }} --definition-reference-id ${{ env.def-ref-id }} --verbose
+            az policy remediation create -m ${{ env.target-mg-id }} -n ${{ env.remediate-dcr-ext }} --policy-assignment ${{ env.policy-asm-dcr-ext }} --definition-reference-id ${{ env.def-ref-id }} --verbose
+          azcliversion: ${{ env.azCliVer }}
 
     # Get VM extension information to determine if the AMA agent is installed, in which case the MMA extension can be removed if desired
     - name: 'get_vm_extension_status'
