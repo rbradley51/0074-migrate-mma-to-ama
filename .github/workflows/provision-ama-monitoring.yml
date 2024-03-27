@@ -38,8 +38,8 @@ env:
   bicepVer: 0.26.54
   tfWorkingdir: src/tfm
   skipUAMI: false # Set to true to skip UAMI creation, false to create UAMI if necessary
-  skipDriveSpace: true # Set to true to skip drive space check, false to check drive space
-  skipEndpointCheck: true # Set to true to skip endpoint check, false to check endpoint connectivity
+  skipDriveSpace: false # Set to true to skip drive space check, false to check drive space
+  skipEndpointCheck: false # Set to true to skip endpoint check, false to check endpoint connectivity
   skipMMAStatus: false # Set to true to skip MMA status check, false to check MMA status
   skipDCRDownload: false # Set to true to skip DCR download, false to download DCR
   skipRemediate: false # Set to true to skip remediation, false to remediate
@@ -100,6 +100,7 @@ jobs:
         azPSVersion: "latest"
 
     # Test connectivity to required endpoints from each VM
+    # https://learn.microsoft.com/en-us/azure/azure-monitor/agents/azure-monitor-agent-manage?tabs=azure-portal#prerequisites
     - name: 'check_connection_results'
       if: ${{ env.skipEndpointCheck == 'false' }}
       uses: azure/powershell@v1
