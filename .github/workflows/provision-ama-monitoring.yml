@@ -43,6 +43,8 @@ env:
   skipMMAStatus: false # Set to true to skip MMA status check, false to check MMA status
   skipDCRDownload: false # Set to true to skip DCR download, false to download DCR
   skipRemediate: true # Set to true to skip remediation, false to remediate
+  skipVmExtension: true # Set to true to skip VM extension check, false to check VM extension
+  removeMMA: false # Set to true to remove MMA extension, false to keep MMA extension
   dcrUrl: 'https://raw.githubusercontent.com/microsoft/AzureMonitorCommunity/master/Azure%20Services/Azure%20Monitor/Agents/Migration%20Tools/DCR%20Config%20Generator/WorkspaceConfigToDCRMigrationTool.ps1'
   dcrOutputPath: az-scripts/WorkspaceConfigToDCRMigrationTool.ps1
   dcrExportPath: dcr-export
@@ -110,27 +112,27 @@ jobs:
         azPSVersion: "latest"
 
     # Get Azure Monitor Agent installation status on each VM
-    - name: 'get_mma_extension_status'
-      uses: azure/powershell@v1
-      with:
-        inlineScript: |
-          Select-AzSubscription -SubscriptionId ${{ env.idySubscription }}
-          $vmList = (Get-AzVM -ResourceGroupName ${{ env.rgpName }}).Name
-          foreach ($vmName in $vmList) 
-          {
-             $vmExtensions = (Get-AzVMExtension -ResourceGroupName ${{ env.rgpName }} -VMName $vmName).Name
-            if ($vmExtensions -contains 'MicrosoftMonitoringAgent') 
-            {
-              Write-Host "VM: $vmName, Legacy MMA extension IS installed"
-              Write-Host "Removing MMA extension from VM: $vmName"
-              Remove-AzVMExtension -ResourceGroupName ${{ env.rgpName }} -VMName $vmName -Name "MicrosoftMonitoringAgent" -WhatIf -Verbose
-            }
-            else
-            {
-              Write-Host "VM: $vmName, Legacy MMA extension NOT installed" 
-            }
-          }
-        azPSVersion: "latest"
+    # - name: 'get_mma_extension_status'
+    #   uses: azure/powershell@v1
+    #   with:
+    #     inlineScript: |
+    #       Select-AzSubscription -SubscriptionId ${{ env.idySubscription }}
+    #       $vmList = (Get-AzVM -ResourceGroupName ${{ env.rgpName }}).Name
+    #       foreach ($vmName in $vmList) 
+    #       {
+    #          $vmExtensions = (Get-AzVMExtension -ResourceGroupName ${{ env.rgpName }} -VMName $vmName).Name
+    #         if ($vmExtensions -contains 'MicrosoftMonitoringAgent') 
+    #         {
+    #           Write-Host "VM: $vmName, Legacy MMA extension IS installed"
+    #           Write-Host "Removing MMA extension from VM: $vmName"
+    #           Remove-AzVMExtension -ResourceGroupName ${{ env.rgpName }} -VMName $vmName -Name "MicrosoftMonitoringAgent" -WhatIf -Verbose
+    #         }
+    #         else
+    #         {
+    #           Write-Host "VM: $vmName, Legacy MMA extension NOT installed" 
+    #         }
+    #       }
+    #     azPSVersion: "latest"
 
     # Download the DCR generator script, comment out the Set-DeployOutputOnAzure function, and deploy the generated templates to create the DCRs
     - name: 'download_execute_dcr_generator_script'
@@ -223,17 +225,19 @@ jobs:
       with:
         inlineScript: |
           az account set --subscription ${{ env.idySubscription }}
-          az policy state trigger-scan -g ${{ env.rgpName }}
+          az policy state trigger-scan -g ${{ env.rgpName }} --no-wait --verbose
         azcliversion: ${{ env.azCliVer }}
 
-    # - name: "remediate_initiative_assignments"
-    #   if: ${{ env.operation == 'apply' }}
-    #   uses: azure/cli@v2
-    #   with:
-    #     inlineScript: |
-    #       az policy remediation create -m ${{ env.target-mg-id }} -n ${{ env.remediate-dcr }} --policy-assignment ${{ env.policy-asm-dcr }} --definition-reference-id ${{ env.dcr-ref-id }} --verbose
-    #       az policy remediation create -m ${{ env.target-mg-id }} -n ${{ env.remediate-dcr-ext }} --policy-assignment ${{ env.policy-asm-dcr-ext }} --definition-reference-id ${{ env.dcr-ref-id }} --verbose
-    #     azcliversion: ${{ env.azCliVer }}
+    # Get VM extension information to determine if the AMA agent is installed, in which case the MMA extension can be removed if desired
+    - name: 'get_vm_extension_status'
+      if: ${{ env.skipVmExtension == 'false' }}
+      uses: azure/powershell@v1
+      with:
+        inlineScript: |
+          chmod +x az-scripts/Get-VmExtension.ps1
+          Select-AzSubscription -SubscriptionId ${{ env.idySubscription }}
+          az-scripts/Get-VmExtension.ps1
+        azPSVersion: "latest"
 
     # Rollback
     - name: 'terraform_rollback'
