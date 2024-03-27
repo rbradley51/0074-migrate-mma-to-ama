@@ -28,11 +28,7 @@ data "azurerm_user_assigned_identity" "umid" {
   name                = var.umi_name
   resource_group_name = var.rgp_iac
 }
-# data "azurerm_user_assigned_identity" "pol" {
-#   provider = azurerm.iac
-#   name                = var.umi_pol_name
-#   resource_group_name = var.rgp_iac
-# }
+
 data "azurerm_monitor_data_collection_rule" "dcr" {
   provider = azurerm.management
   name                = var.dcr_type.dcr
@@ -44,16 +40,6 @@ data "azurerm_monitor_data_collection_rule" "dcr-ext" {
   name                = var.dcr_type.dcr-ext
   resource_group_name = var.mgt_law.rgp
 }
-
-# resource "azurerm_monitor_data_collection_endpoint" "ama_dce" {
-#   name                = var.ama_dce.name
-#   resource_group_name = azurerm_resource_group.mgt.name
-#   location            = var.primary_location
-
-#   lifecycle {
-#     create_before_destroy = true
-#   }
-# }
 
 resource "azurerm_management_group_policy_assignment" "ama_initiative_assignment_dcr" {
   name                 = var.ama_initiative_assignment.name_dcr
