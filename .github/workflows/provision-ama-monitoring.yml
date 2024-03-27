@@ -170,7 +170,6 @@ jobs:
 
     # Init
     - name: 'terraform_init'
-      if: ${{ env.operation == 'plan' || env.operation == 'apply' }}
       id: init
       run: terraform init
       timeout-minutes: 2
