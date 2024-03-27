@@ -55,6 +55,29 @@ data "azurerm_monitor_data_collection_rule" "dcr-ext" {
 #   }
 # }
 
+resource "azurerm_management_group_policy_assignment" "umi_vm_policy_assignment" {
+  name                 = var.umi_vm_policy.assignment_name
+  policy_definition_id = var.umi_vm_policy.defId
+  management_group_id  = data.azurerm_management_group.tgt.id
+  location = var.primary_location
+  parameters = <<PARAMS
+  {
+    "bringYourOwnUserAssignedManagedIdentity": {
+      "value": ${var.ama_init_bool.bringYourOwnUserAssignedManagedIdentity}
+    },
+    "userAssignedIdentityName": {
+      "value": "${data.azurerm_user_assigned_identity.umid.name}"
+    },
+    "identityResourceGroup": {
+      "value": "${data.azurerm_user_assigned_identity.umid.resource_group_name}"
+    },
+    "builtInIdentityResourceGroupLocation": {
+      "value": ${var.primary_location}
+    }
+  }
+PARAMS
+}
+
 resource "azurerm_management_group_policy_assignment" "ama_initiative_assignment_dcr" {
   name                 = var.ama_initiative_assignment.name_dcr
   policy_definition_id = var.ama_initiative_assignment.policy_set_def_id

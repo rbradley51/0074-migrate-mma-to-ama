@@ -26,3 +26,20 @@ for role in "${roles[@]}";
    do echo $role;
    az role assignment create --role "$role" --assignee-object-id $uamiId --assignee-principal-type ServicePrincipal --scope $rgId;
 done
+
+az subscription set --subscription $idySubscrption --verbose
+vmNames=$(az vm list -g $rgpName --query "[].name" -o tsv)
+for vm in $vmNames;
+   do echo $vm;
+   az vm identity assign -g $rgpName -n $vm --identities $uamiId --verbose;
+   osType=$(az vm show -g $rgpName -n $vm --query "storageProfile.osDisk.osType" -o tsv)
+   if [[ $osType == "Windows" ]]; then
+      # Your code here for Windows OS
+      echo "Performing actions for Windows OS"
+      az vm extension set -n "AzureMonitorWindowsAgent" --publisher "Microsoft.Azure.Monitor" --vm-name $vm -g $rgpName --version 1.24 --enable-auto-upgrade --verbose;
+      # Your code here for non-Windows OS
+      echo "Performing actions for Linux OS"
+      az vm extension set -n AzureMonitorLinuxAgent --publisher Microsoft.Azure.Monitor --vm-name $vm -g $rgpName --version 1.30 --verbose;
+   fi
+done
+```

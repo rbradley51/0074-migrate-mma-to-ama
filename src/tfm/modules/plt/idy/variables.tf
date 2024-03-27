@@ -98,6 +98,16 @@ variable "ama_initiative_assignment" {
   }
 }
 
+variable "umi_vm_policy" {
+  type = map(string)
+  description = "[Preview]: Assign Built-In User-Assigned Managed Identity to Virtual Machines"
+  default = {
+    name = "d367bd60-64ca-4364-98ea-276775bddd94"
+    assignment_name = "assign-umi-vm-policy"
+    defId  = "/providers/Microsoft.Authorization/policyDefinitions/d367bd60-64ca-4364-98ea-276775bddd94"
+  }
+}
+
 variable "ama_init_bool" {
   type        = map(bool)
   description = "Boolean values for Azure Monitor for VMs with Azure Monitoring Agent(AMA)"
