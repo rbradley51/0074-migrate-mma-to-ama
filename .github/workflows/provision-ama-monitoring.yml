@@ -38,8 +38,7 @@ env:
   bicepVer: 0.26.54
   tfWorkingdir: src/tfm
   skipUAMI: false # Set to true to skip UAMI creation, false to create UAMI if necessary
-  skipDriveSpace: false # Set to true to skip drive space check, false to check drive space
-  skipEndpointCheck: false # Set to true to skip endpoint check, false to check endpoint connectivity
+  skipDriveSpace: true # Set to true to skip drive space check, false to check drive space
   skipMMAStatus: false # Set to true to skip MMA status check, false to check MMA status
   skipDCRDownload: false # Set to true to skip DCR download, false to download DCR
   skipRemediate: false # Set to true to skip remediation, false to remediate
@@ -97,17 +96,6 @@ jobs:
           chmod +x az-scripts/Get-DriveSpace.ps1
           Select-AzSubscription -SubscriptionId ${{ env.idySubscription }}
           az-scripts/Get-DriveSpace.ps1
-        azPSVersion: "latest"
-
-    # Test connectivity to required endpoints from each VM
-    # https://learn.microsoft.com/en-us/azure/azure-monitor/agents/azure-monitor-agent-manage?tabs=azure-portal#prerequisites
-    - name: 'check_connection_results'
-      if: ${{ env.skipEndpointCheck == 'false' }}
-      uses: azure/powershell@v1
-      with:
-        inlineScript: |
-          chmod +x az-scripts/Get-EndpointConnectionResult.ps1
-          az-scripts/Get-EndpointConnectionResult.ps1
         azPSVersion: "latest"
 
     # Download the DCR generator script, comment out the Set-DeployOutputOnAzure function, and deploy the generated templates to create the DCRs
