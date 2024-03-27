@@ -52,7 +52,7 @@ env:
   policy-asm-dcr: enable-ama-dcr
   policy-asm-dcr-ext: enable-ama-dcr-ext
   target-mg-id: 'org-id-platform'
-  operation: rollback # Allowable values: [plan, apply, rollback
+  operation: plan # Allowable values: [plan, apply, rollback
 
 # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
 defaults:
