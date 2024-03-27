@@ -1,7 +1,7 @@
 Select-AzSubscription -SubscriptionId $env:idySubscription
 $vmList = (Get-AzVM -ResourceGroupName $env:rgpName).Name
 foreach ($vmName in $vmList) {
-    $vmExtensions = (Get-AzVMExtension -ResourceGroupName $env:rgpName -VMName $env:vmName).Name
+    $vmExtensions = (Get-AzVMExtension -ResourceGroupName $env:rgpName -VMName $vmName).Name
     if (($vmExtensions -contains 'MicrosoftMonitoringAgent') -and ($vmExtensions -contains 'AzureMonitoringWindowsAgent')) {
         Write-Host "VM: $vmName, both the MMA AND AMA extensions ARE installed"
         if ($env:removeLegacyAgent -eq "true") 
