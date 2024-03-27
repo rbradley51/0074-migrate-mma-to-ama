@@ -26,4 +26,3 @@ for role in "${roles[@]}";
    do echo $role;
    az role assignment create --role "$role" --assignee-object-id $uamiId --assignee-principal-type ServicePrincipal --scope $rgId;
 done
-```
