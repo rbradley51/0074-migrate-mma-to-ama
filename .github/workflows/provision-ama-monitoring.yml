@@ -207,16 +207,16 @@ jobs:
           az policy state trigger-scan -g ${{ env.rgpName }} --no-wait --verbose
         azcliversion: ${{ env.azCliVer }}
 
-        # Remediate DCRs  
-      - name: "remediate_dcr_policy_set_assignments"
-        if: ${{ env.skipRemediate == 'false' }}
-        uses: azure/cli@v2
-        with:
-          inlineScript: |
-            az account set --subscription ${{ env.idySubscription }}
-            az policy remediation create -m ${{ env.target-mg-id }} -n ${{ env.remediate-dcr }} --policy-assignment ${{ env.policy-asm-dcr }} --definition-reference-id ${{ env.def-ref-id }} --verbose
-            az policy remediation create -m ${{ env.target-mg-id }} -n ${{ env.remediate-dcr-ext }} --policy-assignment ${{ env.policy-asm-dcr-ext }} --definition-reference-id ${{ env.def-ref-id }} --verbose
-          azcliversion: ${{ env.azCliVer }}
+      # Remediate DCRs  
+    - name: "remediate_dcr_policy_set_assignments"
+      if: ${{ env.skipRemediate == 'false' }}
+      uses: azure/cli@v2
+      with:
+        inlineScript: |
+          az account set --subscription ${{ env.idySubscription }}
+          az policy remediation create -m ${{ env.target-mg-id }} -n ${{ env.remediate-dcr }} --policy-assignment ${{ env.policy-asm-dcr }} --definition-reference-id ${{ env.def-ref-id }} --verbose
+          az policy remediation create -m ${{ env.target-mg-id }} -n ${{ env.remediate-dcr-ext }} --policy-assignment ${{ env.policy-asm-dcr-ext }} --definition-reference-id ${{ env.def-ref-id }} --verbose
+        azcliversion: ${{ env.azCliVer }}
 
     # Get VM extension information to determine if the AMA agent is installed, in which case the MMA extension can be removed if desired
     - name: 'get_vm_extension_status'
