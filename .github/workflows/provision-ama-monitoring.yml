@@ -43,7 +43,7 @@ env:
   skipMMAStatus: false # Set to true to skip MMA status check, false to check MMA status
   skipDCRDownload: false # Set to true to skip DCR download, false to download DCR
   skipRemediate: true # Set to true to skip remediation, false to remediate
-  skipVmExtension: true # Set to true to skip VM extension check, false to check VM extension
+  skipVmExtension: false # Set to true to skip VM extension check, false to check VM extension
   removeMMA: false # Set to true to remove MMA extension, false to keep MMA extension
   dcrUrl: 'https://raw.githubusercontent.com/microsoft/AzureMonitorCommunity/master/Azure%20Services/Azure%20Monitor/Agents/Migration%20Tools/DCR%20Config%20Generator/WorkspaceConfigToDCRMigrationTool.ps1'
   dcrOutputPath: az-scripts/WorkspaceConfigToDCRMigrationTool.ps1
