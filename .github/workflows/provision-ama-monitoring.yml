@@ -176,15 +176,14 @@ jobs:
     # Deploy
     - name: 'terraform_plan'
       id: plan
-      run: terraform plan -var \
-      target_mg_id=${{ env.TARGET_MG_ID }} \
+      run: terraform plan \
+      -var target_mg_id=${{ env.TARGET_MG_ID }} \
       target_mg_name=${{ env.TARGET_MG_NAME }} \
       identitySubscriptionId=${{ secrets.IDYSUBSCRIPTION }} \
       managementSubscriptionId=${{ secrets.MGTSUBSCRIPTION }} \
       connectionSubscriptionId=${{ secrets.CONSUBSCRIPTION }} \
       iacSubscriptionId=${{ secrets.IACSUBSCRIPTION }} \
-      uami_name=${{ secrets.UAMI_NAME }} \
-      -auto-approve
+      uami_name=${{ secrets.UAMI_NAME }} -auto-approve
       env:
         ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
         ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
@@ -195,15 +194,14 @@ jobs:
     - name: 'terraform_apply'
       if: ${{ env.operation == 'apply' }}
       id: apply
-      run: terraform plan -var \
-      target_mg_id=${{ env.TARGET_MG_ID }} \
+      run: terraform plan \
+      -var target_mg_id=${{ env.TARGET_MG_ID }} \
       target_mg_name=${{ env.TARGET_MG_NAME }} \
       identitySubscriptionId=${{ secrets.IDYSUBSCRIPTION }} \
       managementSubscriptionId=${{ secrets.MGTSUBSCRIPTION }} \
       connectionSubscriptionId=${{ secrets.CONSUBSCRIPTION }} \
       iacSubscriptionId=${{ secrets.IACSUBSCRIPTION }} \
-      uami_name=${{ secrets.UAMI_NAME }} \
-      -auto-approve
+      uami_name=${{ secrets.UAMI_NAME }} -auto-approve
       env:
         ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
         ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
