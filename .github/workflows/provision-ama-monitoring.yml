@@ -19,14 +19,14 @@ env:
   AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
   AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
   AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-  uamiName: umi-ama-mig-001
+  IDYSUBSCRIPTION: ${{ secrets.IDYSUBSCRIPTION }}
+  MGTSUBSCRIPTION: ${{ secrets.MGTSUBSCRIPTION }}
+  IACSUBSCRIPTION: ${{ secrets.IACSUBSCRIPTION }}
+  UAMI_NAME: ${{ secrets.UAMI_NAME }}
   uamiResourceGroup: rgp-iac
-  idySubscription: "1d790e78-7852-498d-8087-f5d48686a50e"
-  mgtSubscription: "019181ad-6356-46c6-b584-444846096085"
-  iacSubscription: "e25024e7-c4a5-4883-80af-9e81b2f8f689"
   mgtResourceGroup: rg-management
   mgtLogAnalyticsWorkspace: log-management
-  lawId: "11de000e-9725-45e5-9530-3e291e1654b1"
+  LAW_ID: ${{ secrets.LAW_ID }}
   rgpName: rgp-idy
   rgpLocation: centralus
   uamiLocation: eastus2
@@ -50,7 +50,7 @@ env:
   dcrNamePrefix: dcr # For DCR migration tool generated templates
   policy-asm-dcr: enable-ama-dcr
   policy-asm-dcr-ext: enable-ama-dcr-ext
-  target-mg-id: 'org-id-platform'
+  TARGET_MG_ID: ${{ secrets.TARGET_MG_ID }}
   operation: plan # Allowable values: [plan, apply, rollback
 
 # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
@@ -94,7 +94,7 @@ jobs:
       with:
         inlineScript: |
           chmod +x az-scripts/Get-DriveSpace.ps1
-          Select-AzSubscription -SubscriptionId ${{ env.idySubscription }}
+          Select-AzSubscription -SubscriptionId ${{ secrets.IDYSUBSCRIPTION }}
           az-scripts/Get-DriveSpace.ps1
         azPSVersion: "latest"
 
@@ -108,7 +108,7 @@ jobs:
           catch { Write-Host "Failed to download DCR generator script" }
           (Get-Content -Path ${{ env.dcrOutputPath }}) -replace '^Set-DeployOutputOnAzure', '# Set-DeployOutputOnAzure' | Set-Content -Path ${{ env.dcrOutputPath }}
           chmod +x az-scripts/Get-EndpointConnectionResult.ps1
-          az-scripts/WorkspaceConfigToDCRMigrationTool.ps1 -SubscriptionId ${{ env.mgtSubscription }} -ResourceGroupName ${{ env.mgtResourceGroup }} -WorkspaceName ${{ env.mgtLogAnalyticsWorkspace }} -DCRName ${{ env.dcrNamePrefix }} -OutputFolder ${{ env.dcrExportPath }} -Verbose 
+          az-scripts/WorkspaceConfigToDCRMigrationTool.ps1 -SubscriptionId ${{ secrets.MGTSUBSCRIPTION }} -ResourceGroupName ${{ env.mgtResourceGroup }} -WorkspaceName ${{ env.mgtLogAnalyticsWorkspace }} -DCRName ${{ env.dcrNamePrefix }} -OutputFolder ${{ env.dcrExportPath }} -Verbose 
           $outputFiles = (Get-ChildItem -Path ${{ env.dcrExportPath }}).FullName
           $templateFiles = $outputFiles | Where-Object { $_ -like "*template.json" }
           foreach ($templateFile in $templateFiles) 
@@ -188,7 +188,7 @@ jobs:
       uses: azure/cli@v2
       with:
         inlineScript: |
-          az account set --subscription ${{ env.idySubscription }}
+          az account set --subscription ${{ secrets.IDYSUBSCRIPTION }}
           az policy state trigger-scan -g ${{ env.rgpName }} --no-wait --verbose
         azcliversion: ${{ env.azCliVer }}
 
@@ -199,7 +199,7 @@ jobs:
       with:
         inlineScript: |
           chmod +x az-scripts/Get-VmExtension.ps1
-          Select-AzSubscription -SubscriptionId ${{ env.idySubscription }}
+          Select-AzSubscription -SubscriptionId ${{ secrets.IDYSUBSCRIPTION }}
           az-scripts/Get-VmExtension.ps1
         azPSVersion: "latest"
 
