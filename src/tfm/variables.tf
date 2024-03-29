@@ -41,7 +41,7 @@ variable "connectivitySubscriptionId" {
   type    = string
 }
 
-variable "umi_name" {
+variable "uami_name" {
   type        = string
   description = "prefix for user managed identity"
 }
