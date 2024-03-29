@@ -177,12 +177,12 @@ jobs:
     - name: 'terraform_plan'
       id: plan
       run: terraform plan -var "target_mg_id=${{ env.TARGET_MG_ID }}" \
-        -var "target_mg_name=${{ env.TARGET_MG_NAME }}" \
-        -var "identitySubscriptionId=${{ secrets.IDYSUBSCRIPTION }}" \
-        -var "managementSubscriptionId=${{ secrets.MGTSUBSCRIPTION }}" \
-        -var "connectionSubscriptionId=${{ secrets.CONSUBSCRIPTION }}" \
-        -var "iacSubscriptionId=${{ secrets.IACSUBSCRIPTION }}" \
-        -var "uami_name=${{ secrets.UAMI_NAME }}"
+        -var="target_mg_name=${{ env.TARGET_MG_NAME }}" \
+        -var="identitySubscriptionId=${{ secrets.IDYSUBSCRIPTION }}" \
+        -var="managementSubscriptionId=${{ secrets.MGTSUBSCRIPTION }}" \
+        -var="connectionSubscriptionId=${{ secrets.CONSUBSCRIPTION }}" \
+        -var="iacSubscriptionId=${{ secrets.IACSUBSCRIPTION }}" \
+        -var="uami_name=${{ secrets.UAMI_NAME }}"
       env:
         ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
         ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
@@ -194,12 +194,12 @@ jobs:
       if: ${{ env.operation == 'apply' }}
       id: apply
       run: terraform plan -var "target_mg_id=${{ env.TARGET_MG_ID }}" \
-        -var "target_mg_name=${{ env.TARGET_MG_NAME }}" \
-        -var "identitySubscriptionId=${{ secrets.IDYSUBSCRIPTION }}" \
-        -var "managementSubscriptionId=${{ secrets.MGTSUBSCRIPTION }}" \
-        -var "connectionSubscriptionId=${{ secrets.CONSUBSCRIPTION }}" \
-        -var "iacSubscriptionId=${{ secrets.IACSUBSCRIPTION }}" \
-        -var "uami_name=${{ secrets.UAMI_NAME }}" \
+        -var="target_mg_name=${{ env.TARGET_MG_NAME }}" \
+        -var="identitySubscriptionId=${{ secrets.IDYSUBSCRIPTION }}" \
+        -var="managementSubscriptionId=${{ secrets.MGTSUBSCRIPTION }}" \
+        -var="connectionSubscriptionId=${{ secrets.CONSUBSCRIPTION }}" \
+        -var="iacSubscriptionId=${{ secrets.IACSUBSCRIPTION }}" \
+        -var="uami_name=${{ secrets.UAMI_NAME }}" \
         -auto-approve
       env:
         ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
