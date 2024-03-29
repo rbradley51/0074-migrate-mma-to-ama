@@ -176,7 +176,7 @@ jobs:
     # Deploy
     - name: 'terraform_plan'
       id: plan
-      run: terraform plan -var "target_mg_id=${{ env.TARGET_MG_ID }}" \
+      run: terraform plan -var="target_mg_id=${{ env.TARGET_MG_ID }}" \
         -var="target_mg_name=${{ env.TARGET_MG_NAME }}" \
         -var="identitySubscriptionId=${{ secrets.IDYSUBSCRIPTION }}" \
         -var="managementSubscriptionId=${{ secrets.MGTSUBSCRIPTION }}" \
@@ -193,7 +193,7 @@ jobs:
     - name: 'terraform_apply'
       if: ${{ env.operation == 'apply' }}
       id: apply
-      run: terraform plan -var "target_mg_id=${{ env.TARGET_MG_ID }}" \
+      run: terraform plan -var="target_mg_id=${{ env.TARGET_MG_ID }}" \
         -var="target_mg_name=${{ env.TARGET_MG_NAME }}" \
         -var="identitySubscriptionId=${{ secrets.IDYSUBSCRIPTION }}" \
         -var="managementSubscriptionId=${{ secrets.MGTSUBSCRIPTION }}" \
