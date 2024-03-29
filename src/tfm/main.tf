@@ -71,5 +71,7 @@ module "idy" {
   target_mg_id = var.target_mg_id
   target_mg_name = var.target_mg_name
   identitySubscriptionId = var.identitySubscriptionId
-  umi_name = var.umi_name
+  managementSubscriptionId = var.managementSubscriptionId
+  connectivitySubscriptionId = var.connectivitySubscriptionId
+  umi_name = var.uami_name
 }
