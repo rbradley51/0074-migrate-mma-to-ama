@@ -1,4 +1,4 @@
-Select-AzSubscription -SubscriptionId $env:idySubscription
+Select-AzSubscription -SubscriptionId $env:IDYSUBSCRIPTION
 $vmList = (Get-AzVM -ResourceGroupName $env:rgpName).Name
 foreach ($vmName in $vmList) {
     $vmExtensions = (Get-AzVMExtension -ResourceGroupName $env:rgpName -VMName $vmName).Name
