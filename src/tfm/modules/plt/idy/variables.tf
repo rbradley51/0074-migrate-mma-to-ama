@@ -49,7 +49,6 @@ variable "identitySubscriptionId" {
 variable "umi_name" {
   type        = string
   description = "prefix for user managed identity"
-  default     = "umi-ama-mig-001"
 }
 
 variable "umi_pol_name" {
@@ -161,5 +160,3 @@ variable "dcr_type" {
     dcr-ext  = "dcr-extensions"
   }
 }
-
-# az policy remediation create -n myRemediation --policy-assignment eeb18edc813c42d0ad5a9eab --definition-reference-id auditVMPolicyReference

@@ -21,6 +21,7 @@ env:
   AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
   IDYSUBSCRIPTION: ${{ secrets.IDYSUBSCRIPTION }}
   MGTSUBSCRIPTION: ${{ secrets.MGTSUBSCRIPTION }}
+  CONSUBSCRIPTION: ${{ secrets.CONSUBSCRIPTION }} # Subscription for the connection monitor
   IACSUBSCRIPTION: ${{ secrets.IACSUBSCRIPTION }}
   UAMI_NAME: ${{ secrets.UAMI_NAME }}
   uamiResourceGroup: rgp-iac
@@ -51,6 +52,7 @@ env:
   policy-asm-dcr: enable-ama-dcr
   policy-asm-dcr-ext: enable-ama-dcr-ext
   TARGET_MG_ID: ${{ secrets.TARGET_MG_ID }}
+  TARGET_MG_NAME: ${{ secrets.TARGET_MG_NAME }}
   operation: plan # Allowable values: [plan, apply, rollback
 
 # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
@@ -172,10 +174,36 @@ jobs:
       run: terraform fmt -recursive
 
     # Deploy
+    - name: 'terraform_plan'
+      id: plan
+      run: terraform plan -var \
+      target_mg_id=${{ env.TARGET_MG_ID }} \
+      target_mg_name=${{ env.TARGET_MG_NAME }} \
+      identitySubscriptionId=${{ secrets.IDYSUBSCRIPTION }} \
+      managementSubscriptionId=${{ secrets.MGTSUBSCRIPTION }} \
+      connectionSubscriptionId=${{ secrets.CONSUBSCRIPTION }} \
+      iacSubscriptionId=${{ secrets.IACSUBSCRIPTION }} \
+      uami_name=${{ secrets.UAMI_NAME }} \
+      -auto-approve
+      env:
+        ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        ARM_USE_OIDC: true
+
+    # Deploy
     - name: 'terraform_apply'
       if: ${{ env.operation == 'apply' }}
       id: apply
-      run: terraform apply -auto-approve
+      run: terraform plan -var \
+      target_mg_id=${{ env.TARGET_MG_ID }} \
+      target_mg_name=${{ env.TARGET_MG_NAME }} \
+      identitySubscriptionId=${{ secrets.IDYSUBSCRIPTION }} \
+      managementSubscriptionId=${{ secrets.MGTSUBSCRIPTION }} \
+      connectionSubscriptionId=${{ secrets.CONSUBSCRIPTION }} \
+      iacSubscriptionId=${{ secrets.IACSUBSCRIPTION }} \
+      uami_name=${{ secrets.UAMI_NAME }} \
+      -auto-approve
       env:
         ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
         ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
