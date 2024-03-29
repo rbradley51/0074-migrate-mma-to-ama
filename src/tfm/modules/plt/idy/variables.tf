@@ -43,7 +43,6 @@ variable "secondary_location" {
 variable "identitySubscriptionId" {
   type        = string
   description = "identity subscription id"
-  default     = "1d790e78-7852-498d-8087-f5d48686a50e"
 }
 
 variable "umi_name" {
@@ -144,12 +143,10 @@ variable "hvn" {
 
 variable "managementSubscriptionId" {
   type    = string
-  default = "019181ad-6356-46c6-b584-444846096085"
 }
 
 variable "connectivitySubscriptionId" {
   type    = string
-  default = "e4aad2d8-e670-4807-bf53-63b4a36e0d4a"
 }
 
 variable "dcr_type" {

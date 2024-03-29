@@ -183,7 +183,7 @@ jobs:
         "managementSubscriptionId=${{ secrets.MGTSUBSCRIPTION }}" \
         "connectionSubscriptionId=${{ secrets.CONSUBSCRIPTION }}" \
         "iacSubscriptionId=${{ secrets.IACSUBSCRIPTION }}" \
-        "uami_name=${{ secrets.UAMI_NAME }}" -auto-approve
+        "uami_name=${{ secrets.UAMI_NAME }}"
       env:
         ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
         ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
