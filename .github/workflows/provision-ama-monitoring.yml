@@ -34,8 +34,8 @@ env:
   uamiRoleAssignmentVmContrib: "Virtual Machine Contributor"
   uamiRoleAssignmentLogAnalyticsContrib: "Log Analytics Contributor"
   uamiRoleAssignmentArcContrib: "Azure Arc Connected Resource Administrator"
-  azCliVer: 2.58.0
-  tfVersion: 1.7.5
+  azCliVer: 2.59.0
+  tfVersion: 1.8.2
   bicepVer: 0.26.54
   tfWorkingdir: src/tfm
   skipUAMI: false # Set to true to skip UAMI creation, false to create UAMI if necessary
@@ -53,7 +53,7 @@ env:
   policy-asm-dcr-ext: enable-ama-dcr-ext
   TARGET_MG_ID: ${{ secrets.TARGET_MG_ID }}
   TARGET_MG_NAME: ${{ secrets.TARGET_MG_NAME }}
-  operation: rollback # Allowable values: [plan, apply, rollback
+  operation: plan # Allowable values: [plan, apply, rollback
 
 # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
 defaults:
