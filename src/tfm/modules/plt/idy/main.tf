@@ -35,12 +35,6 @@ data "azurerm_monitor_data_collection_rule" "dcr" {
   resource_group_name = var.mgt_law.rgp
 }
 
-data "azurerm_monitor_data_collection_rule" "dcr-ext" {
-  provider = azurerm.management
-  name                = var.dcr_type.dcr-ext
-  resource_group_name = var.mgt_law.rgp
-}
-
 resource "azurerm_management_group_policy_assignment" "ama_initiative_assignment_dcr" {
   name                 = var.ama_initiative_assignment.name_dcr
   policy_definition_id = var.ama_initiative_assignment.policy_set_def_id
