@@ -153,7 +153,7 @@ variable "dcr_type" {
   type        = map(string)
   description = "DCR rule types and name"
   default = {
-    dcr = "azr-idy-dcr"
+    dcr = "dcr"
     dcr-ext  = "dcr-extensions"
   }
 }

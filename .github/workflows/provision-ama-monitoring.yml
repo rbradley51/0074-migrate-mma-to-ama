@@ -25,8 +25,8 @@ env:
   IACSUBSCRIPTION: ${{ secrets.IACSUBSCRIPTION }}
   UAMI_NAME: ${{ secrets.UAMI_NAME }}
   uamiResourceGroup: rgp-iac
-  mgtResourceGroup: rg-management
-  mgtLogAnalyticsWorkspace: log-management
+  mgtResourceGroup: orgid-mgmt
+  mgtLogAnalyticsWorkspace: orgid-la
   LAW_ID: ${{ secrets.LAW_ID }}
   rgpName: rgp-idy
   rgpLocation: centralus
