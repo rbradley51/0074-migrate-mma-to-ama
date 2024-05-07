@@ -32,7 +32,7 @@ data "azurerm_user_assigned_identity" "umid" {
 data "azurerm_monitor_data_collection_rule" "dcr" {
   provider = azurerm.management
   name                = var.dcr_type.dcr
-  resource_group_name = var.rgp_idy
+  resource_group_name = var.mgt_law.rgp
 }
 
 data "azurerm_monitor_data_collection_rule" "dcr-ext" {
