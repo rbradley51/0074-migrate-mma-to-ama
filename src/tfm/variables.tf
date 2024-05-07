@@ -1,11 +1,11 @@
 variable "root_id" {
   type    = string
-  default = "org-id"
+  default = "orgid"
 }
 
 variable "root_name" {
   type    = string
-  default = "org-name"
+  default = "organization id"
 }
 variable "target_mg_id" {
   type        = string

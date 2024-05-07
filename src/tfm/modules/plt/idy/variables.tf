@@ -120,8 +120,8 @@ variable "mgt_law" {
   type        = map(string)
   description = "management log analytics workspace settings from landing zone"
   default = {
-    name = "log-management"
-    rgp  = "rg-management"
+    name = "orgid-la"
+    rgp  = "orgid-mgmt"
   }
 }
 
@@ -130,15 +130,15 @@ variable "hub_vnt" {
   type        = map(string)
   description = "hub virtual network settings from landing zone"
   default = {
-    name = "vnet-hub"
-    rgp  = "rg-connectivity"
+    name = "orgid-hub-centralus"
+    rgp  = "orgid-connectivity-centralus"
   }
 }
 
 variable "hvn" {
   type        = list(string)
   description = "address spaces for hub virtual network"
-  default = ["10.0.0.0/16"]
+  default = ["10.160.0.0/22"]
 }
 
 variable "managementSubscriptionId" {
