@@ -58,3 +58,4 @@ tf/refs/**/*
 # Archives
 archive/**/*
 /.vs/0074-migrate-mma-to-ama/FileContentIndex/**.*
+/.vs/0074-migrate-mma-to-ama/v17/.wsuo
