@@ -53,7 +53,7 @@ env:
   policy-asm-dcr-ext: enable-ama-dcr-ext
   TARGET_MG_ID: ${{ secrets.TARGET_MG_ID }}
   TARGET_MG_NAME: ${{ secrets.TARGET_MG_NAME }}
-  operation: plan # Allowable values: [plan, apply, rollback
+  operation: apply # Allowable values: [plan, apply, rollback
 
 # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
 defaults:
