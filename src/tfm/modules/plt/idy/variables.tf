@@ -84,8 +84,8 @@ variable "ama_initiative_assignment" {
   default = {
     name_dcr = "enable-ama-dcr"
     name_dcr_ext = "enable-ama-dcr-ext"
-    name_hybrid_dcr = "enable-ama-hybrid-dcr"
-    name_hybrid_dcr_ext = "enable-ama-hybrid-dcr-ext"
+    name_hybrid_dcr = "ama-arc-dcr"
+    name_hybrid_dcr_ext = "ama-arc-dcr-ext"
     display_name = "Enable Azure Monitor for VMs with Azure Monitoring Agent(AMA)"
     policy_set_def_id = "/providers/Microsoft.Authorization/policySetDefinitions/924bfe3a-762f-40e7-86dd-5c8b95eb09e6"
     policy_set_hybrid_vm_def_id = "/providers/Microsoft.Authorization/policySetDefinitions/2b00397d-c309-49c4-aa5a-f0b2c5bc6321"
@@ -96,8 +96,8 @@ variable "ama_initiative_assignment" {
     dcrExtResourceId = "/subscriptions/019181ad-6356-46c6-b584-444846096085/resourceGroups/rgp-idy/providers/Microsoft.Insights/dataCollectionRules/dcr-extensions"
     assignment_id_dcr = "/providers/microsoft.management/managementgroups/org-id-platform/providers/microsoft.authorization/policyassignments/enable-az-monitor-ama-dcr"
     assignment_id_dcr_ext = "/providers/microsoft.management/managementgroups/org-id-platform/providers/microsoft.authorization/policyassignments/enable-az-monitor-ama-dcr-ext"
-    assignment_id_dcr_hybrid = "/providers/microsoft.management/managementgroups/org-id-platform/providers/microsoft.authorization/policyassignments/enable-ama-hybrid-dcr"
-    assignment_id_dcr_ext_hybrid = "/providers/microsoft.management/managementgroups/org-id-platform/providers/microsoft.authorization/policyassignments/enable-ama-hybrid-dcr-ext"
+    assignment_id_dcr_hybrid = "/providers/microsoft.management/managementgroups/org-id-platform/providers/microsoft.authorization/policyassignments/ama-arc-dcr"
+    assignment_id_dcr_ext_hybrid = "/providers/microsoft.management/managementgroups/org-id-platform/providers/microsoft.authorization/policyassignments/ama-arc-dcr-ext"
     remediation_name_dcr = "remediate-az-monitor-ama-dcr"
     remediation_name_dcr_ext = "remediate-az-monitor-ama-dcr-ext"
   }
