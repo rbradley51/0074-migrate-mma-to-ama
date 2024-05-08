@@ -79,21 +79,6 @@ resource "azurerm_management_group_policy_assignment" "ama_initiative_assignment
   }
   parameters = <<PARAMS
     {
-      "enableProcessesAndDependencies": {
-        "value": ${var.ama_init_bool.enableProcessesAndDependencies}
-      },
-      "bringYourOwnUserAssignedManagedIdentity": {
-        "value": ${var.ama_init_bool.bringYourOwnUserAssignedManagedIdentity}
-      },
-      "userAssignedManagedIdentityName": {
-        "value": "${data.azurerm_user_assigned_identity.umid.name}"
-      },
-      "userAssignedManagedIdentityResourceGroup": {
-        "value": "${data.azurerm_user_assigned_identity.umid.resource_group_name}"
-      },
-      "scopeToSupportedImages": {
-        "value": ${var.ama_init_bool.scopeToSupportedImages}
-      },
       "dcrResourceId": {
         "value": "${data.azurerm_monitor_data_collection_rule.dcr.id}"
       }
@@ -112,21 +97,6 @@ resource "azurerm_management_group_policy_assignment" "ama_initiative_assignment
   }
   parameters = <<PARAMS
     {
-      "enableProcessesAndDependencies": {
-        "value": ${var.ama_init_bool.enableProcessesAndDependencies}
-      },
-      "bringYourOwnUserAssignedManagedIdentity": {
-        "value": ${var.ama_init_bool.bringYourOwnUserAssignedManagedIdentity}
-      },
-      "userAssignedManagedIdentityName": {
-        "value": "${data.azurerm_user_assigned_identity.umid.name}"
-      },
-      "userAssignedManagedIdentityResourceGroup": {
-        "value": "${data.azurerm_user_assigned_identity.umid.resource_group_name}"
-      },
-      "scopeToSupportedImages": {
-        "value": ${var.ama_init_bool.scopeToSupportedImages}
-      },
       "dcrResourceId": {
         "value": "${data.azurerm_monitor_data_collection_rule.dcr-ext.id}"
       }
