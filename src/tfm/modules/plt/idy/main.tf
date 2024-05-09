@@ -68,6 +68,58 @@ resource "azurerm_management_group_policy_assignment" "ama_initiative_assignment
 PARAMS
 }
 
+resource "azurerm_monitor_data_collection_endpoint" "dce" {
+  provider = azurerm.management
+  name                = var.ama_dce.name
+  resource_group_name = var.mgt_law.rgp
+  location = var.primary_location
+  type = ama_dce.type
+  public_network_access_enabled = ama_dce.public_access
+  configuration_access_endpoint = var.ama_dce.cae
+  logs_ingestion_endpoint = var.ama_dce.lie
+  kind = var.ama_dce.lie
+  identity {
+	type = "UserAssigned"
+	identity_ids = [var.umi_pol_id]
+  }
+}
+
+resource "azurerm_management_group_policy_assignment" "ama_initiative_assignment_dce" {
+  name                 = var.ama_initiative_assignment.name_dcr
+  policy_definition_id = var.ama_initiative_assignment.policy_set_def_id
+  management_group_id  = data.azurerm_management_group.tgt.id
+  location = var.primary_location
+  identity {
+    type = "UserAssigned"
+    identity_ids = [var.umi_pol_id]
+  }
+  parameters = <<PARAMS
+    {
+      "enableProcessesAndDependencies": {
+        "value": ${var.ama_init_bool.enableProcessesAndDependencies}
+      },
+      "bringYourOwnUserAssignedManagedIdentity": {
+        "value": ${var.ama_init_bool.bringYourOwnUserAssignedManagedIdentity}
+      },
+      "userAssignedManagedIdentityName": {
+        "value": "${data.azurerm_user_assigned_identity.umid.name}"
+      },
+      "userAssignedManagedIdentityResourceGroup": {
+        "value": "${data.azurerm_user_assigned_identity.umid.resource_group_name}"
+      },
+      "scopeToSupportedImages": {
+        "value": ${var.ama_init_bool.scopeToSupportedImages}
+      },
+      "dcrResourceId": {
+        "value": "${data.azurerm_monitor_data_collection_endpoint.dce.id}"
+      }
+      "resourceType": {
+		"value": "${var.ama_dce.type}"
+	  }
+    }
+PARAMS
+}
+
 resource "azurerm_management_group_policy_assignment" "amr_arc_dcr" {
   name                 = var.ama_initiative_assignment.name_hybrid_dcr
   policy_definition_id = var.ama_initiative_assignment.policy_set_hybrid_vm_def_id

@@ -65,13 +65,23 @@ variable "umi_pol_id" {
 variable "ama_dce" {
   type = object({
     name = string
+    type = string
+    cae = string
+    kind = string
+    lie = string
+    public_access = Boolean
     lifecycle = object({
       create_before_destroy = bool # not used
     })
   })
-  description = "values for diagnostic collection endpoint"
+  description = "values for data collection endpoint"
   default = {
-    name = "dce"
+    name = "dce1947"
+    type = "dataCollectionEndpoint"
+    cae = "https://dce1947.centralus-1.control.monitor.azure.com"
+    kind = "Windows"
+    lie = "https://dce1947.centralus-1.control.monitor.azure.com"
+    public_access = true
     lifecycle = {
       create_before_destroy = true
     }
