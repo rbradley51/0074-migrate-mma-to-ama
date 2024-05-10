@@ -73,6 +73,6 @@ module "idy" {
   identitySubscriptionId = var.identitySubscriptionId
   managementSubscriptionId = var.managementSubscriptionId
   connectivitySubscriptionId = var.connectivitySubscriptionId
-  dceName = var.dce_name
+  dceName = var.dceName
   umi_name = var.uami_name
 }

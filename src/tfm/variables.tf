@@ -46,7 +46,7 @@ variable "uami_name" {
   description = "prefix for user managed identity"
 }
 
-variable "dce_name" {
+variable "dceName" {
   type        = string
   description = "data collection endpoint"
 }
