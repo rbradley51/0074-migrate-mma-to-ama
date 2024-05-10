@@ -7,20 +7,20 @@
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:.github\\workflows\\provision-ama-monitoring.yml||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\src\\tfm\\modules\\plt\\idy\\main.tf||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\tfm\\modules\\plt\\idy\\main.tf||{3B902123-F8A7-4915-9F01-361F908088D0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\src\\tfm\\modules\\plt\\idy\\variables.tf||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\tfm\\modules\\plt\\idy\\variables.tf||{3B902123-F8A7-4915-9F01-361F908088D0}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\src\\tfm\\variables.tf||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\tfm\\variables.tf||{3B902123-F8A7-4915-9F01-361F908088D0}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\src\\tfm\\main.tf||{3B902123-F8A7-4915-9F01-361F908088D0}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\tfm\\main.tf||{3B902123-F8A7-4915-9F01-361F908088D0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\src\\tfm\\variables.tf||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\tfm\\variables.tf||{3B902123-F8A7-4915-9F01-361F908088D0}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\src\\tfm\\modules\\plt\\idy\\variables.tf||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\tfm\\modules\\plt\\idy\\variables.tf||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\src\\tfm\\modules\\plt\\idy\\main.tf||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\tfm\\modules\\plt\\idy\\main.tf||{3B902123-F8A7-4915-9F01-361F908088D0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -50,52 +50,52 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "variables.tf",
               "DocumentMoniker": "C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\src\\tfm\\modules\\plt\\idy\\variables.tf",
               "RelativeDocumentMoniker": "src\\tfm\\modules\\plt\\idy\\variables.tf",
               "ToolTip": "C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\src\\tfm\\modules\\plt\\idy\\variables.tf",
               "RelativeToolTip": "src\\tfm\\modules\\plt\\idy\\variables.tf",
-              "ViewState": "AQIAAIEAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "ViewState": "AQIAAIEAAAAAAAAAAAAAAJUAAAABAAAA",
               "Icon": "00000000-0000-0000-0000-000000000000.000000|",
               "WhenOpened": "2024-05-10T14:38:17.629Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "main.tf",
               "DocumentMoniker": "C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\src\\tfm\\main.tf",
               "RelativeDocumentMoniker": "src\\tfm\\main.tf",
               "ToolTip": "C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\src\\tfm\\main.tf",
               "RelativeToolTip": "src\\tfm\\main.tf",
-              "ViewState": "AQIAAEIAAAAAAAAAAAAAAE0AAAABAAAA",
+              "ViewState": "AQIAAEIAAAAAAAAAAAAAAEsAAAAaAAAA",
               "Icon": "00000000-0000-0000-0000-000000000000.000000|",
               "WhenOpened": "2024-05-10T14:37:39.284Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
               "Title": "variables.tf",
               "DocumentMoniker": "C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\src\\tfm\\variables.tf",
               "RelativeDocumentMoniker": "src\\tfm\\variables.tf",
               "ToolTip": "C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\src\\tfm\\variables.tf",
               "RelativeToolTip": "src\\tfm\\variables.tf",
-              "ViewState": "AQIAABsAAAAAAAAAAAAAADIAAAAqAAAA",
+              "ViewState": "AQIAABgAAAAAAAAAAAAAAC4AAAABAAAA",
               "Icon": "00000000-0000-0000-0000-000000000000.000000|",
               "WhenOpened": "2024-05-10T14:36:48.391Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "main.tf",
               "DocumentMoniker": "C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\src\\tfm\\modules\\plt\\idy\\main.tf",
               "RelativeDocumentMoniker": "src\\tfm\\modules\\plt\\idy\\main.tf",
               "ToolTip": "C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\src\\tfm\\modules\\plt\\idy\\main.tf",
               "RelativeToolTip": "src\\tfm\\modules\\plt\\idy\\main.tf",
-              "ViewState": "AQIAABsAAAAAAAAAAAAAAEsAAABXAAAA",
+              "ViewState": "AQIAAHIAAAAAAAAAAAAAAIcAAAAIAAAA",
               "Icon": "00000000-0000-0000-0000-000000000000.000000|",
               "WhenOpened": "2024-05-08T18:59:13.778Z",
               "EditorCaption": ""
@@ -108,7 +108,7 @@
               "RelativeDocumentMoniker": ".github\\workflows\\provision-ama-monitoring.yml",
               "ToolTip": "C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\.github\\workflows\\provision-ama-monitoring.yml",
               "RelativeToolTip": ".github\\workflows\\provision-ama-monitoring.yml",
-              "ViewState": "AQIAAM8AAAAAAAAAAAAkwNkAAAAAAAAA",
+              "ViewState": "AQIAAMkAAAAAAAAAAADgv9oAAAAxAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003775|",
               "WhenOpened": "2024-05-08T16:33:52.273Z",
               "EditorCaption": ""

@@ -148,8 +148,3 @@ variable "dcr_type" {
     dcr-ext  = "dcr-extensions"
   }
 }
-
-variable "dceName" {
-  type        = string
-  description = "data collection endpoint name"
-}
