@@ -69,7 +69,7 @@ variable "ama_dce" {
     cae = string
     kind = string
     lie = string
-    public_access = Boolean
+    public_access = bool
     lifecycle = object({
       create_before_destroy = bool # not used
     })
