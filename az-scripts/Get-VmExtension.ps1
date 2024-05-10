@@ -20,7 +20,7 @@ foreach ($vmName in $vmList) {
             }
         }
     }
-    elseif (($vmExtensions -contains 'MicrosoftMonitoringAgent') -and !($vmExtensions -contains $ama)){
+    elseif (($vmExtensions -contains $mma) -and !($vmExtensions -contains $ama)){
         Write-Host "VM: $vmName, Only the MMA extension IS installed"
     }
     elseif (($vmExtensions -contains $ama) -and !($vmExtensions -contains $mma)) 
