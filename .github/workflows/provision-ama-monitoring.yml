@@ -214,7 +214,7 @@ jobs:
       with:
         inlineScript: |
           Set-AzContext -SubscriptionId ${{ secrets.MGTSUBSCRIPTION }} --Verbose
-          $dcrResourceId = (Get-AzResource -ResourceGroupName ${{ env.mgtResourceGroup }} -ResourceType Microsoft.OperationalInsights/workspaces/dataCollectionRules -Name ${{ env.dcrName }}).ResourceId -Verbose
+          $dcrResourceId = (Get-AzResource -ResourceGroupName ${{ env.mgtResourceGroup }} -ResourceType Microsoft.OperationalInsights/workspaces/dataCollectionRules -Name ${{ env.dcrNamePrefix }}).ResourceId
           $LinkedServices = Get-AzOperationalInsightsLinkedService -ResourceGroupName ${{ env.mgtResourceGroup }} -WorkspaceName ${{ env.mgtLogAnalyticsWorkspace }}
           $LinkedServices | ForEach-Object { $_ }
           # $LinkedServices | ForEach-Object { New-AzDataCollectionRuleAssociation -Name ${{ env.dcrAssociation }} -RuleId $dcrResourceId -ResourceId $_ }
