@@ -102,9 +102,6 @@ resource "azurerm_management_group_policy_assignment" "ama_initiative_assignment
       "dcrResourceId": {
         "value": "${data.azurerm_monitor_data_collection_endpoint.dce-id.id}"
       }
-      "resourceType": {
-		"value": "${var.ama_dce.type}"
-	  }
     }
 PARAMS
 }

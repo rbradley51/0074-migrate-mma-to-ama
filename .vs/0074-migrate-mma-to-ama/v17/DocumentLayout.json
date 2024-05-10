@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\.github\\workflows\\provision-ama-monitoring.yml||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:.github\\workflows\\provision-ama-monitoring.yml||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\src\\tfm\\modules\\plt\\idy\\main.tf||{3B902123-F8A7-4915-9F01-361F908088D0}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\tfm\\modules\\plt\\idy\\main.tf||{3B902123-F8A7-4915-9F01-361F908088D0}"
     },
@@ -17,10 +21,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\src\\tfm\\variables.tf||{3B902123-F8A7-4915-9F01-361F908088D0}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\tfm\\variables.tf||{3B902123-F8A7-4915-9F01-361F908088D0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\.github\\workflows\\provision-ama-monitoring.yml||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:.github\\workflows\\provision-ama-monitoring.yml||{8B382828-6202-11D1-8870-0000F87579D2}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,7 +30,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 87,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Bookmark",
@@ -50,7 +50,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "variables.tf",
               "DocumentMoniker": "C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\src\\tfm\\modules\\plt\\idy\\variables.tf",
               "RelativeDocumentMoniker": "src\\tfm\\modules\\plt\\idy\\variables.tf",
@@ -63,7 +63,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "main.tf",
               "DocumentMoniker": "C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\src\\tfm\\main.tf",
               "RelativeDocumentMoniker": "src\\tfm\\main.tf",
@@ -76,7 +76,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "variables.tf",
               "DocumentMoniker": "C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\src\\tfm\\variables.tf",
               "RelativeDocumentMoniker": "src\\tfm\\variables.tf",
@@ -89,7 +89,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "main.tf",
               "DocumentMoniker": "C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\src\\tfm\\modules\\plt\\idy\\main.tf",
               "RelativeDocumentMoniker": "src\\tfm\\modules\\plt\\idy\\main.tf",
@@ -102,13 +102,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 0,
               "Title": "provision-ama-monitoring.yml",
               "DocumentMoniker": "C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\.github\\workflows\\provision-ama-monitoring.yml",
               "RelativeDocumentMoniker": ".github\\workflows\\provision-ama-monitoring.yml",
               "ToolTip": "C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\.github\\workflows\\provision-ama-monitoring.yml",
               "RelativeToolTip": ".github\\workflows\\provision-ama-monitoring.yml",
-              "ViewState": "AQIAAHAAAAAAAAAAAAAAAEQAAAAaAAAA",
+              "ViewState": "AQIAAM8AAAAAAAAAAAAkwNkAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003775|",
               "WhenOpened": "2024-05-08T16:33:52.273Z",
               "EditorCaption": ""
