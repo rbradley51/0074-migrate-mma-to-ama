@@ -48,7 +48,7 @@ env:
   dcrUrl: 'https://raw.githubusercontent.com/microsoft/AzureMonitorCommunity/master/Azure%20Services/Azure%20Monitor/Agents/Migration%20Tools/DCR%20Config%20Generator/WorkspaceConfigToDCRMigrationTool.ps1'
   dcrOutputPath: az-scripts/WorkspaceConfigToDCRMigrationTool.ps1
   dcrExportPath: dcr-export
-  dcrName: dcr # For DCR migration tool generated templates
+  dcrNamePrefix: dcr # For DCR migration tool generated templates
   policy-asm-dcr: enable-ama-dcr
   policy-asm-dcr-ext: enable-ama-dcr-ext
   TARGET_MG_ID: ${{ secrets.TARGET_MG_ID }}
