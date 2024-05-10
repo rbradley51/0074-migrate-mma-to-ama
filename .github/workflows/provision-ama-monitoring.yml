@@ -206,19 +206,6 @@ jobs:
         ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
         ARM_USE_OIDC: true
-
-    # Associate VM resources with DCR
-    - name: 'associate_vms_with_dcr'
-      if: ${{ env.operation == 'apply' }}
-      uses: azure/powershell@v1
-      with:
-        inlineScript: |
-          Set-AzContext -SubscriptionId ${{ secrets.MGTSUBSCRIPTION }}
-          $dcrResourceId = (Get-AzResource -ResourceGroupName ${{ env.mgtResourceGroup }} -ResourceType Microsoft.OperationalInsights/workspaces/dataCollectionRules -Name ${{ env.dcrNamePrefix }}).ResourceId
-          $LinkedServices = Get-AzOperationalInsightsLinkedService -ResourceGroupName ${{ env.mgtResourceGroup }} -WorkspaceName ${{ env.mgtLogAnalyticsWorkspace }}
-          $LinkedServices | ForEach-Object { $_ }
-          # $LinkedServices | ForEach-Object { New-AzDataCollectionRuleAssociation -Name ${{ env.dcrAssociation }} -RuleId $dcrResourceId -ResourceId $_ }
-        azPSVersion: "latest"
     
     # Trigger policy state scan
     - name: "trigger_policy_state_scan"
