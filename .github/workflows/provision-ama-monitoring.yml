@@ -213,7 +213,7 @@ jobs:
       uses: azure/powershell@v1
       with:
         inlineScript: |
-          Set-AzContext -SubscriptionId ${{ secrets.MGTSUBSCRIPTION }} --Verbose
+          Set-AzContext -SubscriptionId ${{ secrets.MGTSUBSCRIPTION }}
           $dcrResourceId = (Get-AzResource -ResourceGroupName ${{ env.mgtResourceGroup }} -ResourceType Microsoft.OperationalInsights/workspaces/dataCollectionRules -Name ${{ env.dcrNamePrefix }}).ResourceId
           $LinkedServices = Get-AzOperationalInsightsLinkedService -ResourceGroupName ${{ env.mgtResourceGroup }} -WorkspaceName ${{ env.mgtLogAnalyticsWorkspace }}
           $LinkedServices | ForEach-Object { $_ }
