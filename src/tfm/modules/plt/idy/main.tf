@@ -74,7 +74,7 @@ resource "azurerm_monitor_data_collection_endpoint" "dce" {
   resource_group_name = var.mgt_law.rgp
   location = var.primary_location
   public_network_access_enabled = var.ama_dce.public_access
-  kind = var.ama_dce.lie
+  kind = var.ama_dce.kind
 }
 
 resource "azurerm_management_group_policy_assignment" "ama_initiative_assignment_dce" {
