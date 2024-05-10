@@ -73,8 +73,8 @@ resource "azurerm_monitor_data_collection_endpoint" "dce" {
   name                = var.ama_dce.name
   resource_group_name = var.mgt_law.rgp
   location = var.primary_location
-  type = ama_dce.type
-  public_network_access_enabled = ama_dce.public_access
+  type = var.ama_dce.type
+  public_network_access_enabled = var.ama_dce.public_access
   configuration_access_endpoint = var.ama_dce.cae
   logs_ingestion_endpoint = var.ama_dce.lie
   kind = var.ama_dce.lie
