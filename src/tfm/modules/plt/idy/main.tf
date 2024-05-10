@@ -77,6 +77,11 @@ resource "azurerm_monitor_data_collection_endpoint" "dce" {
   kind = var.ama_dce.kind
 }
 
+data "azurerm_monitor_data_collection_endpoint" "dce-id" {
+    name = var.ama_dce.name
+    resource_group_name = var.mgt_law.rgp
+}
+
 resource "azurerm_management_group_policy_assignment" "ama_initiative_assignment_dce" {
   name                 = var.ama_initiative_assignment.name_dcr
   policy_definition_id = var.ama_initiative_assignment.policy_set_def_id
@@ -104,7 +109,7 @@ resource "azurerm_management_group_policy_assignment" "ama_initiative_assignment
         "value": ${var.ama_init_bool.scopeToSupportedImages}
       },
       "dcrResourceId": {
-        "value": "${data.azurerm_monitor_data_collection_endpoint.dce.id}"
+        "value": "${data.azurerm_monitor_data_collection_endpoint.dce-id.id}"
       }
       "resourceType": {
 		"value": "${var.ama_dce.type}"
