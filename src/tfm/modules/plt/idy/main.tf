@@ -74,8 +74,6 @@ resource "azurerm_monitor_data_collection_endpoint" "dce" {
   resource_group_name = var.mgt_law.rgp
   location = var.primary_location
   public_network_access_enabled = var.ama_dce.public_access
-  configuration_access_endpoint = var.ama_dce.cae
-  logs_ingestion_endpoint = var.ama_dce.lie
   kind = var.ama_dce.lie
 }
 
