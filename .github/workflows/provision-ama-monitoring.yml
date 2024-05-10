@@ -53,6 +53,8 @@ env:
   policy-asm-dcr-ext: enable-ama-dcr-ext
   TARGET_MG_ID: ${{ secrets.TARGET_MG_ID }}
   TARGET_MG_NAME: ${{ secrets.TARGET_MG_NAME }}
+  dceName: dce-0933 # task-item: randomize name?
+  pubNetAccess: "Enabled"
   operation: apply # Allowable values: [plan, apply, rollback
 
 # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
@@ -89,6 +91,15 @@ jobs:
           chmod +x az-scripts/createAndAssignUAMI.sh
           az-scripts/createAndAssignUAMI.sh
     
+    # Create a data collection endpoint
+    - name: create_data_collection_endpoint
+      uses: Azure/CLI@v1
+      with: 
+        inlineScript: |
+          az account set --subscription ${{ secrets.MGTSUBSCRIPTION }} --verbose
+          az monitor data-collection endpoint create --data-collection-endpoint-name ${{ env.dceName }} --public-network-access ${{ env.pubNetAccess }} --resource-group ${{ env.mgtResourceGroup }}
+        azcliversion: ${{ env.azCliVer }}
+
     # Get drive space on each VM to ensure there is enough space (at least 10GB) to install the Azure Monitoring Agent
     - name: 'get_drive_space'
       if: ${{ env.skipDriveSpace == 'false' }}
@@ -176,7 +187,7 @@ jobs:
     # Deploy
     - name: 'terraform_plan'
       id: plan
-      run: terraform plan -var="target_mg_id=${{ env.TARGET_MG_ID }}" -var="target_mg_name=${{ env.TARGET_MG_NAME }}" -var="identitySubscriptionId=${{ secrets.IDYSUBSCRIPTION }}" -var="managementSubscriptionId=${{ secrets.MGTSUBSCRIPTION }}" -var="connectivitySubscriptionId=${{ secrets.CONSUBSCRIPTION }}" -var="iacSubscriptionId=${{ secrets.IACSUBSCRIPTION }}" -var="uami_name=${{ secrets.UAMI_NAME }}"
+      run: terraform plan -var="target_mg_id=${{ env.TARGET_MG_ID }}" -var="target_mg_name=${{ env.TARGET_MG_NAME }}" -var="identitySubscriptionId=${{ secrets.IDYSUBSCRIPTION }}" -var="managementSubscriptionId=${{ secrets.MGTSUBSCRIPTION }}" -var="connectivitySubscriptionId=${{ secrets.CONSUBSCRIPTION }}" -var="iacSubscriptionId=${{ secrets.IACSUBSCRIPTION }}" -var="uami_name=${{ secrets.UAMI_NAME }}" -var="dceName=${{ env.dceName }}"
       env:
         ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
         ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}

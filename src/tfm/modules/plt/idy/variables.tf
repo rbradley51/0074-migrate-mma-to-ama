@@ -62,32 +62,6 @@ variable "umi_pol_id" {
   default = "/subscriptions/e25024e7-c4a5-4883-80af-9e81b2f8f689/resourceGroups/rgp-iac/providers/Microsoft.ManagedIdentity/userAssignedIdentities/umi-ama-pol-001"
 }
 
-variable "ama_dce" {
-  type = object({
-    name = string
-    type = string
-    cae = string
-    kind = string
-    lie = string
-    public_access = bool
-    lifecycle = object({
-      create_before_destroy = bool # not used
-    })
-  })
-  description = "values for data collection endpoint"
-  default = {
-    name = "dce1947"
-    type = "dataCollectionEndpoint"
-    cae = "https://dce1947.centralus-1.control.monitor.azure.com"
-    kind = "Windows"
-    lie = "https://dce1947.centralus-1.control.monitor.azure.com"
-    public_access = true
-    lifecycle = {
-      create_before_destroy = true
-    }
-  }
-
-}
 variable "ama_initiative_assignment" {
   type = map(string)
   description = "Enable Azure Monitor for VMs AMA"
@@ -173,4 +147,9 @@ variable "dcr_type" {
     dcr = "dcr"
     dcr-ext  = "dcr-extensions"
   }
+}
+
+variable "dceName" {
+  type        = string
+  description = "data collection endpoint name"
 }
