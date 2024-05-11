@@ -4,12 +4,8 @@
     "\\.github",
     "\\.github\\workflows",
     "\\az-scripts",
-    "\\az-scripts\\input",
-    "\\src\\tfm",
-    "\\src\\tfm\\modules",
-    "\\src\\tfm\\modules\\plt",
-    "\\src\\tfm\\modules\\plt\\idy"
+    "\\az-scripts\\input"
   ],
-  "SelectedNode": "\\.github\\workflows\\provision-ama-monitoring.yml",
+  "SelectedNode": "\\az-scripts\\Set-DcrVmAssociation.ps1",
   "PreviewInSolutionExplorer": false
 }

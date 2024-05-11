@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\.github\\workflows\\provision-ama-monitoring.yml||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:.github\\workflows\\provision-ama-monitoring.yml||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\prestopa\\Source\\Repos\\0074-migrate-mma-to-ama\\az-scripts\\Set-DcrVmAssociation.ps1||{3B902123-F8A7-4915-9F01-361F908088D0}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:az-scripts\\Set-DcrVmAssociation.ps1||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\.github\\workflows\\provision-ama-monitoring.yml||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:.github\\workflows\\provision-ama-monitoring.yml||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\src\\tfm\\variables.tf||{3B902123-F8A7-4915-9F01-361F908088D0}",
@@ -34,7 +34,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 87,
-          "SelectedChildIndex": 9,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -54,13 +54,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Set-DcrVmAssociation.ps1",
-              "DocumentMoniker": "C:\\Users\\prestopa\\Source\\Repos\\0074-migrate-mma-to-ama\\az-scripts\\Set-DcrVmAssociation.ps1",
+              "DocumentMoniker": "C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\az-scripts\\Set-DcrVmAssociation.ps1",
               "RelativeDocumentMoniker": "az-scripts\\Set-DcrVmAssociation.ps1",
-              "ToolTip": "C:\\Users\\prestopa\\Source\\Repos\\0074-migrate-mma-to-ama\\az-scripts\\Set-DcrVmAssociation.ps1",
-              "RelativeToolTip": "az-scripts\\Set-DcrVmAssociation.ps1",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAAABIAAAABAAAA",
+              "ToolTip": "C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\az-scripts\\Set-DcrVmAssociation.ps1*",
+              "RelativeToolTip": "az-scripts\\Set-DcrVmAssociation.ps1*",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAAABkAAAAWAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2024-05-11T00:51:45.157Z",
               "EditorCaption": ""
@@ -75,8 +75,7 @@
               "RelativeToolTip": "src\\tfm\\modules\\plt\\idy\\variables.tf",
               "ViewState": "AQIAAIEAAAAAAAAAAAAAAJUAAAABAAAA",
               "Icon": "00000000-0000-0000-0000-000000000000.000000|",
-              "WhenOpened": "2024-05-10T14:38:17.629Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-10T14:38:17.629Z"
             },
             {
               "$type": "Document",
@@ -88,8 +87,7 @@
               "RelativeToolTip": "src\\tfm\\main.tf",
               "ViewState": "AQIAAEIAAAAAAAAAAAAAAEsAAAAaAAAA",
               "Icon": "00000000-0000-0000-0000-000000000000.000000|",
-              "WhenOpened": "2024-05-10T14:37:39.284Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-10T14:37:39.284Z"
             },
             {
               "$type": "Document",
@@ -101,8 +99,7 @@
               "RelativeToolTip": "src\\tfm\\variables.tf",
               "ViewState": "AQIAABgAAAAAAAAAAAAAAC4AAAABAAAA",
               "Icon": "00000000-0000-0000-0000-000000000000.000000|",
-              "WhenOpened": "2024-05-10T14:36:48.391Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-10T14:36:48.391Z"
             },
             {
               "$type": "Document",
@@ -114,18 +111,17 @@
               "RelativeToolTip": "src\\tfm\\modules\\plt\\idy\\main.tf",
               "ViewState": "AQIAAHIAAAAAAAAAAAAAAIcAAAAIAAAA",
               "Icon": "00000000-0000-0000-0000-000000000000.000000|",
-              "WhenOpened": "2024-05-08T18:59:13.778Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-08T18:59:13.778Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "provision-ama-monitoring.yml",
               "DocumentMoniker": "C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\.github\\workflows\\provision-ama-monitoring.yml",
               "RelativeDocumentMoniker": ".github\\workflows\\provision-ama-monitoring.yml",
               "ToolTip": "C:\\Users\\prestopa\\source\\repos\\0074-migrate-mma-to-ama\\.github\\workflows\\provision-ama-monitoring.yml",
               "RelativeToolTip": ".github\\workflows\\provision-ama-monitoring.yml",
-              "ViewState": "AQIAALwAAAAAAAAAAAAkwNkAAABVAAAA",
+              "ViewState": "AQIAALwAAAAAAAAAAAAkwMgAAAAdAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003775|",
               "WhenOpened": "2024-05-08T16:33:52.273Z",
               "EditorCaption": ""
