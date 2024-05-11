@@ -17,7 +17,7 @@
 [CmdletBinding()]
 param (
 	[Parameter(Mandatory=$true)]
-	[string]$inputFilePath = "./input/"
+	[string]$inputFilePath = "./input/input.csv"
 )
 
  $inputList = (Import-Csv -Path $inputFilePath)
