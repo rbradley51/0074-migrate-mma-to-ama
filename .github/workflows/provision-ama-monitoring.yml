@@ -56,6 +56,7 @@ env:
   dceName: dce # task-item: randomize name?
   dcrAssociation: dcrVms
   pubNetAccess: "Enabled"
+  inputFilePath: "./input/input.csv"
   operation: apply # Allowable values: [plan, apply, rollback
 
 # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
@@ -213,7 +214,8 @@ jobs:
       with:
         inlineScript: |
           chmod +x az-scripts/Set-DcrVMAssociation.ps1
-          az-scripts/Set-DcrVMAssociation.ps1
+          Select-AzSubscription -SubscriptionId ${{ secrets.IDYSUBSCRIPTION }}
+          az-scripts/Set-DcrVMAssociation.ps1 -inputFilePath ${{ env.inputFilePath }}
         azPSVersion: "latest"
     
     # Trigger policy state scan
