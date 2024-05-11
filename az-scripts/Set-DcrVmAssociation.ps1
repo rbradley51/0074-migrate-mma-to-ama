@@ -21,7 +21,7 @@ param
 )
 
  $inputList = (Import-Csv -Path $inputFilePath)
- for (each $input in $inputList) 
+ foreach ($input in $inputList) 
  {
 	$index = $input.index 
 	$vmi = $input.vmId 
