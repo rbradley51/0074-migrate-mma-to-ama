@@ -39,7 +39,7 @@ param
 	 $associationName = "$dcrName-$vmName-association"
 	 $description = $assocationName
 	 Write-Host "$index `t Assigning $vmName in resource group $vmIdRgp to data collection rule $dcrName in resource group $dcrRgp"
-	 New-AzDataCollectionRuleAssociation -TargetResourceId $vmi -AssociationName $assocationName -Description $associationName -RuleId $dci -Verbose
+	 New-AzDataCollectionRuleAssociation -TargetResourceId $vmi -AssociationName $associationName -Description $associationName -RuleId $dci -Verbose
  }
 
 
