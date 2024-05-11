@@ -1,7 +1,15 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\.github",
+    "\\.github\\workflows",
+    "\\az-scripts",
+    "\\az-scripts\\input",
+    "\\src\\tfm",
+    "\\src\\tfm\\modules",
+    "\\src\\tfm\\modules\\plt",
+    "\\src\\tfm\\modules\\plt\\idy"
   ],
-  "SelectedNode": "\\C:\\Users\\prestopa\\Source\\Repos\\0074-migrate-mma-to-ama",
+  "SelectedNode": "\\.github\\workflows\\provision-ama-monitoring.yml",
   "PreviewInSolutionExplorer": false
 }
