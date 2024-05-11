@@ -21,7 +21,6 @@ param
 )
 
  $inputList = (Import-Csv -Path $inputFilePath)
- $inputList
  foreach ($input in $inputList) 
  {
 	$index = $input.index 
