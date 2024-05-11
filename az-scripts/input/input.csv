@@ -1,0 +1,4 @@
+index,vmId,dcrResourceId
+1,/subscriptions/1d790e78-7852-498d-8087-f5d48686a50e/resourceGroups/rgp-idy/providers/Microsoft.Compute/virtualMachines/azrads01,/subscriptions/019181ad-6356-46c6-b584-444846096085/resourceGroups/orgid-mgmt/providers/Microsoft.Insights/dataCollectionRules/dcr
+2,/subscriptions/1d790e78-7852-498d-8087-f5d48686a50e/resourceGroups/rgp-idy/providers/Microsoft.Compute/virtualMachines/azrads02,/subscriptions/019181ad-6356-46c6-b584-444846096085/resourceGroups/orgid-mgmt/providers/Microsoft.Insights/dataCollectionRules/dcr
+3,/subscriptions/1d790e78-7852-498d-8087-f5d48686a50e/resourceGroups/rgp-idy/providers/Microsoft.Compute/virtualMachines/azrsvr01,/subscriptions/019181ad-6356-46c6-b584-444846096085/resourceGroups/orgid-mgmt/providers/Microsoft.Insights/dataCollectionRules/dcr

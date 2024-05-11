@@ -206,6 +206,15 @@ jobs:
         ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
         ARM_USE_OIDC: true
+
+     # ETL for DCR, Log Analytics and VM mapping and association
+    - name: 'associate_vms_with_dcr'
+      uses: azure/powershell@v1
+      with:
+        inlineScript: |
+          chmod +x az-scripts/Set-DcrVMAssociation.ps1
+          az-scripts/Set-DcrVMAssociation.ps1
+        azPSVersion: "latest"
     
     # Trigger policy state scan
     - name: "trigger_policy_state_scan"
