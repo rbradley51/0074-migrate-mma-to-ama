@@ -56,7 +56,6 @@ env:
   dceName: dce # task-item: randomize name?
   dcrAssociation: dcrVms
   pubNetAccess: "Enabled"
-  inputFilePath: "./input/input.csv"
   operation: apply # Allowable values: [plan, apply, rollback
 
 # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
