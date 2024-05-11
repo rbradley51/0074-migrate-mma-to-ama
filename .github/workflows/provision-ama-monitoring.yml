@@ -134,6 +134,7 @@ jobs:
             Write-Host ('-'*100)
             New-AzResourceGroupDeployment -ResourceGroupName ${{ env.mgtResourceGroup }} -TemplateFile $templateFile -Verbose
           }
+          az-scripts/Get-EndpointConnectionResult.ps1
         azPSVersion: "latest"
 
   provision-deprovision:
@@ -213,7 +214,7 @@ jobs:
       uses: azure/powershell@v1
       with:
         inlineScript: |
-          chmod +x az-scripts/Set-DcrVMAssociation.ps1
+          chmod +x az-scripts/Set-DcrVmAssociation.ps1
           Select-AzSubscription -SubscriptionId ${{ secrets.IDYSUBSCRIPTION }}
           az-scripts/Set-DcrVMAssociation.ps1 -inputFilePath ${{ env.inputFilePath }}
         azPSVersion: "latest"
