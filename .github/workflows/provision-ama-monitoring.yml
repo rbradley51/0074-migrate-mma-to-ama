@@ -216,7 +216,7 @@ jobs:
         inlineScript: |
           chmod +x az-scripts/Set-DcrVmAssociation.ps1
           Select-AzSubscription -SubscriptionId ${{ secrets.IDYSUBSCRIPTION }}
-          az-scripts/Set-DcrVMAssociation.ps1 -inputFilePath ${{ env.inputFilePath }}
+          az-scripts/Set-DcrVmAssociation.ps1 -inputFilePath ${{ env.inputFilePath }}
         azPSVersion: "latest"
     
     # Trigger policy state scan
