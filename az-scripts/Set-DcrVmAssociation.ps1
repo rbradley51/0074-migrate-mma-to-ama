@@ -21,11 +21,12 @@ param
 )
 
  $inputList = (Import-Csv -Path $inputFilePath)
+ $inputList
  foreach ($input in $inputList) 
  {
 	$index = $input.index 
 	$vmi = $input.vmId 
-	 $dci = $input.dcrResourceId
+	$dci = $input.dcrResourceId
 
 	 $vmIdSub = $input.vmId.Split("/")[2]
 	 $vmIdRgp = $input.vmId.Split("/")[4]
